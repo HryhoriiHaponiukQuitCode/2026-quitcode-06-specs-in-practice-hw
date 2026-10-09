@@ -112,14 +112,15 @@ npm test
 1. **Проєкт:** Dashboard → New project → **ваша власна організація** (не через Vercel Marketplace: та інтеграція
    створює окрему організацію, керовану Vercel, і займає слот). Назва — `<team-slug>`, пароль бази збережіть у
    менеджері паролів, регіон — найближчий.
-2. **Auth:** Authentication → Sign In / Providers → Email → вимкніть **Confirm email**. Вбудований SMTP надсилає
+2. **Auth:** у налаштуваннях Authentication, провайдер Email (орієнтовно Authentication → Sign In / Providers →
+   Email; точний шлях у Dashboard звіряємо на репетиції), вимкніть **Confirm email**. Вбудований SMTP надсилає
    2 листи на годину і лише членам команди проєкту, тож користувачів створює скрипт. У налаштуваннях
    Authentication вимкніть і **Allow new users to sign up** (точний шлях у Dashboard звіряємо на репетиції).
    Публічний ключ лежить у JS-бандлі, тож з увімкненою реєстрацією будь-хто зареєструється сам. Користувачі
-   з'являються лише через `npm run users:demo` (Admin API, працює й з вимкненою реєстрацією). У
-   `supabase/config.toml` шаблону вже стоїть `[auth] enable_signup = false` з коментарем, але це конфігурація
-   CLI: `db push` застосовує в хмарі міграції (і сид з `--include-seed`), а налаштувань Auth з `config.toml` не
-   переносить. Тому перемикач у Dashboard — обов'язковий.
+   з'являються лише через `npm run users:demo` (Admin API; що він працює з вимкненою реєстрацією, звіряємо на
+   репетиції). У `supabase/config.toml` шаблону вже стоїть `[auth] enable_signup = false` з коментарем, але це
+   конфігурація CLI: `db push` застосовує в хмарі міграції (і сид з `--include-seed`), а налаштувань Auth з
+   `config.toml` не переносить. Тому перемикач у Dashboard — обов'язковий.
 3. **Прив'язка й міграції** (без Docker):
 
    ```bash

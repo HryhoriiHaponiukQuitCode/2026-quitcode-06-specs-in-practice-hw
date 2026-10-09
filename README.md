@@ -119,12 +119,14 @@
   без порожніх клітинок. `roadmap.md` — зріз на кожне заняття WS6–WS11. `denylist.txt` — лише внутрішні слова;
   справжні назви клієнта — у локальному `product/denylist.local.txt` (не в git) і секреті `SPEC_DENYLIST`.
   У `openspec/config.yaml` заповнено рядок `Продукт:`. Усе через PR зі зеленим CI.
-- **B (40):** зміна заархівована в гілці до merge, PR злито merge-комітом, тег `spec-v0.1` стоїть на коміті `main`. `proposal.md` має всі
-  розділи з правил шаблону, What Changes — з AC ID, Users & roles — таблиця, Non-goals — справжні виключення з
-  причинами, Assumptions і Open questions не порожні. Дельта: 3–5 вимог, 6–10 AC; кожна вимога — одне речення
-  EARS з `SHALL`/`MUST`; кожен сценарій — `#### Scenario: AC-<AREA>-<NN> …`, один критерій, конкретні числа й
-  дати, без кліків по UI і без назв таблиць чи API; на кожну вимогу є негативний шлях. CI (`spec`) зелений.
-  У PR зміни є розділ `## spec-review` зі знахідками й рішеннями. Запис `spec-v0.1` у `CHANGELOG.md`.
+- **B (40):** зміна заархівована в гілці до merge, PR злито merge-комітом, тег `spec-v0.1` стоїть на коміті `main`.
+  `proposal.md` має всі розділи з правил шаблону в їхньому порядку: Why, What Changes, Capabilities, Users & roles,
+  Non-goals, Assumptions, Open questions. What Changes — з AC ID; Capabilities — `### New Capabilities` /
+  `### Modified Capabilities` і свій `specs/<capability>/spec.md` на кожну можливість; Users & roles — таблиця;
+  Non-goals — справжні виключення з причинами; Assumptions і Open questions не порожні. Дельта: 3–5 вимог, 6–10 AC;
+  кожна вимога — одне речення EARS з `SHALL`/`MUST`; кожен сценарій — `#### Scenario: AC-<AREA>-<NN> …`, один
+  критерій, конкретні числа й дати, без кліків по UI і без назв таблиць чи API; на кожну вимогу є негативний шлях.
+  CI (`spec`) зелений. У PR зміни є розділ `## spec-review` зі знахідками й рішеннями. Запис `spec-v0.1` у `CHANGELOG.md`.
 - **C (25):** на кожне issue є відповідь PM в issue. Кожне рішення записане в `decisions.md` (питання з `#N` →
   відповідь → що змінилось → версія). Зміна `clarify-…`: MODIFIED з повним блоком вимоги й незмінними AC ID,
   нові правила — з новими AC ID. Тег `spec-v0.2` зі щонайменше одним MODIFIED або ADDED, запис у `CHANGELOG.md`.
@@ -151,7 +153,8 @@
 ### Definition of Done (PM)
 
 - [ ] Upstream `<pm>/<team-slug>` публічний, створений із шаблону; ruleset на `main`; CI зелений на `main` (`spec`, `app`)
-- [ ] `product/`: vision, glossary, roles (з матрицею), roadmap, denylist, decisions, CHANGELOG заповнені
+- [ ] `product/`: vision, glossary, roles (з матрицею), roadmap, decisions, CHANGELOG заповнені
+- [ ] `denylist.txt` — лише загальні вказівки; назви клієнтів — у локальному `product/denylist.local.txt` (не в git) і в секреті `SPEC_DENYLIST`
 - [ ] Теги `spec-v0.1` і `spec-v0.2` в upstream; у PR кожної зміни — розділ `## spec-review`
 - [ ] Жодних значень секретів і назв клієнтів; дані — `*@example.test`
 - [ ] Файл здачі з «Нотаткою PM»; PR `WS6: Ім'я Прізвище` з заповненим полем «Ім'я та Прізвище»

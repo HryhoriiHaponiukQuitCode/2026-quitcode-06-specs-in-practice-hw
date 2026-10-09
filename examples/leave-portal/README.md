@@ -19,11 +19,11 @@
 | | | [`2-clarify/issue-Q2.md`](2-clarify/issue-Q2.md) | текст одного issue за полями форми `spec-question`: варіанти A–D, рекомендований, вплив |
 | | | [`2-clarify/decisions.md`](2-clarify/decisions.md) | `product/decisions.md` PM: питання → відповідь → що змінилось → версія |
 | 3. Реалізація | `demo-03-impl` | [`3-impl/tasks.md`](3-impl/tasks.md) | вертикальні задачі, кожна з «Done when: AC-…» |
-| | | [`3-impl/design.md`](3-impl/design.md) | рішення розробника (таблиці, GRANT + RLS, доменний модуль) з посиланнями на AC |
+| | | [`3-impl/design.md`](3-impl/design.md) | рішення розробника (таблиці, GRANT + RLS, доменний модуль) з посиланнями на AC. Порядок зміни ролей тут працює лише на порожній таблиці ([див. нижче](#що-тут-видно-і-чого-тут-немає)) |
 | | | [`3-impl/.openspec.yaml`](3-impl/.openspec.yaml) | `skip_specs: true` — зміна розробника не змінює спеку |
 | | | [`3-impl/conformance.md`](3-impl/conformance.md) | матриця на spec-v0.1: AC → код → тест → `реалізовано` |
 | 4. Нова версія спеки | `spec-v0.2~1` (`ca6ea14`), `spec-v0.2` | [`4-spec-v0.2/spec-v0.2-diff.txt`](4-spec-v0.2/spec-v0.2-diff.txt) | вивід `npx openspec show clarify-leave-rules --diff`: MODIFIED з `-`/`+`, ADDED AC-LEAVE-10, AC-LEAVE-11 |
-| | | [`4-spec-v0.2/CHANGELOG.md`](4-spec-v0.2/CHANGELOG.md) | `product/CHANGELOG.md`: що змінилось у кожній версії |
+| | | [`4-spec-v0.2/CHANGELOG.md`](4-spec-v0.2/CHANGELOG.md) | `product/CHANGELOG.md`: що змінилось у кожній версії. Порядок релізу в коментарі скорочено ([див. нижче](#що-тут-видно-і-чого-тут-немає)) |
 | 5. Дрейф у форку | `demo-04-sync~6` (`bbf14f5`) | [`4-spec-v0.2/drift-ci.txt`](4-spec-v0.2/drift-ci.txt) | `npm run ac:coverage` після злиття spec-v0.2: `NO-ROW` для AC-LEAVE-10 і AC-LEAVE-11, exit 1 |
 
 ## Що тут видно і чого тут немає
@@ -35,6 +35,16 @@
   «Заблоковані дні» і «Перетин заявок». Рубрика й `spec-review` вимагають **одне речення EARS на вимогу** й
   **один критерій на сценарій**: у вашій спеці це були б окремі вимоги `IF … THEN` для кожного коду помилки й
   окремі AC. Як правильно — [скелет зміни](../../docs/spec-guide.md#скелет-зміни).
+- **Порядок зміни ролей у [`3-impl/design.md`](3-impl/design.md) працює лише на порожній таблиці `profiles`.**
+  Демо застосовує міграції разом, ще до `npm run users:demo`, тож профілів немає, і `update` ролей іде до зняття
+  старого `profiles_role_check`. У вашому проєкті `npm run users:demo` уже створив рядки `member`
+  ([walkthrough-dev, крок 4](../../docs/walkthrough-dev.md#4-supabase-40-хв--трек-a)), і старе правило не пропустить
+  такий `update`. Спершу зніміть старе правило, потім оновіть дані й default, і лише тоді додайте нове — порядок у
+  [walkthrough-dev, крок 12.2](../../docs/walkthrough-dev.md#122-задача-за-задачею-34-год).
+- **Коментар у [`4-spec-v0.2/CHANGELOG.md`](4-spec-v0.2/CHANGELOG.md) показує скорочений порядок релізу:** у ньому
+  немає злиття саме merge-комітом, `git switch main` і `git pull` перед тегом і `git push origin spec-vX.Y`. Повний
+  порядок — у [walkthrough-pm, крок 7](../../docs/walkthrough-pm.md#7-реліз-spec-v01-20-хв--трек-b-до-кінця-дня-2).
+- Обидва файли — точні копії з демо (нижче службового блоку), тому застереження до них — тут, а не в самих файлах.
 - **AC ID наскрізні.** `AC-LEAVE-02` стоїть у назві сценарію, у назві тесту (`it("AC-LEAVE-02: …")`), у рядку
   матриці й у питанні Q1. Саме цей ланцюжок перевіряє CI шаблону (`npm run spec:check`, `npm run ac:coverage`).
 - **Дрейф ловиться лише частково.** `ac:coverage` бачить нові AC без рядка в матриці, але не бачить змінений
