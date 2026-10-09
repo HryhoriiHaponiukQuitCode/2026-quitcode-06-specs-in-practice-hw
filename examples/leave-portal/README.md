@@ -12,7 +12,7 @@
 
 | Етап | Тег / коміт у демо | Файл тут | Що в ньому дивитись |
 |---|---|---|---|
-| 1. Зміна PM до релізу | `spec-v0.1~1` (`5a02e25`) | [`1-spec-v0.1/proposal.md`](1-spec-v0.1/proposal.md) | розділи Why, What Changes з AC ID, Users & roles як таблиця, Non-goals з причинами, Assumptions, Open questions Q4–Q5 |
+| 1. Зміна PM до релізу | `spec-v0.1~1` (`5a02e25`) | [`1-spec-v0.1/proposal.md`](1-spec-v0.1/proposal.md) | розділи Why, What Changes з AC ID, Capabilities, Users & roles як таблиця, Non-goals з причинами, Assumptions, Open questions Q4–Q5 |
 | | | [`1-spec-v0.1/specs/leave-requests/spec.md`](1-spec-v0.1/specs/leave-requests/spec.md) | `## Purpose`, вимоги EARS з `SHALL`, `#### Scenario: AC-LEAVE-01 …`, числа й дати, коди помилок. **Свідомо лишено 5 неоднозначностей** для демо уточнення — знайдіть їх, перш ніж читати етап 2. Правило «одне речення / один критерій» тут порушено ([див. нижче](#що-тут-видно-і-чого-тут-немає)) |
 | | | [`1-spec-v0.1/.openspec.yaml`](1-spec-v0.1/.openspec.yaml) | зміна PM — без `skip_specs` (вона змінює поведінку) |
 | 2. Уточнення | `demo-02-clarify` | [`2-clarify/spec-reading.md`](2-clarify/spec-reading.md) | скан за 11 категоріями, Q1–Q5 з рекомендацією, власні припущення розробника, «що скіл знайшов зайве» |

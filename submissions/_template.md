@@ -44,7 +44,7 @@
 
 <!-- PM: заголовок «## Розробник» залиште, а все під ним замініть одним рядком «—». -->
 
-- Перший PR (бутстрап): <!-- https://github.com/<я>/<team-slug>/pull/N -->
+- Перший PR (бутстрап, `docs/bootstrap.md`): <!-- https://github.com/<я>/<team-slug>/pull/N -->
 - PR sync/spec-v0.1: <!-- …/pull/N -->
 - Issues в upstream (щонайменше 3): <!-- https://github.com/<pm>/<team-slug>/issues/N, … -->
 - PR-и реалізації: <!-- …/pull/N, …/pull/M -->
