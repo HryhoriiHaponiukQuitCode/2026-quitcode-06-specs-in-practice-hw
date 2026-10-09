@@ -155,10 +155,12 @@ npm test
 
 1. Vercel → **Add New → Project** → Import Git Repository → ваш форк `<я>/<team-slug>` (дайте застосунку Vercel
    доступ лише до цього репозиторію). Framework — Next.js, Node 24.x береться з `engines` у `package.json`.
-2. **Environment Variables** для **Production і Preview** (як у README шаблону): `NEXT_PUBLIC_SUPABASE_URL`,
-   `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` і `SUPABASE_SECRET_KEY` з типом **Secret**. Секретний ключ обходить RLS:
-   лише серверний код і скрипти, ніколи Client Components і ніколи з префіксом `NEXT_PUBLIC_`. **Не** підключайте
-   Supabase через Marketplace-інтеграцію Vercel.
+2. **Environment Variables** для **Production і Preview**: лише `NEXT_PUBLIC_SUPABASE_URL` і
+   `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. `SUPABASE_SECRET_KEY` у Vercel поки **не** додавайте: у шаблоні його
+   читає лише скрипт `users:demo`, який ви запускаєте локально, а код застосунку — ні. Секретний ключ обходить RLS,
+   тож він має бути лише там, де без нього не обійтись (найменші привілеї). Знадобиться вашому серверному коду —
+   додайте тоді з типом **Secret** і зробіть редеплой. Ніколи в Client Components і ніколи з префіксом
+   `NEXT_PUBLIC_`. **Не** підключайте Supabase через Marketplace-інтеграцію Vercel.
 3. **Deploy.** Перевірте прод-URL `https://<проєкт>.vercel.app/login`.
 4. Settings → **Deployment Protection** → **Vercel Authentication**: якщо увімкнено — вимкніть → Save. Інакше PM
    і викладач не відкриють ваші preview без входу у ваш акаунт Vercel (на Hobby немає учасників команди). Чи
@@ -208,9 +210,15 @@ git switch -c bootstrap/evidence
 Заповніть `docs/bootstrap.md` за пунктами з кроків 1–8: посилання на run, назви змінних і де вони задані,
 регіон, прод-URL. **Жодних значень секретів.** Знімки екрана можна класти в `docs/img/`. Пункти «Тег спеки злито»
 і «Після merge у `main` job `db`…» заповните пізніше. У пункті про ruleset допишіть `conformance`: у форку він теж
-обов'язковий (крок 2), хоча чекліст шаблону називає лише `spec` і `app`.
+обов'язковий (крок 2), хоча чекліст шаблону називає лише `spec` і `app`. У пункті про змінні Vercel біля
+`SUPABASE_SECRET_KEY` напишіть «не додано — коду застосунку не потрібен» (крок 5), хоча чекліст шаблону називає
+три змінні.
 
-Якщо `spec-v0.1` уже вийшов, спершу зробіть крок 10: тоді перший PR може містити й перший тест з AC ID у назві.
+**Перший PR — `docs/bootstrap.md`, а не тест.** На слайді заняття перший PR містить тест з AC ID, бо в демо
+`spec-v0.1` уже вийшов. У вас у день 0–1 спеки у форку ще немає, а тест з AC ID до `sync/spec-v0.1` валить
+`conformance` з `ORPHAN` (AC немає в спеці). Тому зелений CI і preview доводимо на `docs/bootstrap.md`, а тести
+з AC ID — після кроку 10. Якщо `spec-v0.1` уже вийшов, спершу зробіть крок 10: тоді перший PR може містити й
+перший тест з AC ID у назві.
 
 ```bash
 git add docs
@@ -264,6 +272,10 @@ git merge spec-v0.1
 
 Потім у `docs/spec-reading.md`:
 
+- **таблицю скану** (11 категорій, статус Ясно / Частково / Немає, де саме) збережіть у розділ
+  `## Скан за таксономією` над «Питання до PM». Скіл показує її лише в чаті, а в шаблоні файлу такого розділу
+  немає: додайте його самі (рубрика B його перевіряє). Зразок —
+  [`spec-reading.md` демо](../examples/leave-portal/2-clarify/spec-reading.md);
 - колонка «Issue» — посилання `<pm>/<team-slug>#N`;
 - «Рішення (що зробили)» — ваше **робоче припущення**, поки PM не відповів;
 - коли PM відповість — «Відповідь PM» і що змінили;
@@ -319,9 +331,12 @@ npx openspec new change impl-<зріз>
    npm run db:types
    ```
 
-   Застосовані міграції не редагуємо, лише новий файл. Довідкові дані — в ідемпотентний `supabase/seed.sql`, у хмару
-   його застосовує лише `npx supabase db push --include-seed` (звичайний `db:push` і job `db` у CI сид **не**
-   виконують). Нові ролі — нова міграція з `profiles_role_check`, потім оновіть `supabase/demo-users.json` і
+   Застосовані міграції не редагуємо, лише новий файл. Довідкові дані першої задачі — в ідемпотентний
+   `supabase/seed.sql` (`insert … on conflict do nothing`), у хмару його застосовує лише
+   `npx supabase db push --include-seed` (звичайний `db:push` і job `db` у CI сид **не** виконують). **У хмарі сид
+   виконується лише один раз:** відредагований `seed.sql` повторно не виконується, CLI лише оновлює його хеш
+   (`Updating seed hash…`). Довідкові дані, додані пізніше, — новою міграцією з `insert … on conflict do nothing`.
+   Нові ролі — нова міграція з `profiles_role_check`, потім оновіть `supabase/demo-users.json` і
    `npm run users:demo`.
 2. **Код і тести.** Назва кожного тесту поведінки починається з AC ID: `it("AC-…-02: …")`. Пропущені тести
    (`.skip`, `.todo`) AC не покривають.
@@ -342,6 +357,11 @@ npx openspec new change impl-<зріз>
    бази, дочекайтеся завершення job `db`.
 6. **Останній PR зрізу, до merge:** `npx openspec archive impl-<зріз> -y` у тій самій гілці (прямі коміти в
    `main` ruleset не пустить).
+
+**PM ще не випустив `spec-v0.1`?** `design.md` і `tasks.md` можна почати з відкритої зміни в PR PM (як у
+кроці 11), а код без AC ID — писати й зливати. Тести з AC ID у назві — лише після злиття `sync/spec-v0.1`:
+до того `conformance` падає з `ORPHAN`, а ruleset без нього PR не пустить. Затримка PM балів не знімає
+([README](../README.md#що-знімає-бали-розробник)).
 
 **Відповіді PM ще немає?** Або реалізуйте своє робоче припущення з `docs/spec-reading.md` і назвіть його в PR,
 або залиште AC зі статусом `відкладено (чекаємо відповідь PM на Q3, <pm>/<team-slug>#N)`.
