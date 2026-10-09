@@ -69,7 +69,8 @@ git remote -v                       # origin → ваш форк, upstream → �
   сторінці upstream) — те саме, тоді клонуйте свій форк і додайте `git remote add upstream https://github.com/<pm>/<team-slug>.git`.
 - **Actions у форку вимкнено за замовчуванням.** Вкладка Actions вашого форку → **I understand my workflows, go
   ahead and enable them**. Потім перший прогін: Actions → CI → **Run workflow** або `gh workflow run ci.yml`.
-  Очікувано зелені `spec`, `app`, `conformance`. `db` пропущено, бо це не push у `main`.
+  Очікувано зелені `spec`, `app`, `conformance`. `db` пропущено, бо це не push у `main`. Форкнули вже після
+  тегу `spec-v0.1`? Тоді `conformance` червоний з `NO-ROW` — це очікувано, див. примітку в кінці кроку 9.
 
 **Доказ:** посилання на перший run і вивід `gh repo set-default --view` — у `docs/bootstrap.md` (крок 9).
 
@@ -124,6 +125,8 @@ npm test
 3. **Прив'язка й міграції** (без Docker):
 
    ```bash
+   # Windows: якщо Git Bash відповідає «non-TTY environments», виконайте login і link у PowerShell або
+   # Windows Terminal (звіряємо на репетиції); пароль бази вводьте на запит, не прапорцем -p
    npx supabase login                       # відкриє браузер
    npx supabase link --project-ref <ref>     # спитає пароль бази
    npx supabase db push --dry-run            # покаже 20261012000000_profiles_and_roles.sql
@@ -248,7 +251,7 @@ git switch main
 git pull
 git fetch upstream --tags
 git switch -c sync/spec-v0.1
-git merge spec-v0.1
+git merge --no-edit spec-v0.1
 ```
 
 1. У `.spec-source` розкоментуйте два рядки: `upstream: <pm>/<team-slug>`, `version: spec-v0.1`.
@@ -290,9 +293,11 @@ git merge spec-v0.1
 [`issue-Q2.md`](../examples/leave-portal/2-clarify/issue-Q2.md). Журнал комітьте PR-ом у форк.
 
 **PM ще не випустив `spec-v0.1`?** Читайте відкриту зміну з його PR: `git fetch upstream`, потім
-`git show upstream/spec/add-<зріз>:openspec/changes/add-<зріз>/proposal.md` (і так само `specs/…/spec.md`). У полі
-«Версія специфікації» issue вкажіть id зміни (`add-<зріз>`). Так само ставте питання й коментарі в PR PM — це
-найдешевший момент для відповіді.
+`git show upstream/spec/add-<зріз>:openspec/changes/add-<зріз>/proposal.md` (і так само `specs/…/spec.md`). Якщо
+`git show` пише «does not exist», PM уже заархівував зміну в гілці: нові шляхи покаже
+`git ls-tree -r --name-only upstream/spec/add-<зріз> openspec` (спека — у `openspec/specs/<capability>/spec.md`,
+proposal — у `openspec/changes/archive/<дата>-add-<зріз>/`). У полі «Версія специфікації» issue вкажіть id зміни
+(`add-<зріз>`). Так само ставте питання й коментарі в PR PM — це найдешевший момент для відповіді.
 
 **Доказ:** щонайменше 3 issues `spec-question` в upstream від вас, `docs/spec-reading.md` у `main` форку.
 
@@ -394,7 +399,7 @@ git switch main
 git pull
 git fetch upstream --tags
 git switch -c sync/spec-v0.2
-git merge spec-v0.2
+git merge --no-edit spec-v0.2
 ```
 
 1. `.spec-source` → `version: spec-v0.2`; `npm run spec:source` → OK.
@@ -407,8 +412,9 @@ git merge spec-v0.2
    ```
 
    Для кожного зміненого AC: код уже відповідає (бо ви взяли ту саму відповідь як робоче припущення), треба
-   змінити код і тест, або `відкладено (причина)`. Таблицю «Синхронізація на spec-v0.2» додайте в
-   `docs/spec-reading.md`.
+   змінити код і тест, або `відкладено (причина)`. Таблицю «Синхронізація на spec-v0.2» (колонки: AC, що
+   змінив PM, ваш код на spec-v0.1, що зробили) додайте в `docs/spec-reading.md`. Зразок —
+   [`spec-reading.md` демо](https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo/blob/main/docs/spec-reading.md#синхронізація-на-spec-v02).
 4. Реалізація дельти — у тій самій гілці або окремими PR після злиття sync-PR. Великій дельті дайте окрему зміну
    `impl-<зріз>-v0-2` з `skip_specs: true`.
 5. PR → зелений CI → **Create a merge commit**.

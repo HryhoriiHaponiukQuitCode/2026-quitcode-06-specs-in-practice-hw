@@ -21,7 +21,7 @@
 | 3. Реалізація | `demo-03-impl` | [`3-impl/tasks.md`](3-impl/tasks.md) | вертикальні задачі, кожна з «Done when: AC-…» |
 | | | [`3-impl/design.md`](3-impl/design.md) | рішення розробника (таблиці, GRANT + RLS, доменний модуль) з посиланнями на AC. Порядок зміни ролей тут працює лише на порожній таблиці ([див. нижче](#що-тут-видно-і-чого-тут-немає)) |
 | | | [`3-impl/.openspec.yaml`](3-impl/.openspec.yaml) | `skip_specs: true` — зміна розробника не змінює спеку |
-| | | [`3-impl/conformance.md`](3-impl/conformance.md) | матриця на spec-v0.1: AC → код → тест → `реалізовано` |
+| | | [`3-impl/conformance.md`](3-impl/conformance.md) | матриця на spec-v0.1: AC → код → тест → `реалізовано`. AC-LEAVE-05 і AC-LEAVE-09 тут покрито кодом, якого застосунок не викликає ([див. нижче](#що-тут-видно-і-чого-тут-немає)) |
 | 4. Нова версія спеки | `spec-v0.2~1` (`ca6ea14`), `spec-v0.2` | [`4-spec-v0.2/spec-v0.2-diff.txt`](4-spec-v0.2/spec-v0.2-diff.txt) | вивід `npx openspec show clarify-leave-rules --diff`: MODIFIED з `-`/`+`, ADDED AC-LEAVE-10, AC-LEAVE-11 |
 | | | [`4-spec-v0.2/CHANGELOG.md`](4-spec-v0.2/CHANGELOG.md) | `product/CHANGELOG.md`: що змінилось у кожній версії. Порядок релізу в коментарі скорочено ([див. нижче](#що-тут-видно-і-чого-тут-немає)) |
 | 5. Дрейф у форку | `demo-04-sync~6` (`bbf14f5`) | [`4-spec-v0.2/drift-ci.txt`](4-spec-v0.2/drift-ci.txt) | `npm run ac:coverage` після злиття spec-v0.2: `NO-ROW` для AC-LEAVE-10 і AC-LEAVE-11, exit 1 |
@@ -44,7 +44,11 @@
 - **Коментар у [`4-spec-v0.2/CHANGELOG.md`](4-spec-v0.2/CHANGELOG.md) показує скорочений порядок релізу:** у ньому
   немає злиття саме merge-комітом, `git switch main` і `git pull` перед тегом і `git push origin spec-vX.Y`. Повний
   порядок — у [walkthrough-pm, крок 7](../../docs/walkthrough-pm.md#7-реліз-spec-v01-20-хв--трек-b-до-кінця-дня-2).
-- Обидва файли — точні копії з демо (нижче службового блоку), тому застереження до них — тут, а не в самих файлах.
+- **У [`3-impl/conformance.md`](3-impl/conformance.md) AC-LEAVE-05 і AC-LEAVE-09 «покриті» тестами `routeRecords` і
+  `canViewRecord`, яких застосунок не викликає:** ці правила виконує RLS. Пізніша зміна демо `harden-leave-db` видалила
+  цей код і покрила правила тестами бази (`tests/db/leave-db.test.ts` на `main` демо). Тест для AC має перевіряти код,
+  який справді виконує правило.
+- Ці файли — точні копії з демо (нижче службового блоку), тому застереження до них — тут, а не в самих файлах.
 - **AC ID наскрізні.** `AC-LEAVE-02` стоїть у назві сценарію, у назві тесту (`it("AC-LEAVE-02: …")`), у рядку
   матриці й у питанні Q1. Саме цей ланцюжок перевіряє CI шаблону (`npm run spec:check`, `npm run ac:coverage`).
 - **Дрейф ловиться лише частково.** `ac:coverage` бачить нові AC без рядка в матриці, але не бачить змінений

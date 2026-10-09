@@ -116,7 +116,8 @@
 - **A (25):** upstream створено з шаблону, публічний; ruleset на `main` (PR + статуси `spec`, `app`); мітка
   `spec-question` існує. `vision.md` — одна сторінка з 2–4 вимірними ознаками успіху. `glossary.md` — 8–15 термінів
   з «Не вживаємо». `roles.md` — ролі проєкту замість `member`/`admin` шаблону, матриця роль × сутність × дія
-  без порожніх клітинок. `roadmap.md` — зріз на кожне заняття WS6–WS11. `denylist.txt` — лише внутрішні слова;
+  без порожніх клітинок. `roadmap.md` — рядок WS6 (перший зріз) і зріз на кожне заняття WS7–WS11.
+  `denylist.txt` — лише нейтральні внутрішні слова (кодові назви, назви чужих систем), якщо такі є;
   справжні назви клієнта — у локальному `product/denylist.local.txt` (не в git) і секреті `SPEC_DENYLIST`.
   У `openspec/config.yaml` заповнено рядок `Продукт:`. Усе через PR зі зеленим CI.
 - **B (40):** зміна заархівована в гілці до merge, PR злито merge-комітом, тег `spec-v0.1` стоїть на коміті `main`.
@@ -154,7 +155,7 @@
 
 - [ ] Upstream `<pm>/<team-slug>` публічний, створений із шаблону; ruleset на `main`; CI зелений на `main` (`spec`, `app`)
 - [ ] `product/`: vision, glossary, roles (з матрицею), roadmap, decisions, CHANGELOG заповнені
-- [ ] `denylist.txt` — лише загальні вказівки; назви клієнтів — у локальному `product/denylist.local.txt` (не в git) і в секреті `SPEC_DENYLIST`
+- [ ] `denylist.txt` — лише нейтральні внутрішні слова (кодові назви, назви чужих систем), якщо такі є; назви клієнтів — у локальному `product/denylist.local.txt` (не в git) і в секреті `SPEC_DENYLIST`
 - [ ] Теги `spec-v0.1` і `spec-v0.2` в upstream; у PR кожної зміни — розділ `## spec-review`
 - [ ] Жодних значень секретів і назв клієнтів; дані — `*@example.test`
 - [ ] Файл здачі з «Нотаткою PM»; PR `WS6: Ім'я Прізвище` з заповненим полем «Ім'я та Прізвище»
@@ -177,7 +178,8 @@
   URLs. Vercel: лише `NEXT_PUBLIC_SUPABASE_URL` і `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` у Production і Preview
   (без Marketplace-інтеграції; `SUPABASE_SECRET_KEY` — лише в локальному `.env.local`), редеплой, preview
   відкривається без входу. Секрети CI для job `db`. CodeRabbit на акаунті. Перший PR у форку — `docs/bootstrap.md`
-  зі зеленим CI і preview: кожен пункт із доказом (посилання, назви змінних), **жодного значення**.
+  зі зеленим CI і preview: кожен пункт із доказом (посилання, назви змінних), **жодного значення**. Якщо форк
+  зроблено вже після тегу `spec-v0.1`, `docs/bootstrap.md` іде в PR `sync/spec-v0.1` — балів це не знімає.
 - **B (20):** щонайменше 3 issues `spec-question` в upstream, створені через форму: варіанти поведінки (не
   реалізації), рекомендований, вплив. `docs/spec-reading.md`: скан за таксономією; таблиця питань з посиланнями
   `<pm>/<team-slug>#N`, відповіддю PM і рішенням; «Власні припущення»; що знайшли ви, а що скіл.
@@ -186,7 +188,9 @@
   RLS, `revoke` + явні `grant`, політика на кожну операцію, ролі не з `user_metadata`; новий набір ролей — окремою
   міграцією, дані й default оновлено до нового `profiles_role_check`. Назва кожного тесту поведінки
   починається з AC ID. `docs/conformance.md` — рядок на кожен AC, статус дослівно `реалізовано` або
-  `відкладено (причина)`; `npm run ac:coverage` зелений. Прод на Vercel працює під синтетичними користувачами.
+  `відкладено (причина)`; `npm run ac:coverage` зелений. Прод на Vercel працює під синтетичними користувачами
+  (за SHA це видно з прод-URL у файлі здачі, коментарів Vercel у PR-ах реалізації й `supabase/demo-users.json`
+  лише з `*@example.test`).
   Сесія — `src/proxy.ts`, авторизація — `getClaims()`, ключі — publishable / secret.
 - **D (10):** PR `sync/spec-v0.2` злито merge-комітом; `.spec-source` → `spec-v0.2`; рядки нових AC; таблиця
   «Синхронізація на spec-v0.2» у `docs/spec-reading.md` (MODIFIED звірено з кодом); дельта реалізована або

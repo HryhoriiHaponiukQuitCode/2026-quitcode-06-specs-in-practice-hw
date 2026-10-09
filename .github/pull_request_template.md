@@ -22,7 +22,7 @@
 
 - [ ] Upstream публічний, створений із шаблону; ruleset на `main`; CI зелений на `main` (`spec`, `app`)
 - [ ] `product/`: vision, glossary, roles (з матрицею), roadmap, decisions, CHANGELOG заповнені
-- [ ] `denylist.txt` — лише загальні вказівки; назви клієнтів — у локальному `product/denylist.local.txt` (не в git) і в секреті `SPEC_DENYLIST`
+- [ ] `denylist.txt` — лише нейтральні внутрішні слова (кодові назви, назви чужих систем), якщо такі є; назви клієнтів — у локальному `product/denylist.local.txt` (не в git) і в секреті `SPEC_DENYLIST`
 - [ ] Теги `spec-v0.1` і `spec-v0.2`; у PR кожної зміни — розділ `## spec-review`
 - [ ] «Нотатка PM» у файлі здачі — щонайменше 3 розбіжності
 - [ ] Жодних значень секретів і назв клієнтів; дані — `*@example.test`
