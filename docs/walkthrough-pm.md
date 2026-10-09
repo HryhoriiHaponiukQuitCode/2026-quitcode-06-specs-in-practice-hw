@@ -115,7 +115,9 @@ gh secret set SPEC_DENYLIST --repo <pm>/<team-slug>
     Тепер `npm run spec:check` на вашій машині ловить назви ще до push, але значень не друкує (лише «слово #N із
     product/denylist.local.txt»).
   - **Секрет для CI.** `gh secret set` попросить значення: ті самі назви через кому. Значення ніде не друкується,
-    а CI підставляє його в `npm run spec:check` (job `spec`).
+    а CI підставляє його в `npm run spec:check` (job `spec`). Але CI у PR із форків (пропозиції змін спеки від
+    розробників) секретів не отримує: там `spec:check` бачить лише `product/denylist.txt`. Перед merge такого PR
+    перевірте його локально: `gh pr checkout <номер>` → `npm run spec:check`.
 - CodeRabbit: <https://github.com/apps/coderabbitai> → Install → ваш акаунт → Only select repositories →
   `<team-slug>`. У публічних репозиторіях із < 10 зірок рев'ю не запускається само: після створення PR напишіть
   окремим **коментарем** `@coderabbitai review`.
