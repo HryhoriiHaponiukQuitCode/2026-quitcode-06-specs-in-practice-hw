@@ -1,0 +1,38 @@
+> **Зразок формату, не відповідь.** Копія з демо-репозиторію (портал відсутностей), без змін нижче цього блоку.
+> Оригінал: <https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo/blob/spec-v0.2/product/CHANGELOG.md>. Команда leave-portal пише власну специфікацію своїми словами — див. [README](../README.md).
+
+# Журнал версій специфікації
+
+<!--
+Заповнює PM при кожному релізі, у гілці зміни до merge: `npx openspec archive <id> -y` + запис тут → merge → тег spec-vX.Y.
+Розробники читають цей файл, щоб знати, що синхронізувати (гілка sync/spec-vX.Y у форку).
+Формат запису:
+
+## spec-v0.2 — 2026-10-16
+- Зміна: clarify-…
+- MODIFIED: AC-…-02 (що саме змінилось одним реченням)
+- ADDED: AC-…-10, AC-…-11
+- REMOVED: —
+- Відповіді на питання: Q1 (#3), Q2 (#5)
+-->
+
+## spec-v0.1 — 2026-10-09
+
+- Зміна: `add-leave-request` (архів: `openspec/changes/archive/2026-10-09-add-leave-request/`)
+- Нова можливість: `leave-requests` — подання заявки, заблоковані дні, маршрутизація, рішення менеджера, доступ
+- ADDED: AC-LEAVE-01 … AC-LEAVE-09
+- MODIFIED: —
+- REMOVED: —
+- Відкриті питання: Q4 (заміна), Q5 (перетин заявок) — див. proposal.md зміни
+
+## spec-v0.2 — 2026-10-09
+
+- Зміна: `clarify-leave-rules` (архів: `openspec/changes/archive/2026-10-09-clarify-leave-rules/`;
+  diff до archive — `docs/demo/spec-v0.2-diff.txt`)
+- MODIFIED: AC-LEAVE-01 (заміна — необов'язкове текстове поле), AC-LEAVE-02 (записи — для посад, які працівник
+  позначив; «покриває обидві» = розклад за обома посадами в ці дати), AC-LEAVE-04 (заявку прийнято, заблоковані
+  дні виключено з кількості днів), AC-LEAVE-05 (кожен запис — у черзі менеджера підрозділу своєї посади)
+- ADDED: AC-LEAVE-10 (лише заблоковані дні → `ONLY_BLOCKED_DAYS`), AC-LEAVE-11 (перетин із заявкою на розгляді
+  чи схваленою → `OVERLAPPING_REQUEST`)
+- REMOVED: —
+- Відповіді на питання: Q1 (#1), Q2 (#2), Q3 (#3), Q4 (#4), Q5 (#5) — `product/decisions.md`

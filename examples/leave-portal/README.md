@@ -1,0 +1,38 @@
+# Приклад: портал відсутностей персоналу школи
+
+> **Зразок формату, не відповідь.** Тут лежать копії артефактів із демо-репозиторію заняття
+> [`koldovsky/2026-quitcode-06-leave-portal-demo`](https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo).
+> На них видно, як виглядає кожен крок тижня: зміна PM, журнал питань, задачі розробника, матриця
+> відповідності, дельта нової версії спеки. **Переписувати їх у свій проєкт не можна.** PM команди
+> `leave-portal` теж пише власну специфікацію: свій зріз, свої формулювання, свої AC. Скопійовані з демо
+> вимоги чи сценарії оцінюються в 0 балів за трек B.
+
+Демо проходить увесь цикл в одному репозиторії: обидві ролі живуть в одній історії, кожен етап позначено тегом.
+У вашій команді PM працює в upstream, а кожен розробник — у своєму форку.
+
+| Етап | Тег / коміт у демо | Файл тут | Що в ньому дивитись |
+|---|---|---|---|
+| 1. Зміна PM до релізу | `spec-v0.1~1` (`5a02e25`) | [`1-spec-v0.1/proposal.md`](1-spec-v0.1/proposal.md) | розділи Why, What Changes з AC ID, Users & roles як таблиця, Non-goals з причинами, Assumptions, Open questions Q4–Q5 |
+| | | [`1-spec-v0.1/specs/leave-requests/spec.md`](1-spec-v0.1/specs/leave-requests/spec.md) | `## Purpose`, вимоги EARS з `SHALL`, `#### Scenario: AC-LEAVE-01 …`, числа й дати, коди помилок. **Свідомо лишено 5 неоднозначностей** для демо уточнення — знайдіть їх, перш ніж читати етап 2 |
+| | | [`1-spec-v0.1/.openspec.yaml`](1-spec-v0.1/.openspec.yaml) | зміна PM — без `skip_specs` (вона змінює поведінку) |
+| 2. Уточнення | `demo-02-clarify` | [`2-clarify/spec-reading.md`](2-clarify/spec-reading.md) | скан за 11 категоріями, Q1–Q5 з рекомендацією, власні припущення розробника, «що скіл знайшов зайве» |
+| | | [`2-clarify/issue-Q2.md`](2-clarify/issue-Q2.md) | текст одного issue за полями форми `spec-question`: варіанти A–D, рекомендований, вплив |
+| | | [`2-clarify/decisions.md`](2-clarify/decisions.md) | `product/decisions.md` PM: питання → відповідь → що змінилось → версія |
+| 3. Реалізація | `demo-03-impl` | [`3-impl/tasks.md`](3-impl/tasks.md) | вертикальні задачі, кожна з «Done when: AC-…» |
+| | | [`3-impl/design.md`](3-impl/design.md) | рішення розробника (таблиці, GRANT + RLS, доменний модуль) з посиланнями на AC |
+| | | [`3-impl/.openspec.yaml`](3-impl/.openspec.yaml) | `skip_specs: true` — зміна розробника не змінює спеку |
+| | | [`3-impl/conformance.md`](3-impl/conformance.md) | матриця на spec-v0.1: AC → код → тест → `реалізовано` |
+| 4. Нова версія спеки | `spec-v0.2~1` (`ca6ea14`), `spec-v0.2` | [`4-spec-v0.2/spec-v0.2-diff.txt`](4-spec-v0.2/spec-v0.2-diff.txt) | вивід `npx openspec show clarify-leave-rules --diff`: MODIFIED з `-`/`+`, ADDED AC-LEAVE-10, AC-LEAVE-11 |
+| | | [`4-spec-v0.2/CHANGELOG.md`](4-spec-v0.2/CHANGELOG.md) | `product/CHANGELOG.md`: що змінилось у кожній версії |
+| 5. Дрейф у форку | `demo-04-sync~6` (`bbf14f5`) | [`4-spec-v0.2/drift-ci.txt`](4-spec-v0.2/drift-ci.txt) | `npm run ac:coverage` після злиття spec-v0.2: `NO-ROW` для AC-LEAVE-10 і AC-LEAVE-11, exit 1 |
+
+## Що тут видно і чого тут немає
+
+- **Розміри.** Одна зміна PM — 5 вимог і 9 AC на тиждень. Більший перший зріз команда за тиждень не реалізує.
+- **AC ID наскрізні.** `AC-LEAVE-02` стоїть у назві сценарію, у назві тесту (`it("AC-LEAVE-02: …")`), у рядку
+  матриці й у питанні Q1. Саме цей ланцюжок перевіряє CI шаблону (`npm run spec:check`, `npm run ac:coverage`).
+- **Дрейф ловиться лише частково.** `ac:coverage` бачить нові AC без рядка в матриці, але не бачить змінений
+  текст сценарію (MODIFIED). Тому в `spec-reading.md` є таблиця «Синхронізація на spec-v0.2» — її розробник
+  складає вручну за diff ([повна версія на `main` демо](https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo/blob/main/docs/spec-reading.md)).
+- **Коду тут немає.** Код, міграції й тести — у демо-репозиторії на тегах `demo-03-impl` і `demo-04-sync`.
+  Дивіться їх як один із можливих варіантів. Ваша реалізація може бути іншою, якщо проходить ті самі AC.
