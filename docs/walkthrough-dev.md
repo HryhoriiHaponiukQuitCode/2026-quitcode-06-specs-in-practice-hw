@@ -113,9 +113,13 @@ npm test
    створює окрему організацію, керовану Vercel, і займає слот). Назва — `<team-slug>`, пароль бази збережіть у
    менеджері паролів, регіон — найближчий.
 2. **Auth:** Authentication → Sign In / Providers → Email → вимкніть **Confirm email**. Вбудований SMTP надсилає
-   2 листи на годину і лише членам команди проєкту, тож користувачів створює скрипт. Там само вимкніть **Allow
-   new users to sign up**. Публічний ключ лежить у JS-бандлі, тож з увімкненою реєстрацією будь-хто зареєструється
-   сам. `npm run users:demo` працює й так, бо це Admin API. Точне місце перемикача перевіримо на репетиції.
+   2 листи на годину і лише членам команди проєкту, тож користувачів створює скрипт. У налаштуваннях
+   Authentication вимкніть і **Allow new users to sign up** (точний шлях у Dashboard звіряємо на репетиції).
+   Публічний ключ лежить у JS-бандлі, тож з увімкненою реєстрацією будь-хто зареєструється сам. Користувачі
+   з'являються лише через `npm run users:demo` (Admin API, працює й з вимкненою реєстрацією). У
+   `supabase/config.toml` шаблону вже стоїть `[auth] enable_signup = false` з коментарем, але це конфігурація
+   CLI: `db push` застосовує в хмарі міграції (і сид з `--include-seed`), а налаштувань Auth з `config.toml` не
+   переносить. Тому перемикач у Dashboard — обов'язковий.
 3. **Прив'язка й міграції** (без Docker):
 
    ```bash
@@ -136,7 +140,9 @@ npm test
 
    Заповніть за Project Settings → API Keys: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
    (`sb_publishable_…`), `SUPABASE_SECRET_KEY` (`sb_secret_…`), `DEMO_USER_PASSWORD` (свій, ≥ 8 символів).
-   Значення не вставляйте в чат з агентом: `.claude/settings.json` шаблону забороняє агенту читати `.env*`.
+   `SUPABASE_SECRET_KEY` живе **лише тут**: його читає `scripts/create-demo-users.mjs` (`npm run users:demo`), а
+   код застосунку — ні (у Vercel його не додаємо, крок 5). Значення не вставляйте в чат з агентом:
+   `.claude/settings.json` шаблону забороняє агенту читати `.env*`.
 5. **Користувачі й перший вхід:**
 
    ```bash
@@ -156,10 +162,10 @@ npm test
 1. Vercel → **Add New → Project** → Import Git Repository → ваш форк `<я>/<team-slug>` (дайте застосунку Vercel
    доступ лише до цього репозиторію). Framework — Next.js, Node 24.x береться з `engines` у `package.json`.
 2. **Environment Variables** для **Production і Preview**: лише `NEXT_PUBLIC_SUPABASE_URL` і
-   `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. `SUPABASE_SECRET_KEY` у Vercel поки **не** додавайте: у шаблоні його
-   читає лише скрипт `users:demo`, який ви запускаєте локально, а код застосунку — ні. Секретний ключ обходить RLS,
-   тож він має бути лише там, де без нього не обійтись (найменші привілеї). Знадобиться вашому серверному коду —
-   додайте тоді з типом **Secret** і зробіть редеплой. Ніколи в Client Components і ніколи з префіксом
+   `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. `SUPABASE_SECRET_KEY` у Vercel **не** додавайте: у шаблоні його
+   читає лише скрипт `users:demo`, який ви запускаєте локально, а код застосунку першого зрізу — ні. Секретний
+   ключ обходить RLS, тож він має бути лише там, де без нього не обійтись (найменші привілеї). Змінну типу
+   **Secret** додавайте лише тоді, коли її потребує ваш власний серверний код, і після цього — редеплой. Ніколи в Client Components і ніколи з префіксом
    `NEXT_PUBLIC_`. **Не** підключайте Supabase через Marketplace-інтеграцію Vercel.
 3. **Deploy.** Перевірте прод-URL `https://<проєкт>.vercel.app/login`.
 4. Settings → **Deployment Protection** → **Vercel Authentication**: якщо увімкнено — вимкніть → Save. Інакше PM
@@ -209,16 +215,13 @@ git switch -c bootstrap/evidence
 
 Заповніть `docs/bootstrap.md` за пунктами з кроків 1–8: посилання на run, назви змінних і де вони задані,
 регіон, прод-URL. **Жодних значень секретів.** Знімки екрана можна класти в `docs/img/`. Пункти «Тег спеки злито»
-і «Після merge у `main` job `db`…» заповните пізніше. У пункті про ruleset допишіть `conformance`: у форку він теж
-обов'язковий (крок 2), хоча чекліст шаблону називає лише `spec` і `app`. У пункті про змінні Vercel біля
-`SUPABASE_SECRET_KEY` напишіть «не додано — коду застосунку не потрібен» (крок 5), хоча чекліст шаблону називає
-три змінні.
+і «Після merge у `main` job `db`…» заповните пізніше. Обов'язкові перевірки ruleset — `spec`, `app`,
+`conformance` (крок 2); змінні Vercel — лише дві `NEXT_PUBLIC_…` (крок 5).
 
 **Перший PR — `docs/bootstrap.md`, а не тест.** У демо заняття `spec-v0.1` уже вийшов, тому там перший PR
 одразу з тестом з AC ID. У вас у день 0–1 спеки у форку ще немає, а тест з AC ID до `sync/spec-v0.1` валить
-`conformance` з `ORPHAN` (AC немає в спеці). Тому зелений CI і preview доводимо на `docs/bootstrap.md`, а тести
-з AC ID — після кроку 10. Якщо `spec-v0.1` уже вийшов, спершу зробіть крок 10: тоді перший PR може містити й
-перший тест з AC ID у назві.
+`conformance` з `ORPHAN` (AC немає в спеці). Тому зелений CI і preview доводимо на `docs/bootstrap.md` (день 0–1),
+а тести з AC ID у назві — лише в PR після того, як злито `sync/spec-v0.1` (крок 10).
 
 ```bash
 git add docs
@@ -259,7 +262,8 @@ git merge spec-v0.1
 
 У Claude Code або Cursor: «Уточни спеку spec-v0.1 скілом spec-clarify». Скіл:
 
-1. проходить 11 категорій таксономії і показує таблицю Ясно / Частково / Немає;
+1. проходить 11 категорій таксономії і записує таблицю Ясно / Частково / Немає в розділ `## Скан за таксономією`
+   файлу `docs/spec-reading.md` (розділ уже є в шаблоні);
 2. ставить вам **по одному** питанню з варіантами й рекомендацією — ви вирішуєте, чи йде воно до PM;
 3. видає готові тексти issues і додає рядки в `docs/spec-reading.md`.
 
@@ -272,9 +276,9 @@ git merge spec-v0.1
 
 Потім у `docs/spec-reading.md`:
 
-- **таблицю скану** (11 категорій, статус Ясно / Частково / Немає, де саме) збережіть у розділ
-  `## Скан за таксономією` над «Питання до PM». Скіл показує її лише в чаті, а в шаблоні файлу такого розділу
-  немає: додайте його самі (рубрика B його перевіряє). Зразок —
+- **таблиця скану** (11 категорій, статус Ясно / Частково / Немає, де саме) — у розділі
+  `## Скан за таксономією`. Скіл заповнює її сам; перевірте, що всі 11 рядків на місці й колонка «Де» вказує на
+  конкретні вимоги чи AC, і виправте, з чим не згодні (рубрика B її перевіряє). Зразок —
   [`spec-reading.md` демо](../examples/leave-portal/2-clarify/spec-reading.md);
 - колонка «Issue» — посилання `<pm>/<team-slug>#N`;
 - «Рішення (що зробили)» — ваше **робоче припущення**, поки PM не відповів;
@@ -337,7 +341,19 @@ npx openspec new change impl-<зріз>
    виконується лише один раз:** відредагований `seed.sql` повторно не виконується, CLI лише оновлює його хеш
    (`Updating seed hash…`). Довідкові дані, додані пізніше (або якщо `--include-seed` уже запускали), — новою
    міграцією з `insert … on conflict do nothing`.
-   Нові ролі — нова міграція з `profiles_role_check`, потім оновіть `supabase/demo-users.json` і
+   **Нові ролі** (замість `member`/`admin` шаблону) — окрема нова міграція в такому порядку:
+
+   ```sql
+   alter table public.profiles drop constraint profiles_role_check;               -- 1) зняти старе правило
+   update public.profiles set role = 'employee' where role = 'member';            -- 2) перевести наявні дані
+   alter table public.profiles alter column role set default 'employee';          -- 3) новий default
+   alter table public.profiles
+     add constraint profiles_role_check check (role in ('employee', 'manager', 'admin'));  -- 4) нове правило
+   ```
+
+   Дані й default оновлюємо **до** нового `profiles_role_check`, інакше він упаде на рядках `member`, які вже
+   створив `npm run users:demo` у кроці 4. А старе правило знімаємо першим, бо воно не пускає нові значення в
+   `update`. Ролі тут — з демо, у вас — з `product/roles.md`. Потім оновіть `supabase/demo-users.json` і
    `npm run users:demo`.
 2. **Код і тести.** Назва кожного тесту поведінки починається з AC ID: `it("AC-…-02: …")`. Пропущені тести
    (`.skip`, `.todo`) AC не покривають.
