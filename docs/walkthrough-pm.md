@@ -233,22 +233,70 @@ gh pr create --web
    відповіді робить робоче припущення, а п'ять різних припущень — п'ять різних реалізацій.
 2. **Записуйте** кожне рішення в `product/decisions.md`: питання (з `#N`) → відповідь → що змінилось у специфікації →
    версія. Зразок — [`examples/leave-portal/2-clarify/decisions.md`](../examples/leave-portal/2-clarify/decisions.md).
-   Відповіді на ваші власні Open questions — сюди ж.
-3. **Якщо відповідь змінює поведінку**, створіть нову зміну в гілці `spec/clarify-<зріз>`:
-   - змінений сценарій: `## MODIFIED Requirements` з **повним** блоком вимоги й усіма сценаріями; AC ID
-     незмінні;
-   - нове правило: новий сценарій із **новим** AC ID (наступний номер) або `## ADDED Requirements`;
-   - перед PR перегляньте diff проти поточної спеки:
+   Відповіді на ваші власні Open questions — сюди ж. Прямі коміти в `main` ruleset не пустить, тому
+   `decisions.md` комітьте в гілку `spec/clarify-<зріз>` з пункту 3, разом зі зміною. Якщо жодна відповідь не
+   змінює поведінку, усе одно потрібна гілка (наприклад, `product/decisions`) і PR.
+3. **Якщо відповідь змінює поведінку**, створіть нову зміну в окремій гілці:
 
-     ```bash
-     npx openspec show clarify-<зріз> --diff
-     npx openspec validate clarify-<зріз> --strict
-     npm run spec:check
-     ```
+   ```bash
+   git switch main
+   git pull
+   git switch -c spec/clarify-<зріз>
+   npx openspec new change clarify-<зріз>     # або /opsx:propose у Claude Code (/opsx-propose у Cursor)
+   ```
 
-     Зразок diff — [`examples/leave-portal/4-spec-v0.2/spec-v0.2-diff.txt`](../examples/leave-portal/4-spec-v0.2/spec-v0.2-diff.txt).
-4. `spec-review` для нової зміни → PR → archive у гілці → запис `## spec-v0.2` у `product/CHANGELOG.md` (MODIFIED,
-   ADDED, на які питання відповідає) → merge → `git tag spec-v0.2` → `git push origin spec-v0.2` **до кінця дня 4**.
+   `openspec new change` створює лише теку зміни з `.openspec.yaml`. Обидва файли нижче пишете ви (або агент):
+
+   - `openspec/changes/clarify-<зріз>/proposal.md` — усі розділи, як у кроці 5: пропущений розділ —
+     блокер у `spec-review`. Why — на які питання відповідає зміна (`#N`, Q1…); What Changes — що змінилось, з
+     AC ID; Users & roles — що змінюється для ролей (або «ролі не змінюються» і таблиця змін); Non-goals і
+     Assumptions — для цих відповідей; Open questions — що лишилось відкритим, або «—». Без `proposal.md`
+     `validate` проходить, а `openspec show --diff` нижче падає з «has no proposal.md yet». Зразок —
+     `openspec/changes/archive/2026-10-09-clarify-leave-rules/proposal.md` у
+     [демо-репозиторії](https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo);
+   - `openspec/changes/clarify-<зріз>/specs/<capability>/spec.md` — дельта:
+     - змінений сценарій: `## MODIFIED Requirements` з **повним** блоком вимоги й усіма сценаріями; AC ID
+       незмінні;
+     - нове правило: новий сценарій із **новим** AC ID (наступний номер) або `## ADDED Requirements`.
+
+   Перед PR перегляньте diff проти поточної спеки:
+
+   ```bash
+   npx openspec show clarify-<зріз> --diff
+   npx openspec validate clarify-<зріз> --strict
+   npm run spec:check
+   ```
+
+   Зразок diff — [`examples/leave-portal/4-spec-v0.2/spec-v0.2-diff.txt`](../examples/leave-portal/4-spec-v0.2/spec-v0.2-diff.txt).
+4. **Реліз `spec-v0.2`** — так само, як `spec-v0.1` у кроці 7, **до кінця дня 4**. `spec-review` для нової
+   зміни, потім коміт і PR:
+
+   ```bash
+   git add openspec product
+   git commit -m "Propose clarify-<зріз>"
+   git push -u origin spec/clarify-<зріз>
+   gh pr create --web
+   ```
+
+   Опис PR — тип «Зміна специфікації», розділ `## spec-review`. **У тій самій гілці, до merge:** archive і запис
+   `## spec-v0.2` у `product/CHANGELOG.md` (MODIFIED, ADDED, на які питання відповідає):
+
+   ```bash
+   npx openspec archive clarify-<зріз> -y
+   npm run spec:validate
+   git add openspec product/CHANGELOG.md
+   git commit -m "Archive clarify-<зріз> and log spec-v0.2"
+   git push
+   ```
+
+   CI зелений → **Merge** → тег на `main`, а не на гілці (після squash-злиття коміту гілки в `main` немає взагалі):
+
+   ```bash
+   git switch main
+   git pull
+   git tag spec-v0.2
+   git push origin spec-v0.2
+   ```
 5. Закрийте issues з посиланням на зміну. Повідомте команду: «`spec-v0.2` — синхронізуйтеся гілкою `sync/spec-v0.2`».
 
 Питання, що надійшли після `spec-v0.2`, — відповідь в issue й запис у `decisions.md` зі статусом «наступна версія».
