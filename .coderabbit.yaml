@@ -1,0 +1,181 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+#
+# CodeRabbit config — review of QuitCode Workshop 6 submission PRs.
+# Workshop: "Специфікації на практиці: старт командного проєкту".
+# The work itself lives in the teams' repositories (PM upstream, developer forks) and is graded
+# by the instructor's pipeline at the SHA from the submission file. Here CodeRabbit checks ONLY
+# the submission PR: one new file submissions/<team-slug>/<github-login>.md, its fields, and that
+# nothing else changed. Every check is STATIC over the diff and the PR description: no network,
+# no npm, no cloning of linked repositories.
+# Limits: custom check names < 50 chars, tone_instructions ≤ 250 chars — otherwise CodeRabbit
+# silently ignores the WHOLE file (tells: review in English, docstring check reappears).
+
+language: "uk-UA"
+tone_instructions: >
+  Ментор курсу QuitCode. Українською, коротко й доброзичливо. Перевіряєш лише файл здачі
+  WS6 і опис PR. Статуси: ✅ зроблено, ⚠️ частково, ❌ бракує.
+
+early_access: false
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: true
+  changed_files_summary: true
+  sequence_diagrams: false
+  in_progress_fortune: false
+
+  auto_review:
+    enabled: true
+    drafts: true
+    base_branches:
+      - ".*"
+    ignore_title_keywords:
+      - "WIP"
+      - "[skip review]"
+    ignore_usernames:
+      - "dependabot[bot]"
+      - "renovate[bot]"
+      - "github-actions[bot]"
+
+  # Every path of the repository is listed, so that changes outside submissions/ are visible
+  # to the "nothing else changed" check.
+  path_filters:
+    - "submissions/**"
+    - "README.md"
+    - "AGENTS.md"
+    - "CLAUDE.md"
+    - "docs/**"
+    - "materials/**"
+    - "examples/**"
+    - ".github/**"
+    - ".coderabbit.yaml"
+    - ".gitignore"
+    - ".gitattributes"
+    - "**"
+
+  path_instructions:
+    - path: "submissions/*/*.md"
+      instructions: |
+        Файл здачі WS6. Статичне рев'ю, посилань не відкривай і нічого не запускай.
+        Шлях: submissions/<team-slug>/<github-login>.md; team-slug — рівно один із
+        property-workflows, therapy-scheduling, school-purchasing, leave-portal; ім'я файла
+        (без .md) збігається з полем «GitHub-логін» і, якщо видно, з логіном автора PR (без
+        урахування регістру). Розділ «Дані»: «Роль» — pm або dev; «Команда» — та сама, що тека;
+        «Upstream» — https://github.com/<owner>/<repo> без зайвого шляху; «Форк» — для dev
+        https://github.com/<github-login>/<repo> з тим самим <repo>, що в Upstream, для pm рівно «—»;
+        «SHA» — рівно 40 символів [0-9a-f] (коротший SHA, гілка чи тег — ❌); «Версія спеки» —
+        spec-vX.Y; «Прод-URL» — для dev https://….vercel.app (або інший https-домен із поясненням),
+        для pm рівно «—». Розділ своєї ролі заповнено повними посиланнями https://github.com/…
+        (PR — …/pull/N, issues — …/issues/N), розділ іншої ролі — рівно «—». pm: «Нотатка PM» має
+        щонайменше 3 пункти, у кожному — AC ID, щонайменше два прочитання з посиланнями, «Чому» і
+        «Що зробив PM». dev: щонайменше 3 посилання на issues в Upstream (той самий owner/repo).
+        Бонус E — «—» або опис із посиланням. Плейсхолдери <…>, «…» чи незаповнені коментарі-підказки
+        замість значень — ⚠️. Повне ім'я людини у файлі — ⚠️ (ім'я лише в описі PR; логіни — нормально).
+        Значення секретів (sb_secret_, sb_publishable_ зі значенням, sbp_, eyJ…, паролі, рядки
+        підключення з паролем), email не з домену example.test — ❌.
+
+    - path: "submissions/_template.md"
+      instructions: |
+        Шаблон здачі — матеріал курсу, учасник його не змінює. Будь-яка зміна — ❌:
+        скопіюйте шаблон у submissions/<team-slug>/<github-login>.md.
+
+    - path: "submissions/README.md"
+      instructions: |
+        Інструкція здачі — матеріал курсу. Будь-яка зміна — ❌.
+
+    - path: "submissions/*/.gitkeep"
+      instructions: |
+        Службові файли тек команд. Видалення чи зміна — ❌.
+
+    - path: "docs/**"
+      instructions: |
+        Інструкції курсу (walkthrough-pm, walkthrough-dev, spec-guide). У PR здачі не змінюються —
+        будь-яка зміна ❌. Помилку в матеріалах повідомляють окремим issue, а не в PR здачі.
+
+    - path: "materials/**"
+      instructions: |
+        Брифи команд і JSON ruleset-ів — матеріали курсу. Будь-яка зміна в PR здачі — ❌.
+
+    - path: "examples/**"
+      instructions: |
+        Зразки з демо-репозиторію — матеріал курсу. Будь-яка зміна в PR здачі — ❌.
+
+    - path: ".github/**"
+      instructions: |
+        Шаблон PR курсу. Будь-яка зміна в PR здачі — ❌.
+
+    - path: "*.md"
+      instructions: |
+        README.md, AGENTS.md, CLAUDE.md — матеріали курсу. Будь-яка зміна в PR здачі — ❌.
+
+  pre_merge_checks:
+    docstrings:
+      mode: "off"
+
+    title:
+      mode: "warning"
+      requirements: >
+        PR title should follow: "WS6: <participant full name>" (two words, a real name, not a GitHub login).
+
+    # The built-in description check takes only `mode`; the name requirement is a custom check.
+    description:
+      mode: "warning"
+
+    custom_checks:
+      - mode: "warning"
+        name: "Опис PR: ім'я та прізвище"
+        instructions: >
+          Static review of the PR description only; do NOT review the diff or execute anything.
+          The description MUST contain a filled-in "Ім'я та Прізвище" field under the "Учасник"
+          heading with the participant's real full name (two words). An empty field, a leftover
+          placeholder or template comment, or only a GitHub login is NOT acceptable: say so and ask
+          the author to add it. Also check that "Роль" and "Команда" are filled and that the
+          Definition of Done checklist for the participant's role is filled in rather than left as
+          unchecked template boxes. PASS if all hold; FAIL otherwise. Answer in Ukrainian.
+
+      - mode: "warning"
+        name: "Лише один файл здачі"
+        instructions: >
+          Static review of the diff only. PASS only if the PR adds exactly one file and changes
+          nothing else, and that file is submissions/<team-slug>/<github-login>.md where team-slug
+          is one of property-workflows, therapy-scheduling, school-purchasing, leave-portal, and
+          github-login matches the "GitHub-логін" field inside the file (case-insensitive) and, when
+          visible, the PR author's login. FAIL if any other file is added, modified or deleted
+          (README.md, AGENTS.md, CLAUDE.md, docs/, materials/, examples/, .github/, .coderabbit.yaml,
+          .gitignore, .gitattributes, submissions/README.md, submissions/_template.md, .gitkeep files,
+          another participant's submission), or if the file is placed elsewhere or named differently.
+          Name every offending path. Answer in Ukrainian.
+
+      - mode: "warning"
+        name: "Поля файлу здачі заповнено"
+        instructions: >
+          Static review of the submission file only; do NOT open links or run anything. Check the
+          "Дані" section: Роль is pm or dev; Команда equals the folder name; Upstream is
+          https://github.com/<owner>/<repo>; Форк is https://github.com/<login>/<same repo> for dev and
+          exactly "—" for pm; SHA is exactly 40 lowercase hex characters (a short SHA, branch or tag
+          name is a FAIL); Версія спеки matches spec-vX.Y; Прод-URL is an https URL (normally
+          *.vercel.app) for dev and exactly "—" for pm. The section of the participant's role uses
+          full https://github.com/ links (pull requests as /pull/N, issues as /issues/N) and the other
+          role's section is exactly "—". For pm, "Нотатка PM" has at least three items, each with an AC
+          ID, at least two readings with links, "Чому" and "Що зробив PM". For dev, at least three issue
+          links point to the Upstream repository. Бонус E is "—" or a description with a link.
+          Placeholders such as <…>, "…" or untouched template comments instead of values are a FAIL.
+          List every missing or malformed field. Answer in Ukrainian.
+
+      - mode: "warning"
+        name: "Анонімізація й секрети у здачі"
+        instructions: >
+          Static review of the diff only. FAIL if the submission file contains a secret value
+          (sb_secret_ or sb_publishable_ followed by a value, sbp_ tokens, JWT-looking eyJ strings,
+          passwords, database URLs with a password), an email address outside the example.test
+          domain, a person's full name (names belong only in the PR description; GitHub logins are
+          fine), or what looks like a real client or company name rather than the four team slugs and
+          generic product words. Vendor names such as Supabase, Vercel, GitHub, QuickBooks or Buildium
+          are fine. PASS otherwise. Answer in Ukrainian.
+
+chat:
+  auto_reply: true
