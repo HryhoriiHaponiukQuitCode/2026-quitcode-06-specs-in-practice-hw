@@ -64,7 +64,8 @@ git remote -v                       # origin → ваш форк, upstream → �
 ```
 
 - `gh repo fork --clone` сам додає remote `upstream`, але **ставить upstream репозиторієм за замовчуванням**. Без
-  `set-default` команди `gh pr create` і `gh secret set` полізуть у репозиторій PM. Через браузер (Fork на
+  `set-default` команди `gh pr create` і `gh workflow run` полізуть у репозиторій PM. `gh secret set` завжди
+  пишемо з `--repo <я>/<team-slug>` (крок 7): на секрети `set-default` не діє. Через браузер (Fork на
   сторінці upstream) — те саме, тоді клонуйте свій форк і додайте `git remote add upstream https://github.com/<pm>/<team-slug>.git`.
 - **Actions у форку вимкнено за замовчуванням.** Вкладка Actions вашого форку → **I understand my workflows, go
   ahead and enable them**. Потім перший прогін: Actions → CI → **Run workflow** або `gh workflow run ci.yml`.
@@ -159,8 +160,10 @@ npm test
    лише серверний код і скрипти, ніколи Client Components і ніколи з префіксом `NEXT_PUBLIC_`. **Не** підключайте
    Supabase через Marketplace-інтеграцію Vercel.
 3. **Deploy.** Перевірте прод-URL `https://<проєкт>.vercel.app/login`.
-4. Settings → **Deployment Protection** → **Vercel Authentication** → вимкніть → Save. Інакше PM і викладач не
-   відкриють ваші preview без входу у ваш акаунт Vercel (на Hobby немає учасників команди).
+4. Settings → **Deployment Protection** → **Vercel Authentication**: якщо увімкнено — вимкніть → Save. Інакше PM
+   і викладач не відкриють ваші preview без входу у ваш акаунт Vercel (на Hobby немає учасників команди). Чи
+   вмикає його Vercel для нових проєктів Hobby за замовчуванням, перевіряємо на репетиції. Перевірка — у кроці 9:
+   preview відкривається у вікні інкогніто без входу.
 5. **Редеплой після будь-якої зміни змінних:** Deployments → останній деплой → ⋯ → **Redeploy**. Змінні діють лише
    для нових деплоїв.
 
