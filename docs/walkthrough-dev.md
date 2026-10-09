@@ -214,8 +214,8 @@ git switch -c bootstrap/evidence
 `SUPABASE_SECRET_KEY` напишіть «не додано — коду застосунку не потрібен» (крок 5), хоча чекліст шаблону називає
 три змінні.
 
-**Перший PR — `docs/bootstrap.md`, а не тест.** На слайді заняття перший PR містить тест з AC ID, бо в демо
-`spec-v0.1` уже вийшов. У вас у день 0–1 спеки у форку ще немає, а тест з AC ID до `sync/spec-v0.1` валить
+**Перший PR — `docs/bootstrap.md`, а не тест.** У демо заняття `spec-v0.1` уже вийшов, тому там перший PR
+одразу з тестом з AC ID. У вас у день 0–1 спеки у форку ще немає, а тест з AC ID до `sync/spec-v0.1` валить
 `conformance` з `ORPHAN` (AC немає в спеці). Тому зелений CI і preview доводимо на `docs/bootstrap.md`, а тести
 з AC ID — після кроку 10. Якщо `spec-v0.1` уже вийшов, спершу зробіть крок 10: тоді перший PR може містити й
 перший тест з AC ID у назві.
@@ -335,7 +335,8 @@ npx openspec new change impl-<зріз>
    `supabase/seed.sql` (`insert … on conflict do nothing`), у хмару його застосовує лише
    `npx supabase db push --include-seed` (звичайний `db:push` і job `db` у CI сид **не** виконують). **У хмарі сид
    виконується лише один раз:** відредагований `seed.sql` повторно не виконується, CLI лише оновлює його хеш
-   (`Updating seed hash…`). Довідкові дані, додані пізніше, — новою міграцією з `insert … on conflict do nothing`.
+   (`Updating seed hash…`). Довідкові дані, додані пізніше (або якщо `--include-seed` уже запускали), — новою
+   міграцією з `insert … on conflict do nothing`.
    Нові ролі — нова міграція з `profiles_role_check`, потім оновіть `supabase/demo-users.json` і
    `npm run users:demo`.
 2. **Код і тести.** Назва кожного тесту поведінки починається з AC ID: `it("AC-…-02: …")`. Пропущені тести
@@ -359,7 +360,7 @@ npx openspec new change impl-<зріз>
    `main` ruleset не пустить).
 
 **PM ще не випустив `spec-v0.1`?** `design.md` і `tasks.md` можна почати з відкритої зміни в PR PM (як у
-кроці 11), а код без AC ID — писати й зливати. Тести з AC ID у назві — лише після злиття `sync/spec-v0.1`:
+кроці 11), код — писати й зливати. Тести поведінки (з AC ID у назві) — лише після злиття `sync/spec-v0.1`:
 до того `conformance` падає з `ORPHAN`, а ruleset без нього PR не пустить. Затримка PM балів не знімає
 ([README](../README.md#що-знімає-бали-розробник)).
 
