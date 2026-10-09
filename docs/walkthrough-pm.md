@@ -297,6 +297,7 @@ gh pr create --web
    git tag spec-v0.2
    git push origin spec-v0.2
    ```
+
 5. Закрийте issues з посиланням на зміну. Повідомте команду: «`spec-v0.2` — синхронізуйтеся гілкою `sync/spec-v0.2`».
 
 Питання, що надійшли після `spec-v0.2`, — відповідь в issue й запис у `decisions.md` зі статусом «наступна версія».
