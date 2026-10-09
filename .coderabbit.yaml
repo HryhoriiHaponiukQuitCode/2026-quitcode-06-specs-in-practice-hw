@@ -108,9 +108,17 @@ reviews:
       instructions: |
         Шаблон PR курсу. Будь-яка зміна в PR здачі — ❌.
 
-    - path: "*.md"
+    - path: "README.md"
       instructions: |
-        README.md, AGENTS.md, CLAUDE.md — матеріали курсу. Будь-яка зміна в PR здачі — ❌.
+        README курсу. Будь-яка зміна в PR здачі — ❌.
+
+    - path: "AGENTS.md"
+      instructions: |
+        Правила агента для репозиторію курсу. Будь-яка зміна в PR здачі — ❌.
+
+    - path: "CLAUDE.md"
+      instructions: |
+        Імпорт AGENTS.md для Claude Code. Будь-яка зміна в PR здачі — ❌.
 
   pre_merge_checks:
     docstrings:

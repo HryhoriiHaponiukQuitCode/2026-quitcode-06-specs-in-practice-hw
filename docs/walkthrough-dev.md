@@ -15,7 +15,7 @@ PowerShell 5.1 немає `&&`: виконуйте команди по черз�
 
 **Бутстрап не чекає на спеку.** Кроки 1–9 від PM не залежать — починайте в день 0.
 
-**Бюджет треку: 8–10 годин за тиждень** (без бонусу). Бутстрап — 2,5–3 год, реалізація — 4–5 год.
+**Бюджет треку: 9,5–10,5 годин за тиждень** (сума кроків нижче, без бонусу). Бутстрап (кроки 0–9) — ~3 год, реалізація — 4–5 год.
 
 | Крок | Коли | Бюджет | Трек |
 |---|---|---|---|
@@ -154,10 +154,10 @@ npm test
 
 1. Vercel → **Add New → Project** → Import Git Repository → ваш форк `<я>/<team-slug>` (дайте застосунку Vercel
    доступ лише до цього репозиторію). Framework — Next.js, Node 24.x береться з `engines` у `package.json`.
-2. **Environment Variables** для **Production і Preview**: `NEXT_PUBLIC_SUPABASE_URL`,
-   `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. `SUPABASE_SECRET_KEY` (тип **Secret**, лише Production і Preview)
-   додайте тоді, коли ваш серверний код ним користується. Застосунок шаблону його не читає, він потрібен скрипту
-   `users:demo` локально. **Не** підключайте Supabase через Marketplace-інтеграцію Vercel.
+2. **Environment Variables** для **Production і Preview** (як у README шаблону): `NEXT_PUBLIC_SUPABASE_URL`,
+   `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` і `SUPABASE_SECRET_KEY` з типом **Secret**. Секретний ключ обходить RLS:
+   лише серверний код і скрипти, ніколи Client Components і ніколи з префіксом `NEXT_PUBLIC_`. **Не** підключайте
+   Supabase через Marketplace-інтеграцію Vercel.
 3. **Deploy.** Перевірте прод-URL `https://<проєкт>.vercel.app/login`.
 4. Settings → **Deployment Protection** → **Vercel Authentication** → вимкніть → Save. Інакше PM і викладач не
    відкриють ваші preview без входу у ваш акаунт Vercel (на Hobby немає учасників команди).
@@ -204,7 +204,10 @@ git switch -c bootstrap/evidence
 
 Заповніть `docs/bootstrap.md` за пунктами з кроків 1–8: посилання на run, назви змінних і де вони задані,
 регіон, прод-URL. **Жодних значень секретів.** Знімки екрана можна класти в `docs/img/`. Пункти «Тег спеки злито»
-і «Після merge у `main` job `db`…» заповните пізніше.
+і «Після merge у `main` job `db`…» заповните пізніше. У пункті про ruleset допишіть `conformance`: у форку він теж
+обов'язковий (крок 2), хоча чекліст шаблону називає лише `spec` і `app`.
+
+Якщо `spec-v0.1` уже вийшов, спершу зробіть крок 10: тоді перший PR може містити й перший тест з AC ID у назві.
 
 ```bash
 git add docs
