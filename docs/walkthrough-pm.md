@@ -20,7 +20,7 @@ upstream і реалізують кожен своє. Ви не пишете к�
 | 0. Підготовка машини й акаунтів | до заняття | 20–30 хв | — |
 | 1. Upstream із шаблону | день 0, на занятті | 10 хв | A |
 | 2. Ruleset на `main` | день 0 | 10 хв | A |
-| 3. Мітка, секрет denylist, CodeRabbit | день 0 | 10 хв | A |
+| 3. Мітка, denylist (локальний файл і секрет), CodeRabbit | день 0 | 10 хв | A |
 | 4. Продуктовий контекст | дні 0–1 | 1–1,5 год | A |
 | 5. Перший зріз: чернетка зміни | дні 1–2 | 1,5–2 год | B |
 | 6. Перевірка: `validate`, `spec:check`, `spec-review` | день 2 | 45 хв | B |
@@ -93,7 +93,7 @@ PowerShell: `curl.exe` замість `curl` (у Windows PowerShell 5.1 `curl` �
 
 **Доказ:** знімок екрана сторінки ruleset або вивід `gh api repos/<pm>/<team-slug>/rulesets`.
 
-## 3. Мітка, секрет denylist, CodeRabbit (10 хв) — трек A
+## 3. Мітка, denylist (локальний файл і секрет), CodeRabbit (10 хв) — трек A
 
 ```bash
 gh label create spec-question --repo <pm>/<team-slug> --description "Питання до специфікації"
@@ -101,9 +101,21 @@ gh secret set SPEC_DENYLIST --repo <pm>/<team-slug>
 ```
 
 - **Мітку створіть першого ж дня.** Форма issue «Питання до специфікації» ставить лише наявну мітку.
-- `gh secret set` попросить значення: впишіть **справжні** назви клієнта через кому. Значення ніде не друкується, а
-  CI підставляє його в `npm run spec:check`. Репозиторій публічний, тому справжніх назв немає ні в
-  `product/denylist.txt`, ні в будь-якому іншому файлі, issue чи PR.
+- **Справжні назви клієнта — лише в локальному `product/denylist.local.txt` (не в git) і секреті
+  `SPEC_DENYLIST`.** Репозиторій публічний, тому справжніх назв немає ні в `product/denylist.txt`, ні в будь-якому
+  іншому файлі, issue чи PR.
+  - **Локальний файл.** У клоні upstream створіть у редакторі `product/denylist.local.txt`: по одній назві на
+    рядок, `#` — коментар. Шаблон уже має цей шлях у `.gitignore`. Перевірка — команда нижче показує рядок
+    `.gitignore`, а `git status` файла не бачить:
+
+    ```bash
+    git check-ignore -v product/denylist.local.txt
+    ```
+
+    Тепер `npm run spec:check` на вашій машині ловить назви ще до push, але значень не друкує (лише «слово #N із
+    product/denylist.local.txt»).
+  - **Секрет для CI.** `gh secret set` попросить значення: ті самі назви через кому. Значення ніде не друкується,
+    а CI підставляє його в `npm run spec:check` (job `spec`).
 - CodeRabbit: <https://github.com/apps/coderabbitai> → Install → ваш акаунт → Only select repositories →
   `<team-slug>`. У публічних репозиторіях із < 10 зірок рев'ю не запускається само: після створення PR напишіть
   окремим **коментарем** `@coderabbitai review`.
@@ -124,14 +136,15 @@ git switch -c product/context
 | `product/glossary.md` | 8–15 термінів; колонка «Не вживаємо» | кожен іменник зі сценаріїв першого зрізу має бути тут |
 | `product/roles.md` | ролі зі значеннями `profiles.role` і **матриця роль × сутність × дія** | заповнені клітинки або «—», без порожніх; ролі шаблону `member`/`admin` замініть своїми |
 | `product/roadmap.md` | зріз на кожне заняття WS6–WS11 | WS6 — перший зріз; далі — з брифу («поза зрізом») |
-| `product/denylist.txt` | внутрішні слова, яких не має бути в спеках (кодові назви, назви чужих систем) | справжніх назв клієнта тут **немає** — вони в секреті |
+| `product/denylist.txt` | внутрішні слова, яких не має бути в спеках (кодові назви, назви чужих систем) | справжніх назв клієнта тут **немає** — вони в локальному `product/denylist.local.txt` (не в git) і секреті `SPEC_DENYLIST` (крок 3) |
 | `openspec/config.yaml` | рядок `Продукт: …` у `context` — назва й одне речення | правила `rules:` не чіпайте; якщо змінюєте — кожен пункт у лапках ([пастки](spec-guide.md#10-пастки-формату-openspec-1141)) |
 
 Перевірте й відкрийте PR:
 
 ```bash
 npm run spec:check
-git add product openspec/config.yaml
+git add product openspec/config.yaml      # denylist.local.txt не потрапить: він у .gitignore
+git status                                # перевірте: denylist.local.txt у списку немає
 git commit -m "Fill product context: vision, glossary, roles, roadmap"
 git push -u origin product/context
 gh pr create --web
@@ -184,6 +197,10 @@ npm run spec:check
 
 ## 7. Реліз `spec-v0.1` (20 хв) — трек B, до кінця дня 2
 
+Порядок релізу (так само для `spec-v0.2`): гілка зміни → PR → **у гілці** archive і запис у `CHANGELOG.md` →
+merge (**Create a merge commit**) → `git switch main` і `git pull` → `git tag spec-vX.Y` →
+`git push origin spec-vX.Y`.
+
 ```bash
 git add openspec
 git commit -m "Propose add-<зріз>"
@@ -210,7 +227,7 @@ gh pr create --web
    git push
    ```
 
-4. CI зелений → **Merge** → тег на `main`:
+4. CI зелений → злийте PR кнопкою **Create a merge commit** → тег на `main`:
 
    ```bash
    git switch main
@@ -289,7 +306,7 @@ gh pr create --web
    git push
    ```
 
-   CI зелений → **Merge** → тег на `main`, а не на гілці (після squash-злиття коміту гілки в `main` немає взагалі):
+   CI зелений → злийте PR кнопкою **Create a merge commit** → тег на `main`, а не на гілці:
 
    ```bash
    git switch main
