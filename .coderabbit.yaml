@@ -70,9 +70,11 @@ reviews:
         «SHA» — рівно 40 символів [0-9a-f] (коротший SHA, гілка чи тег — ❌); «Версія спеки» —
         spec-vX.Y; «Прод-URL» — для dev https://….vercel.app (або інший https-домен із поясненням),
         для pm рівно «—». Розділ своєї ролі заповнено повними посиланнями https://github.com/…
-        (PR — …/pull/N, issues — …/issues/N), розділ іншої ролі — рівно «—». pm: «Нотатка PM» має
-        щонайменше 3 пункти, у кожному — AC ID, щонайменше два прочитання з посиланнями, «Чому» і
-        «Що зробив PM». dev: щонайменше 3 посилання на issues в Upstream (той самий owner/repo).
+        (PR — …/pull/N, issues — …/issues/N, коментарі в issues — …/issues/N#issuecomment-M), розділ
+        іншої ролі — рівно «—». pm: «Нотатка PM» має щонайменше 3 пункти, у кожному — AC ID, щонайменше
+        два прочитання з посиланнями (пункт із поміткою «прогноз» — два прочитання без посилань), «Чому» і
+        «Що зробив PM». dev: щонайменше 3 посилання на issues або коментарі в issues (…/issues/N або
+        …/issues/N#issuecomment-M) в Upstream (той самий owner/repo), щонайменше одне — без #issuecomment.
         Без посилання в розділі dev можуть бути лише число AC «реалізовано» / усього (N / M) і
         «spec-v0.2 не випущено» в полі «PR sync/spec-v0.2»; у розділі pm — «spec-v0.2 не випущено» в
         полях «PR зміни spec-v0.2» і «Тег spec-v0.2».
@@ -170,10 +172,12 @@ reviews:
           exactly "—" for pm; SHA is exactly 40 lowercase hex characters (a short SHA, branch or tag
           name is a FAIL); Версія спеки matches spec-vX.Y; Прод-URL is an https URL (normally
           *.vercel.app) for dev and exactly "—" for pm. The section of the participant's role uses
-          full https://github.com/ links (pull requests as /pull/N, issues as /issues/N) and the other
-          role's section is exactly "—". For pm, "Нотатка PM" has at least three items, each with an AC
-          ID, at least two readings with links, "Чому" and "Що зробив PM". For dev, at least three issue
-          links point to the Upstream repository. Non-link values the template allows in the dev
+          full https://github.com/ links (pull requests as /pull/N, issues as /issues/N, issue comments
+          as /issues/N#issuecomment-M) and the other role's section is exactly "—". For pm, "Нотатка PM"
+          has at least three items, each with an AC ID, at least two readings with links (an item marked
+          «прогноз» may give two readings without links), "Чому" and "Що зробив PM". For dev, at least
+          three links to issues or issue comments (/issues/N or /issues/N#issuecomment-M) point to the
+          Upstream repository, at least one of them a plain issue link without #issuecomment. Non-link values the template allows in the dev
           section: the count "AC «реалізовано» / усього" (N / M) and "spec-v0.2 не випущено" for
           "PR sync/spec-v0.2"; in the pm section, "spec-v0.2 не випущено" for "PR зміни spec-v0.2" and
           "Тег spec-v0.2". Бонус E is "—" or a description with a link.

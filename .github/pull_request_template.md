@@ -30,8 +30,8 @@
 ### Розробник
 
 - [ ] Форк; ruleset на `main`; CI зелений на `main` (`spec`, `app`, `conformance`)
-- [ ] `docs/bootstrap.md`, `docs/spec-reading.md`, `docs/conformance.md` заповнені; щонайменше 3 issues в upstream
-- [ ] Зріз задеплоєно на Vercel; `sync/spec-v0.2` (або останній тег PM) злито merge-комітом
+- [ ] `docs/bootstrap.md`, `docs/spec-reading.md`, `docs/conformance.md` заповнені; щонайменше 3 питання в upstream: власні issues `spec-question` або коментар із новим варіантом чи впливом у наявному issue колеги (дублікатів не створюємо), з них щонайменше 1 — власне issue
+- [ ] Зріз задеплоєно на Vercel, в останньому PR реалізації — запис екрана 1–2 хв (кожна роль, головний сценарій, без паролів у кадрі); `sync/spec-v0.2` (або останній тег PM) злито merge-комітом
 - [ ] Жодних значень секретів і назв клієнтів; дані — `*@example.test`
 
 ### Здача
