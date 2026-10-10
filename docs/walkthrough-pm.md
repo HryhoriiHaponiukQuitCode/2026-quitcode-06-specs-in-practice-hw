@@ -12,13 +12,17 @@ upstream і реалізують кожен своє. Ви не пишете к�
 Позначення: `<pm>` — ваш GitHub-логін, `<team-slug>` — слаг команди (`property-workflows`, `therapy-scheduling`,
 `school-purchasing` або `leave-portal`). Команди нижче — для Git Bash на Windows і терміналу macOS. Де PowerShell
 відрізняється, це сказано окремо. У Windows PowerShell 5.1 немає `&&`: виконуйте команди по черзі.
+Якщо PowerShell відповідає «running scripts is disabled on this system», пишіть `npx.cmd`, `npm.cmd`,
+`openspec.cmd` замість `npx`, `npm`, `openspec`.
 
 **Бюджет треку: 7–8 годин за тиждень** (сума кроків нижче, без бонусу). Найбільше часу йде на перший зріз (кроки 5–6) і цикл уточнень (крок 8).
+
+Дні календарні (з вихідними); «кінець дня N» — 23:59 за Києвом N-го дня після заняття (день 0 — день заняття).
 
 | Крок | Коли | Бюджет | Трек |
 |---|---|---|---|
 | 0. Підготовка машини й акаунтів | до заняття | 20–30 хв | — |
-| 1. Upstream із шаблону | день 0, на занятті | 10 хв | A |
+| 1. Upstream із шаблону | день 0, одразу після заняття | 10 хв | A |
 | 2. Ruleset на `main` | день 0 | 10 хв | A |
 | 3. Мітка, denylist (локальний файл і секрет), CodeRabbit | день 0 | 10 хв | A |
 | 4. Продуктовий контекст | дні 0–1 | 1–1,5 год | A |
@@ -49,6 +53,8 @@ upstream і реалізують кожен своє. Ви не пишете к�
 
 ## 1. Upstream із шаблону (10 хв) — трек A
 
+Команди нижче може виконати агент — давайте їх по одній і підтверджуйте кожен push.
+
 Через браузер: <https://github.com/koldovsky/2026-quitcode-06-project-template> → **Use this template** →
 **Create a new repository** → Owner — ваш акаунт, Repository name — `<team-slug>`, **Public** → Create.
 
@@ -76,7 +82,8 @@ Ruleset забороняє прямі коміти в `main`: усе йде че
 - Ruleset name — `main: PR + CI`, Enforcement status — **Active**;
 - Target branches → Add target → **Include default branch**;
 - позначте **Restrict deletions**, **Block force pushes**, **Require a pull request before merging** (Required
-  approvals — `0`), **Require status checks to pass** → Add checks → `spec`, `app` → Create.
+  approvals — `0`; Allowed merge methods — лише **Merge**, точну назву поля звіряємо на репетиції),
+  **Require status checks to pass** → Add checks → `spec`, `app` → Create.
 
 Якщо `spec` і `app` не з'являються в пошуку, дочекайтеся першого прогону CI (крок 1) і спробуйте ще раз.
 
@@ -105,19 +112,30 @@ gh secret set SPEC_DENYLIST --repo <pm>/<team-slug>
   `SPEC_DENYLIST`.** Репозиторій публічний, тому справжніх назв немає ні в `product/denylist.txt`, ні в будь-якому
   іншому файлі, issue чи PR.
   - **Локальний файл.** У клоні upstream створіть у редакторі `product/denylist.local.txt`: по одній назві на
-    рядок, `#` — коментар. Шаблон уже має цей шлях у `.gitignore`. Перевірка — команда нижче показує рядок
-    `.gitignore`, а `git status` файла не бачить:
+    рядок, `#` — коментар. Шаблон уже має цей шлях у `.gitignore`. Перевірка — у виводі першої команди має
+    бути рядок `!! product/denylist.local.txt` (`!!` — git ігнорує файл) і жодного рядка з `??`, а друга має показати
+    «слів у denylist: N», де N — не менше кількості ваших назв:
 
     ```bash
-    git check-ignore -v product/denylist.local.txt
+    git status --short --ignored product
+    npm run spec:check
     ```
+
+    Бачите `denylist.local.txt.txt`? Провідник Windows приховав розширення, і до імені додалось друге `.txt`:
+    увімкніть Провідник → Вигляд → Показати → Розширення імен файлів і перейменуйте файл на `denylist.local.txt`.
 
     Тепер `npm run spec:check` на вашій машині ловить назви ще до push, але значень не друкує (лише «слово #N із
     product/denylist.local.txt»).
   - **Секрет для CI.** `gh secret set` попросить значення: ті самі назви через кому. Значення ніде не друкується,
     а CI підставляє його в `npm run spec:check` (job `spec`). Але CI у PR із форків (пропозиції змін спеки від
     розробників) секретів не отримує: там `spec:check` бачить лише `product/denylist.txt`. Перед merge такого PR
-    перевірте його локально: `gh pr checkout <номер>` → `npm run spec:check`.
+    перевірте його локально: `gh pr checkout <номер>` → `npm run spec:check`. Якщо в такому PR замість
+    перевірок `spec` і `app` GitHub показує кнопку **Approve and run workflows** (перший внесок розробника в ваш
+    репозиторій), натисніть її — інакше обов'язкові перевірки чекатимуть безкінечно (точний текст кнопки й
+    налаштування за замовчуванням звіряємо на репетиції).
+  - **Список для розробників.** Надішліть ті самі назви кожному розробнику команди **особистим повідомленням**
+    (не в загальний чат і не в issue): вони збережуть їх у `product/denylist.local.txt` свого клону, і
+    `npm run spec:check` у форках ловитиме назви в документації, коді, сидах і тестах ще до push.
 - CodeRabbit: <https://github.com/apps/coderabbitai> → Install → ваш акаунт → Only select repositories →
   `<team-slug>`. У публічних репозиторіях із < 10 зірок рев'ю не запускається само: після створення PR напишіть
   окремим **коментарем** `@coderabbitai review`.
@@ -138,15 +156,15 @@ git switch -c product/context
 | `product/glossary.md` | 8–15 термінів; колонка «Не вживаємо» | кожен іменник зі сценаріїв першого зрізу має бути тут |
 | `product/roles.md` | ролі зі значеннями `profiles.role` і **матриця роль × сутність × дія** | заповнені клітинки або «—», без порожніх; ролі шаблону `member`/`admin` замініть своїми |
 | `product/roadmap.md` | зріз на кожне заняття WS6–WS11 | WS6 — перший зріз; далі — з брифу («поза зрізом») |
-| `product/denylist.txt` | внутрішні слова, яких не має бути в спеках (кодові назви, назви чужих систем) | справжніх назв клієнта тут **немає** — вони в локальному `product/denylist.local.txt` (не в git) і секреті `SPEC_DENYLIST` (крок 3) |
+| `product/denylist.txt` | внутрішні слова, яких не має бути ні в спеках, ні в коді й документації (кодові назви, заглушки з чужих шаблонів на кшталт Contoso); назви сторонніх систем із брифу (QuickBooks, Buildium) — дозволені | справжніх назв клієнта тут **немає** — вони в локальному `product/denylist.local.txt` (не в git) і секреті `SPEC_DENYLIST` (крок 3) |
 | `openspec/config.yaml` | рядок `Продукт: …` у `context` — назва й одне речення | правила `rules:` не чіпайте; якщо змінюєте — кожен пункт у лапках ([пастки](spec-guide.md#10-пастки-формату-openspec-1141)) |
 
 Перевірте й відкрийте PR:
 
 ```bash
 npm run spec:check
-git add product openspec/config.yaml      # denylist.local.txt не потрапить: він у .gitignore
-git status                                # перевірте: denylist.local.txt у списку немає
+git status --short --ignored product      # denylist.local.txt — лише з !!, жодного ?? поруч
+git add product openspec/config.yaml
 git commit -m "Fill product context: vision, glossary, roles, roadmap"
 git push -u origin product/context
 gh pr create --web
@@ -172,10 +190,15 @@ git switch -c spec/add-<зріз>
 бере з `openspec/config.yaml`. Ви відповідаєте на питання, а потім **читаєте й правите кожен рядок**: агент
 охоче вигадує правила, яких ви не казали, і пише «тощо».
 
+`/opsx:propose` (у Cursor `/opsx-propose`) за своєю інструкцією генерує всі артефакти зміни, зокрема `design.md` і
+`tasks.md` (як реалізувати). У зміні PM їх не лишаємо — це робота розробника у форку: додайте до запиту «пиши лише
+proposal.md і specs/, без design.md і tasks.md», а якщо агент їх усе ж створив — видаліть обидва файли до коміту.
+
 **Вручну:** `npx openspec new change add-<зріз>`, далі файли за [скелетом](spec-guide.md#скелет-зміни).
 
 Що перевірити перед кроком 6:
 
+- у теці зміни лише `.openspec.yaml`, `proposal.md` і `specs/` — без `design.md` і `tasks.md`;
 - `proposal.md`: Why, What Changes з AC ID, Capabilities, Users & roles (таблиця), Non-goals, Assumptions,
   Open questions;
 - кожна вимога — EARS з `SHALL`; кожен сценарій — `#### Scenario: AC-<AREA>-<NN> …`, один критерій, числа й дати;
@@ -198,6 +221,10 @@ npm run spec:check
 ви виправили, а що свідомо лишили (і чому). Без цього розділу — мінус бали за B.
 
 ## 7. Реліз `spec-v0.1` (20 хв) — трек B, до кінця дня 2
+
+Не працювали з гілками й тегами? Попросіть агента: «Виконай реліз spec-v0.1 за README, «Шлях PM», крок 5; перед
+кожним git push, створенням PR і merge питай мене». Агент питає перед push — так задано в AGENTS.md («Спитай
+спершу»). Merge — лише «Create a merge commit».
 
 Порядок релізу (так само для `spec-v0.2`): гілка зміни → PR → **у гілці** archive і запис у `CHANGELOG.md` →
 merge (**Create a merge commit**) → `git switch main` і `git pull` → `git tag spec-vX.Y` →
@@ -237,6 +264,16 @@ gh pr create --web
    git tag spec-v0.1
    git push origin spec-v0.1
    ```
+
+   **Або через браузер (без терміналу):** Code → Releases → **Draft a new release** → Choose a tag → введіть
+   `spec-v0.1` → **Create new tag on publish** → Target — `main` → Release title `spec-v0.1`, в описі — запис із
+   `CHANGELOG.md` → **Publish release** (точні назви кнопок звіряємо на репетиції).
+
+   **Перевірка тегу (обидва способи):** відкрийте `https://github.com/<pm>/<team-slug>/tree/spec-v0.1/openspec/specs`
+   — там тека вашої можливості з `spec.md`, а в `openspec/changes/` немає теки `add-<зріз>` (лише `archive/`).
+   Якщо не так, тег стоїть не на тому коміті: поки розробники не синхронізувались, видаліть його
+   (`git push origin --delete spec-v0.1`, потім `git tag -d spec-v0.1`; якщо створювали реліз — спершу
+   Releases → Delete) і поставте знову.
 
 5. Напишіть у чат команди: «`spec-v0.1` готовий, питання — issues `spec-question` в upstream».
 
@@ -317,6 +354,8 @@ gh pr create --web
    git push origin spec-v0.2
    ```
 
+   Або через Releases, як у кроці 7; перевірка тегу — та сама (`…/tree/spec-v0.2/openspec/specs`).
+
 5. Закрийте issues з посиланням на зміну. Повідомте команду: «`spec-v0.2` — синхронізуйтеся гілкою `sync/spec-v0.2`».
 
 Питання, що надійшли після `spec-v0.2`, — відповідь в issue й запис у `decisions.md` зі статусом «наступна версія».
@@ -359,8 +398,9 @@ git rev-list -n 1 spec-v0.2
 
 - **Друга OpenSpec-зміна** — наступний зріз з `roadmap.md` (`add-<зріз-2>`), відкритий PR в upstream зі
   зеленим CI і розділом `spec-review`. Не архівуйте й не тегуйте її до WS7, якщо команда ще не закінчила перший зріз.
-- **Порівняння з Spec Kit:** проженіть одну свою вимогу через `/speckit-clarify` (GitHub Spec Kit; `pip install
-  specify-cli` — Python ≥ 3.11, ставте окремо від upstream) і через `spec-review`. Порівняйте, які питання знайшов
-  кожен, які пропустив і який формат зручніший для вашої команди.
+- **Порівняння з Spec Kit:** в окремій порожній теці (не в upstream) `pip install specify-cli==1.1.2` (Python ≥ 3.11)
+  → `specify init --here --integration claude` (у Cursor — `--integration cursor-agent`) → `/speckit-specify` з
+  текстом однієї вашої вимоги → `/speckit-clarify`; та сама вимога — через `spec-review`. Порівняйте, які питання
+  знайшов кожен, які пропустив і який формат зручніший для вашої команди.
 
 Звіт — у розділі «Бонус E» файлу здачі: посилання і до пів сторінки висновків.

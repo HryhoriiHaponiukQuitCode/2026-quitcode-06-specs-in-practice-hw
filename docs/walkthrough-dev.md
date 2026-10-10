@@ -11,11 +11,14 @@ issue в upstream, нову версію забираєте гілкою `sync/s
 Позначення: `<я>` — ваш GitHub-логін, `<pm>` — логін PM, `<team-slug>` — назва upstream (слаг команди),
 `<ref>` — Project ref проєкту Supabase, `<зріз>` — короткий слаг першого зрізу з `proposal.md` PM.
 Команди — для Git Bash на Windows і терміналу macOS. Де PowerShell відрізняється, це сказано окремо. У Windows
-PowerShell 5.1 немає `&&`: виконуйте команди по черзі.
+PowerShell 5.1 немає `&&`: виконуйте команди по черзі. Якщо PowerShell відповідає «running scripts is disabled on
+this system», пишіть `npx.cmd`, `npm.cmd`, `openspec.cmd` замість `npx`, `npm`, `openspec`.
 
 **Бутстрап не чекає на спеку.** Кроки 1–9 від PM не залежать — починайте в день 0.
 
 **Бюджет треку: 9,5–10,5 годин за тиждень** (сума кроків нижче, без бонусу). Бутстрап (кроки 0–9) — ~3 год, реалізація — 4–5 год.
+
+Дні календарні (з вихідними); «кінець дня N» — 23:59 за Києвом N-го дня після заняття (день 0 — день заняття).
 
 | Крок | Коли | Бюджет | Трек |
 |---|---|---|---|
@@ -70,7 +73,21 @@ git remote -v                       # origin → ваш форк, upstream → �
 - **Actions у форку вимкнено за замовчуванням.** Вкладка Actions вашого форку → **I understand my workflows, go
   ahead and enable them**. Потім перший прогін: Actions → CI → **Run workflow** або `gh workflow run ci.yml`.
   Очікувано зелені `spec`, `app`, `conformance`. `db` пропущено, бо це не push у `main`. Форкнули вже після
-  тегу `spec-v0.1`? Тоді `conformance` червоний з `NO-ROW` — це очікувано, див. примітку в кінці кроку 9.
+  тегу `spec-v0.1`? Тоді `conformance` червоний: `spec:source` (`.spec-source` ще закоментований) і `NO-ROW` — це
+  очікувано, див. примітку нижче й у кінці кроку 9.
+
+> Форкнули вже після тегу `spec-v0.1` (зокрема, приєдналися на WS7 чи пізніше)? `main` PM може містити правки
+> `product/` після останнього тегу, тож ДО ruleset (крок 2) вирівняйте `main` форку з останнім тегом:
+>
+> ```bash
+> git fetch upstream --tags
+> git ls-remote --tags --refs --sort=-v:refname upstream "spec-v*" | head -1   # останній тег
+> git reset --hard <останній тег>
+> git push --force-with-lease origin main
+> ```
+>
+> Далі крок 10 одразу з цим тегом (гілка `sync/<останній тег>`, у `.spec-source` — він же); проміжні теги окремо
+> не синхронізуйте.
 
 **Доказ:** посилання на перший run і вивід `gh repo set-default --view` — у `docs/bootstrap.md` (крок 9).
 
@@ -79,8 +96,8 @@ git remote -v                       # origin → ваш форк, upstream → �
 Через браузер: Settings → Rules → Rulesets → New ruleset → New branch ruleset → назва `main: PR + CI`,
 Enforcement status **Active**, Target branches → **Include default branch**, позначте **Restrict deletions**,
 **Block force pushes**, **Require a pull request before merging** (Required approvals — `0`: власний PR
-схвалити не можна), **Require status checks to pass** → `spec`, `app`, `conformance` → Create. Якщо перевірок
-немає в пошуку, дочекайтеся першого прогону CI з кроку 1.
+схвалити не можна; Allowed merge methods — лише **Merge**, точну назву поля звіряємо на репетиції),
+**Require status checks to pass** → `spec`, `app`, `conformance` → Create. Якщо перевірок немає в пошуку, дочекайтеся першого прогону CI з кроку 1.
 
 Або через `gh api` (JSON — [`materials/rulesets/fork-main.json`](../materials/rulesets/fork-main.json); ми перевіримо
 його на ваших акаунтах на репетиції):
@@ -93,8 +110,9 @@ rm ruleset.json
 
 PowerShell: `curl.exe` замість `curl`, `Remove-Item ruleset.json` замість `rm`.
 
-Ruleset дозволяє всі три способи злиття. **Гілки `sync/spec-vX.Y` зливайте лише кнопкою Create a merge commit**,
-інакше тег upstream не потрапить в історію `main`, і наступна синхронізація дасть конфлікти.
+Ruleset дозволяє лише merge commit: так тег upstream гарантовано потрапляє в історію `main`, і наступна
+синхронізація не дає конфліктів. Якщо налаштовуєте через браузер і поле злиття не знайшли — **гілки
+`sync/spec-vX.Y` зливайте лише кнопкою Create a merge commit**.
 
 ## 3. Залежності й локальні перевірки (15 хв) — трек A
 
@@ -107,6 +125,10 @@ npm test
 
 Попередження `npm warn deprecated …` / `allow-scripts` під час `npm ci` очікувані. `npm audit fix` і оновлення
 пакетів до latest не запускайте: шаблон перевірено з TypeScript ^5 і ESLint ^9.
+
+**Denylist команди.** PM надішле особистим повідомленням список справжніх назв. Збережіть його в
+`product/denylist.local.txt` свого клону (уже в `.gitignore`; `spec:source` невідстежуваний файл не бачить). Тоді
+`npm run spec:check` ловить назви в `docs/`, `src/`, `supabase/` і `tests/` ще до push.
 
 ## 4. Supabase (40 хв) — трек A
 
@@ -146,7 +168,8 @@ npm test
    (`sb_publishable_…`), `SUPABASE_SECRET_KEY` (`sb_secret_…`), `DEMO_USER_PASSWORD` (свій, ≥ 8 символів).
    `SUPABASE_SECRET_KEY` живе **лише тут**: його читає `scripts/create-demo-users.mjs` (`npm run users:demo`), а
    код застосунку — ні (у Vercel його не додаємо, крок 5). Значення не вставляйте в чат з агентом:
-   `.claude/settings.json` шаблону забороняє агенту читати `.env*`.
+   `.claude/settings.json` шаблону забороняє читати `.env*` агенту Claude Code; у Cursor такої заборони немає — лише
+   ваша дисципліна.
 5. **Користувачі й перший вхід:**
 
    ```bash
@@ -154,12 +177,14 @@ npm test
    npm run dev            # http://localhost:3000 → вхід як admin@example.test
    ```
 
-6. Для Supabase MCP з `.mcp.json` (лише читання) задайте змінну перед запуском агента:
+6. Для Supabase MCP з `.mcp.json` (лише читання; цей файл читає Claude Code, Cursor — ні) задайте змінну перед
+   запуском агента:
    `export SUPABASE_PROJECT_REF=<ref>` (PowerShell: `$env:SUPABASE_PROJECT_REF = "<ref>"`).
 
 **Правила бази (з `AGENTS.md` шаблону):** схему змінюємо лише міграціями, у Dashboard схему не редагуємо;
 `supabase db reset --linked`, `migration repair`, `db push --include-all` — ніколи. CLI у сесії агента сам
-підтверджує дії, тому `.claude/settings.json` питає вас перед кожним `db push`.
+підтверджує дії, тому `.claude/settings.json` питає вас перед кожним `db push` (у Claude Code; у Cursor
+підтверджуйте самі).
 
 ## 5. Vercel (30 хв) — трек A
 
@@ -199,6 +224,7 @@ Job `db` у `.github/workflows/ci.yml` виконує `supabase db push` піс�
 gh secret set SUPABASE_ACCESS_TOKEN --repo <я>/<team-slug>
 gh secret set SUPABASE_DB_PASSWORD --repo <я>/<team-slug>
 gh secret set SUPABASE_PROJECT_ID --repo <я>/<team-slug>     # значення — <ref>
+gh secret set SPEC_DENYLIST --repo <я>/<team-slug>   # необов'язково: той самий список через кому — для CI форку
 ```
 
 `gh secret set` питає значення й ніде його не друкує. `SUPABASE_ACCESS_TOKEN` — окремий токен для CI:
@@ -218,7 +244,8 @@ git switch -c bootstrap/evidence
 ```
 
 Заповніть `docs/bootstrap.md` за пунктами з кроків 1–8: посилання на run, назви змінних і де вони задані,
-регіон, прод-URL. **Жодних значень секретів.** Знімки екрана можна класти в `docs/img/`. Пункти «Тег спеки злито»
+регіон, прод-URL. **Жодних значень секретів.** Знімки екрана можна класти в `docs/img/`, але `spec:check` картинок не
+читає: перед комітом перевірте, що на них немає назв клієнта, імен людей і значень ключів. Пункти «Тег спеки злито»
 і «Після merge у `main` job `db`…» заповните пізніше. Обов'язкові перевірки ruleset — `spec`, `app`,
 `conformance` (крок 2); змінні Vercel — лише дві `NEXT_PUBLIC_…` (крок 5).
 
@@ -238,9 +265,12 @@ gh pr create --web       # base: main вашого форку
 Окремим коментарем — `@coderabbitai review`. Злийте PR. Після merge перевірте Actions: job `db` зелений і
 виконав крок `supabase db push` (точний текст виводу CLI перевіримо на репетиції; база вже актуальна, бо міграцію
 ви застосували в кроці 4). Якщо в лозі «db push пропущено», якогось секрету з кроку 7 бракує.
+Job `db` червоний на `supabase link` чи `db push`, хоча секрети на місці? Перевірте, чи проєкт Supabase не на
+паузі (Dashboard → Resume project; як саме CLI падає на паузі, звіряємо на репетиції), і перезапустіть job.
 
-> Форкнули вже після тегу `spec-v0.1`? Тоді `conformance` упаде з `NO-ROW`: спека вже у форку, а матриця
-> порожня. Спершу зробіть крок 10, а `docs/bootstrap.md` закомітьте в ту саму гілку `sync/spec-v0.1`.
+> Форкнули вже після тегу `spec-v0.1`? Спершу вирівняйте `main` з останнім тегом (крок 1), потім крок 10 з цим
+> тегом, а `docs/bootstrap.md` закомітьте в ту саму гілку `sync/<останній тег>`: окремий PR бутстрапу впаде на
+> `conformance` з `NO-ROW`.
 
 ## 10. Синхронізація `spec-v0.1` (20 хв) — трек B
 
@@ -255,12 +285,22 @@ git merge --no-edit spec-v0.1
 ```
 
 1. У `.spec-source` розкоментуйте два рядки: `upstream: <pm>/<team-slug>`, `version: spec-v0.1`.
-2. `npm run spec:source` → OK.
+2. `npm run spec:source` → **OK** (не SKIP: SKIP означає, що рядки не розкоментовано або в `upstream:` стоїть ваш
+   логін, а не `<pm>`).
 3. У `docs/conformance.md` додайте рядок на кожен AC зі спеки. Поки код не написано — статус
    `відкладено (не реалізовано, задача з tasks.md)` або інша конкретна причина. Це вміє `/conformance` у Claude Code
    чи Cursor.
 4. `npm run ac:coverage` → OK.
-5. PR у форк → зелений CI → злийте кнопкою **Create a merge commit** (не Squash і не Rebase).
+5. Комітимо й відкриваємо PR:
+
+   ```bash
+   git add .spec-source docs
+   git commit -m "Sync spec-v0.1"
+   git push -u origin sync/spec-v0.1
+   gh pr create --web       # base: main вашого форку
+   ```
+
+   → зелений CI → злийте кнопкою **Create a merge commit** (не Squash і не Rebase).
 
 ## 11. Читання спеки (1 год) — трек B
 
@@ -361,8 +401,11 @@ npx openspec new change impl-<зріз>
    створив `npm run users:demo` у кроці 4. А старе правило знімаємо першим, бо воно не пускає нові значення в
    `update`. Ролі тут — з демо, у вас — з `product/roles.md`. Потім оновіть `supabase/demo-users.json` і
    `npm run users:demo`.
-2. **Код і тести.** Назва кожного тесту поведінки починається з AC ID: `it("AC-…-02: …")`. Пропущені тести
-   (`.skip`, `.todo`) AC не покривають.
+2. **Код і тести.** Назва кожного тесту поведінки починається з AC ID: `it("AC-…-02: …")`. Тести — лише у файлах
+   `*.test.ts` / `*.test.tsx` (у `src/` або `tests/`): `*.spec.ts` Vitest не запускає, і `ac:coverage` такий тест не
+   рахує. Пропущені тести (`.skip`, `.todo`) AC не покривають, а тест без жодного `expect` Vitest вважає проваленим.
+   Шляхи в колонках «Код» і «Тест» пишіть від кореня репозиторію в бектиках (`src/…`, `tests/…`, `supabase/…`;
+   номер рядка `:12` можна): `ac:coverage` перевіряє, що ці файли є і що тест із цим AC лежить у вказаному файлі.
 3. **Матриця.** `/conformance` перебудовує `docs/conformance.md`. Статус — дослівно `реалізовано` або
    `відкладено (причина)`.
 4. **Перевірки перед PR:**
@@ -394,6 +437,10 @@ npx openspec new change impl-<зріз>
 
 ## 13. Синхронізація `spec-v0.2` (45 хв) — трек D
 
+Про новий тег PM напише в чат команди. Крім того, поки `.spec-source` вказує старий тег, `npm run spec:source` (і
+CI форку) друкує попередження «УВАГА: в <pm>/<team-slug> уже є spec-v0.2…». CI при цьому лишається зеленим, тож
+не відкладайте синхронізацію.
+
 ```bash
 git switch main
 git pull
@@ -402,7 +449,8 @@ git switch -c sync/spec-v0.2
 git merge --no-edit spec-v0.2
 ```
 
-1. `.spec-source` → `version: spec-v0.2`; `npm run spec:source` → OK.
+1. `.spec-source` → `version: spec-v0.2`; `npm run spec:source` → **OK** (не SKIP: SKIP означає, що рядки не
+   розкоментовано або в `upstream:` стоїть ваш логін, а не `<pm>`).
 2. `npm run ac:coverage` **упаде** з `NO-ROW` на нових AC — це і є дрейф, який ловить CI (зразок —
    [`drift-ci.txt`](../examples/leave-portal/4-spec-v0.2/drift-ci.txt)). Додайте рядки.
 3. **Змінені сценарії (MODIFIED) перевірка не бачить** — звірте їх самі:
@@ -417,10 +465,25 @@ git merge --no-edit spec-v0.2
    [`spec-reading.md` демо](https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo/blob/main/docs/spec-reading.md#синхронізація-на-spec-v02).
 4. Реалізація дельти — у тій самій гілці або окремими PR після злиття sync-PR. Великій дельті дайте окрему зміну
    `impl-<зріз>-v0-2` з `skip_specs: true`.
-5. PR → зелений CI → **Create a merge commit**.
+5. Комітимо й відкриваємо PR:
+
+   ```bash
+   git add .spec-source docs
+   git commit -m "Sync spec-v0.2"
+   git push -u origin sync/spec-v0.2
+   gh pr create --web       # base: main вашого форку
+   ```
+
+   → зелений CI → злийте кнопкою **Create a merge commit** (не Squash і не Rebase).
 
 Якщо попередній sync-PR злили squash-ем і `git merge` дав конфлікти в `product/` чи `openspec/specs/`, візьміть
-версію тегу: `git checkout --theirs -- product openspec/specs`.
+версію тегу й завершіть merge:
+
+```bash
+git checkout --theirs -- product openspec/specs
+git add product openspec/specs
+git commit --no-edit
+```
 
 **PM не випустив `spec-v0.2` до дня 6?** Трек D оцінюємо за тим, що є: sync-PR на останній тег PM (або рядок у
 файлі здачі «`spec-v0.2` не випущено»). Затримка PM не знімає з вас балів.
