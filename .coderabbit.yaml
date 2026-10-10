@@ -74,7 +74,8 @@ reviews:
         щонайменше 3 пункти, у кожному — AC ID, щонайменше два прочитання з посиланнями, «Чому» і
         «Що зробив PM». dev: щонайменше 3 посилання на issues в Upstream (той самий owner/repo).
         Без посилання в розділі dev можуть бути лише число AC «реалізовано» / усього (N / M) і
-        «spec-v0.2 не випущено» в полі «PR sync/spec-v0.2».
+        «spec-v0.2 не випущено» в полі «PR sync/spec-v0.2»; у розділі pm — «spec-v0.2 не випущено» в
+        полях «PR зміни spec-v0.2» і «Тег spec-v0.2».
         Бонус E — «—» або опис із посиланням. Плейсхолдери <…>, «…» чи незаповнені коментарі-підказки
         замість значень — ⚠️. Повне ім'я людини у файлі — ⚠️ (ім'я лише в описі PR; логіни — нормально).
         Значення секретів (sb_secret_, sb_publishable_ зі значенням, sbp_, eyJ…, паролі, рядки
@@ -174,7 +175,8 @@ reviews:
           ID, at least two readings with links, "Чому" and "Що зробив PM". For dev, at least three issue
           links point to the Upstream repository. Non-link values the template allows in the dev
           section: the count "AC «реалізовано» / усього" (N / M) and "spec-v0.2 не випущено" for
-          "PR sync/spec-v0.2". Бонус E is "—" or a description with a link.
+          "PR sync/spec-v0.2"; in the pm section, "spec-v0.2 не випущено" for "PR зміни spec-v0.2" and
+          "Тег spec-v0.2". Бонус E is "—" or a description with a link.
           Placeholders such as <…>, "…" or untouched template comments instead of values are a FAIL.
           List every missing or malformed field. Answer in Ukrainian.
 

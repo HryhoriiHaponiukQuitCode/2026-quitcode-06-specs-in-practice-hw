@@ -25,8 +25,8 @@
 - PR продуктового контексту: <!-- https://github.com/<pm>/<team-slug>/pull/N -->
 - PR першого зрізу (з розділом `## spec-review`): <!-- …/pull/N -->
 - Тег spec-v0.1: <!-- https://github.com/<pm>/<team-slug>/releases/tag/spec-v0.1 або …/tree/spec-v0.1 -->
-- PR зміни spec-v0.2: <!-- …/pull/N -->
-- Тег spec-v0.2: <!-- …/tree/spec-v0.2 -->
+- PR зміни spec-v0.2: <!-- …/pull/N або «spec-v0.2 не випущено» -->
+- Тег spec-v0.2: <!-- …/tree/spec-v0.2 або «spec-v0.2 не випущено» -->
 - Issues `spec-question`, на які ви відповіли: <!-- …/issues/N, …/issues/M -->
 
 ### Нотатка PM (трек D)
