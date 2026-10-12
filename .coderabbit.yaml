@@ -70,7 +70,7 @@ reviews:
         spec-vX.Y.Z; «Прод-URL» — https://….vercel.app (або інший https-домен із поясненням).
         Усі посилання на роботу ведуть у той самий owner/repo, що «Репо команди» (PR — …/pull/N,
         issues — …/issues/N, коментарі — …/issues/N#issuecomment-M, рев'ю — …/pull/N#pullrequestreview-M,
-        файли — …/blob/…). Роль pm заповнює розділ «PM», а розділ «Розробник» — рівно «—»; ролі
+        файли — …/blob/…, теги — …/releases/tag/spec-vX.Y або …/tree/spec-vX.Y). Роль pm заповнює розділ «PM», а розділ «Розробник» — рівно «—»; ролі
         techlead і dev — навпаки. pm: «Нотатка PM» має щонайменше 3 пункти, у кожному — AC ID,
         щонайменше два прочитання з посиланнями (пункт із поміткою «прогноз» — два прочитання без
         посилань), «Чому» і «Що зробив PM»; без посилання можуть бути лише «spec-v0.2 не випущено» в
@@ -175,7 +175,8 @@ reviews:
           https URL (normally *.vercel.app). Every work link points to the same owner/repo as Репо
           команди and uses full https://github.com/ links (pull requests as /pull/N, issues as
           /issues/N, issue comments as /issues/N#issuecomment-M, reviews as
-          /pull/N#pullrequestreview-M, files as /blob/...). Role pm fills the "PM" section and the
+          /pull/N#pullrequestreview-M, files as /blob/..., tags as /releases/tag/spec-vX.Y or
+          /tree/spec-vX.Y). Role pm fills the "PM" section and the
           "Розробник" section is exactly "—"; roles techlead and dev do the opposite. For pm, "Нотатка
           PM" has at least three items, each with an AC ID, at least two readings with links (an item
           marked «прогноз» may give two readings without links), "Чому" and "Що зробив PM"; the only
