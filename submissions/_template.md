@@ -22,7 +22,7 @@
 
 <!-- Розробник і техлід: заголовок «## PM» залиште, а все під ним (і «Нотатку PM») замініть одним рядком «—». -->
 
-- PR налаштування (CODEOWNERS, `docs/bootstrap.md`): <!-- https://github.com/<pm>/<team-slug>/pull/N -->
+- PR налаштування (CODEOWNERS; `docs/bootstrap.md` і рядок у `docs/team.md`): <!-- https://github.com/<pm>/<team-slug>/pull/N, …/pull/M -->
 - PR продуктового контексту: <!-- …/pull/N -->
 - PR першого зрізу (з розділом `## spec-review`): <!-- …/pull/N -->
 - Тег spec-v0.1: <!-- https://github.com/<pm>/<team-slug>/releases/tag/spec-v0.1 або …/tree/spec-v0.1 -->

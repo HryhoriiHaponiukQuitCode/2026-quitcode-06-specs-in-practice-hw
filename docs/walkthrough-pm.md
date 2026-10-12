@@ -31,8 +31,8 @@ disabled on this system», пишіть `npx.cmd`, `npm.cmd`, `openspec.cmd` з�
 | 4. Environment `production` і секрет `SUPABASE_DB_URL` | день 0 | 15 хв | A |
 | 5. Vercel: імпорт, дві змінні, Require Log In, адреси Auth | день 0 | 20 хв | A |
 | 6. Перша база: `db-deploy` з `include_seed`, синтетичні користувачі | день 0 | 15 хв | A |
-| 7. CODEOWNERS і докази налаштування — перший PR, перший повний прогін CI | день 0 | 15 хв | A |
-| 8. Ruleset на `main` | день 0 | 10 хв | A |
+| 7. CODEOWNERS — перший PR | день 0 | 10 хв | A |
+| 8. Ruleset на `main` і докази налаштування | день 0 | 15 хв | A |
 | 9. Продуктовий контекст | дні 0–1 | 1–1,5 год | A |
 | 10. Перший зріз: чернетка зміни | дні 1–2 | 1,5–2 год | B |
 | 11. Перевірка: `validate`, `spec:check`, `spec-review` | день 2 | 45 хв | B |
@@ -101,8 +101,9 @@ npm ci
 заблокованими навіть після відкриття. Тому ніякого «спершу приватний, потім відкрию».
 
 **Доказ:** URL репозиторію команди — для файлу здачі. Перший прогін CI (Actions → CI) має стартувати після
-створення; якщо прогону немає, Actions → CI → **Run workflow** або `gh workflow run ci.yml`. Job `db-deploy` у ньому
-пропущено з повідомленням про порожній `SUPABASE_DB_URL` — так і має бути до кроку 4.
+створення; якщо прогону немає, Actions → CI → **Run workflow** або `gh workflow run ci.yml`. У ньому всі п'ять jobs,
+зокрема `db-check` (на `main` теж); `db-deploy` зелений, але міграцій не застосовує — повідомлення про порожній
+`SUPABASE_DB_URL`, так і має бути до кроку 4. Саме цей прогін потрібен ruleset-у в кроці 8.
 
 ## 2. Collaborators, мітки, denylist, CodeRabbit (15 хв) — трек A
 
@@ -200,11 +201,12 @@ gh label create task --force --repo <pm>/<team-slug> --description "Задача
    Не кладіть його в Repository secrets: секрет репозиторію дістане будь-який workflow будь-якої гілки.
 
 **Запасний шлях**, якщо `db-deploy` не підключається через пулер: офіційний варіант Supabase — `supabase link` +
-`supabase db push` з двома секретами в тому самому environment `production`: `SUPABASE_ACCESS_TOKEN` (токен з
+`supabase db push` із трьома секретами в тому самому environment `production`: `SUPABASE_ACCESS_TOKEN` (токен з
 обмеженими правами, який створюєте ви: Supabase → Account → Access Tokens, лише цей проєкт, право Project Settings →
-API Keys → API Key Secrets — Read) і `SUPABASE_DB_PASSWORD`. Як перемкнути job — у README шаблону, розділ про
-`db-deploy`. Основним цей шлях не робимо: токени з обмеженими правами вийшли 06.10.2026, і з `supabase link` у
-них є відкрита помилка.
+API Keys → API Key Secrets — Read), `SUPABASE_DB_PASSWORD` і `SUPABASE_PROJECT_ID` (`<ref>`). Секрет
+`SUPABASE_DB_URL` тоді видаліть: `db-deploy` сам перейде на цей шлях, у workflow нічого не змінюємо (README шаблону,
+розділ «Міграції в прод»). Основним цей шлях не робимо: токени з обмеженими правами вийшли 06.10.2026, і з
+`supabase link` у них є відкрита помилка.
 
 ## 5. Vercel: імпорт, дві змінні, Require Log In, адреси Auth (20 хв) — трек A
 
@@ -260,12 +262,14 @@ API Keys → API Key Secrets — Read) і `SUPABASE_DB_PASSWORD`. Як пере�
 **Ніколи** не застосовуйте міграції з ноутбука (`supabase db push`) і не змінюйте схему в SQL Editor чи Table
 Editor: база спільна, і зміна поза `main` ламає наступний `db-deploy` усій команді.
 
-## 7. CODEOWNERS і докази налаштування — перший PR, перший повний прогін CI (15 хв) — трек A
+## 7. CODEOWNERS — перший PR (10 хв) — трек A
 
 Техлід має **прийняти** інвайт GitHub до цього кроку: логін без доступу до репозиторію GitHub у CODEOWNERS просто
 ігнорує, і ваші PR зі спекою не матимуть кому схвалити.
 
 ```bash
+git switch main
+git pull
 git switch -c setup/codeowners
 ```
 
@@ -278,30 +282,30 @@ git switch -c setup/codeowners
 /supabase/migrations/  @<techlead> @<pm>
 ```
 
-У тій самій гілці позначте пункти чекліста `docs/bootstrap.md` (кроки 1–6) і додайте докази **без жодного
-значення**: посилання на прогін `db-deploy`, назви змінних Vercel і де вони задані, прод-URL, знімки екрана
-Supabase (Team з ролями Developer — email учасників замажте; вимкнені «Allow new users to sign up» і «Confirm email») у `docs/img/`. Знімки
-`spec:check` не читає: перевірте самі, що на них немає назв клієнта, імен людей, email не з `example.test` і
-значень ключів.
-
 ```bash
-git add .github/CODEOWNERS docs
-git commit -m "Set code owners and record team setup evidence"
+git add .github/CODEOWNERS
+git commit -m "Set code owners: PM and tech lead"
 git push -u origin setup/codeowners
 gh pr create --web
 ```
 
-Цей PR — перший повний прогін CI: на PR запускаються всі чотири обов'язкові перевірки, зокрема `db-check`, якого
-немає в прогонах на `main`. Дочекайтеся зелених `spec`, `app`, `conformance`, `db-check`, попросіть техліда
-переглянути PR і злийте його (ruleset ще немає, тож approve поки не обов'язковий). Відкрийте файл на GitHub:
-якщо логін указано з помилкою, GitHub підсвічує рядок (точний вигляд звіряємо на репетиції).
+Цей PR — перший прогін CI на події `pull_request`: ті самі чотири перевірки, що на `main`, а `db-check` тут ще й
+звіряє порядок міграцій із `main` (у прогонах на `main` цей крок пропущено). Дочекайтеся зелених `spec`, `app`,
+`conformance`, `db-check`. Ruleset ще немає, але PR без approve колеги рубрика A не зараховує, тож попросіть
+техліда схвалити (Review changes → Approve) і лише тоді злийте (Squash and merge). Відкрийте файл на GitHub: якщо
+логін указано з помилкою, GitHub підсвічує рядок (точний вигляд звіряємо на репетиції).
 
-## 8. Ruleset на `main` (10 хв) — трек A
+## 8. Ruleset на `main` і докази налаштування (15 хв) — трек A
 
-Порядок важливий: спершу CI пройшов хоча б раз (кроки 1 і 7), потім ruleset.
+Порядок важливий: спершу CI пройшов на `main` (кроки 1 і 6) і в PR (крок 7), потім ruleset. Обов'язкові перевірки
+в ньому прив'язані до джерела GitHub Actions, а GitHub приймає таку прив'язку, лише коли Actions уже нещодавно
+звітували перевірки в цьому репозиторії.
 
-**Через `gh api`** (рекомендовано; JSON — [`materials/rulesets/team-main.json`](../materials/rulesets/team-main.json),
-джерело перевірок у ньому — GitHub Actions, тож попередній прогін для нього не обов'язковий):
+**Налаштування злиття.** Settings → General → Pull Requests: **Allow merge commits** і **Allow squash merging** мають
+бути увімкнені (так за замовчуванням), **Allow rebase merging** можна вимкнути. Ruleset дозволяє squash і merge
+commit, а метод, вимкнений тут, не запрацює й з ruleset-ом.
+
+**Через `gh api`** (рекомендовано; JSON — [`materials/rulesets/team-main.json`](../materials/rulesets/team-main.json)):
 
 ```bash
 curl -sLo ruleset.json https://raw.githubusercontent.com/koldovsky/2026-quitcode-06-specs-in-practice-hw/main/materials/rulesets/team-main.json
@@ -323,17 +327,47 @@ PowerShell: `curl.exe` замість `curl` (у Windows PowerShell 5.1 `curl` �
 - **Require status checks to pass** → Add checks → `spec`, `app`, `conformance`, `db-check` (джерело — GitHub
   Actions); **Require branches to be up to date before merging** — вимкнено → Create.
 
-Якщо `db-check` не знаходиться в пошуку, перевірте, що PR із кроку 7 справді його запускав.
+Якщо перевірка не знаходиться в пошуку, відкрийте Actions: прогони з кроків 1, 6 і 7 мають містити jobs саме з
+такими назвами (`db-check` на `main` теж запускається). Те саме, якщо `gh api` відповідає помилкою про
+`integration_id`: спершу зелений прогін CI, потім повторіть команду.
 
 Чому саме так: approve колеги — рев'ю, яке ми оцінюємо; «stale approvals» вимкнено, бо інакше кожен merge у `main`
 знімав би approve з усіх відкритих PR команди; squash — для задач, merge commit — запасний шлях для Vercel (див.
 [walkthrough-dev](walkthrough-dev.md#vercel-preview-і-прод)); loose-перевірки — щоб не оновлювати гілку після кожного
 чужого merge.
 
-**Перевірка:** відкрийте будь-який свій PR — кнопка merge заблокована, доки немає approve. Якщо GitHub таки дає вам,
-власнику, злити власний PR без approve, не користуйтеся цим: рубрика A перевіряє, що кожен PR у `main` має approve колеги.
+**Перший PR під ruleset-ом — докази налаштування.** Він же перевіряє ruleset:
 
-**Доказ:** вивід `gh api repos/<pm>/<team-slug>/rulesets` або знімок сторінки ruleset.
+```bash
+git switch main
+git pull
+git switch -c onboarding/<pm>
+```
+
+- У `docs/team.md` — ваш рядок: `| @<pm> | PM | специфікація й налаштування |`.
+- У `docs/bootstrap.md` — позначте розділи 1–6 і додайте докази **без жодного значення**: посилання на прогони CI і
+  `db-deploy`, назви змінних Vercel і де вони задані, прод-URL, знімки екрана в `docs/img/` (Supabase Team з
+  ролями Developer — email учасників замажте; вимкнені «Allow new users to sign up» і «Confirm email»; сторінка
+  ruleset-у). Знімки `spec:check` не читає: перевірте самі, що на них немає назв клієнта, імен людей, email не з
+  `example.test` і значень ключів.
+
+```bash
+git add docs
+git commit -m "Onboarding: PM row in the team table, setup evidence in bootstrap.md"
+git push -u origin onboarding/<pm>
+gh pr create --web
+```
+
+Тип PR — «Онбординг». **Перевірка ruleset-у:** кнопка merge заблокована, доки немає approve. Посилання на цей PR —
+перший пункт розділу 7 «Перевірка в перший день» у `docs/bootstrap.md`. Якщо GitHub таки дає вам, власнику, злити
+власний PR без approve, не користуйтеся цим і напишіть у чат курсу: рубрика A перевіряє, що кожен PR у `main` має
+approve колеги. Approve колеги (`docs/` власника коду не має, тож будь-хто) → Squash and merge.
+
+Решту розділу 7 (preview PR колеги, прод-деплой після squash-merge колеги, PR із міграцією й `db-deploy`) позначте,
+коли це станеться за тиждень, — невеликим PR «Онбординг» до здачі.
+
+**Доказ:** злиті PR кроків 7 і 8 (посилання — у полі «PR налаштування» файлу здачі), сторінка ruleset-у або вивід
+`gh api repos/<pm>/<team-slug>/rulesets`.
 
 Наприкінці дня 0 — повідомлення в чат команди: «Репо готове: <URL>. Прийміть інвайти GitHub і Supabase, далі —
 `docs/onboarding.md`; перший PR кожного — рядок про себе в `docs/team.md`».
