@@ -119,12 +119,12 @@ gh api --method PUT repos/<pm>/<team-slug>/collaborators/<login>
 ```
 
 **Мітки.** Форми issues ставлять лише мітки, які вже є в репозиторії, тож створіть їх, якщо їх ще немає: Issues →
-Labels → **New label** → `spec-question` («Питання до специфікації») і `task` («Задача реалізації»). Або
+Labels → **New label** → `spec-question` («Питання до специфікації») і `task` («Задача зрізу»). Або
 (`--force` оновить мітку, якщо вона вже існує, замість помилки):
 
 ```bash
 gh label create spec-question --force --repo <pm>/<team-slug> --description "Питання до специфікації"
-gh label create task --force --repo <pm>/<team-slug> --description "Задача реалізації"
+gh label create task --force --repo <pm>/<team-slug> --description "Задача зрізу"
 ```
 
 **Denylist (локальний файл і секрет).** Справжні назви клієнта — **лише** в локальному `product/denylist.local.txt`
@@ -176,7 +176,7 @@ gh label create task --force --repo <pm>/<team-slug> --description "Задача
    `[auth] enable_signup = false`, але це конфігурація CLI: у хмару вона не переноситься, перемикач у Dashboard
    обов'язковий.
 
-Проєкт Free **засинає** після ~7 днів без активності, а відновити його (Dashboard → Resume project) може лише
+Проєкт Free **засинає** після ~7 днів без активності, а відновити його (Dashboard → Restore project; точну назву кнопки звіряємо на репетиції) може лише
 власник, тобто ви. Перевіряйте перед кожним заняттям і перед здачею.
 
 ## 4. Environment `production` і секрет `SUPABASE_DB_URL` (15 хв) — трек A
@@ -289,7 +289,7 @@ git push -u origin setup/codeowners
 gh pr create --web
 ```
 
-Цей PR — перший прогін CI на події `pull_request`: ті самі чотири перевірки, що на `main`, а `db-check` тут ще й
+Тип PR — «Онбординг» (він дозволяє `.github/CODEOWNERS` у день 0). Цей PR — перший прогін CI на події `pull_request`: ті самі чотири перевірки, що на `main`, а `db-check` тут ще й
 звіряє порядок міграцій із `main` (у прогонах на `main` цей крок пропущено). Дочекайтеся зелених `spec`, `app`,
 `conformance`, `db-check`. Ruleset ще немає, але PR без approve колеги рубрика A не зараховує, тож попросіть
 техліда схвалити (Review changes → Approve) і лише тоді злийте (Squash and merge). Відкрийте файл на GitHub: якщо
