@@ -31,7 +31,7 @@ disabled on this system», пишіть `npx.cmd`, `npm.cmd`, `openspec.cmd` з�
 | 4. Environment `production` і секрет `SUPABASE_DB_URL` | день 0 | 15 хв | A |
 | 5. Vercel: імпорт, дві змінні, Require Log In, адреси Auth | день 0 | 20 хв | A |
 | 6. Перша база: `db-deploy` з `include_seed`, синтетичні користувачі | день 0 | 15 хв | A |
-| 7. CODEOWNERS — перший PR і перший повний прогін CI | день 0 | 15 хв | A |
+| 7. CODEOWNERS і докази налаштування — перший PR, перший повний прогін CI | день 0 | 15 хв | A |
 | 8. Ruleset на `main` | день 0 | 10 хв | A |
 | 9. Продуктовий контекст | дні 0–1 | 1–1,5 год | A |
 | 10. Перший зріз: чернетка зміни | дні 1–2 | 1,5–2 год | B |
@@ -258,7 +258,7 @@ API Keys → API Key Secrets — Read) і `SUPABASE_DB_PASSWORD`. Як пере�
 **Ніколи** не застосовуйте міграції з ноутбука (`supabase db push`) і не змінюйте схему в SQL Editor чи Table
 Editor: база спільна, і зміна поза `main` ламає наступний `db-deploy` усій команді.
 
-## 7. CODEOWNERS — перший PR і перший повний прогін CI (15 хв) — трек A
+## 7. CODEOWNERS і докази налаштування — перший PR, перший повний прогін CI (15 хв) — трек A
 
 Техлід має **прийняти** інвайт GitHub до цього кроку: логін без доступу до репозиторію GitHub у CODEOWNERS просто
 ігнорує, і ваші PR зі спекою не матимуть кому схвалити.
@@ -276,9 +276,15 @@ git switch -c setup/codeowners
 /supabase/migrations/  @<techlead> @<pm>
 ```
 
+У тій самій гілці позначте пункти чекліста `docs/bootstrap.md` (кроки 1–6) і додайте докази **без жодного
+значення**: посилання на прогін `db-deploy`, назви змінних Vercel і де вони задані, прод-URL, знімки екрана
+Supabase (Team з ролями Developer — email учасників замажте; вимкнені «Allow new users to sign up» і «Confirm email») у `docs/img/`. Знімки
+`spec:check` не читає: перевірте самі, що на них немає назв клієнта, імен людей, email не з `example.test` і
+значень ключів.
+
 ```bash
-git add .github/CODEOWNERS
-git commit -m "Set code owners"
+git add .github/CODEOWNERS docs
+git commit -m "Set code owners and record team setup evidence"
 git push -u origin setup/codeowners
 gh pr create --web
 ```
