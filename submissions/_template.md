@@ -51,7 +51,7 @@
 - Журнал `docs/spec-reading/<login>.md`: <!-- https://github.com/<pm>/<team-slug>/blob/<SHA>/docs/spec-reading/<login>.md -->
 - Issues або коментарі (щонайменше 3, з них щонайменше 1 — власне issue): <!-- https://github.com/<pm>/<team-slug>/issues/N або …/issues/N#issuecomment-M, … -->
 - PR-и задач, автор — ви (щонайменше 2): <!-- …/pull/N, …/pull/M -->
-- AC «реалізовано» у ваших PR: <!-- напр. AC-LEAVE-03, AC-LEAVE-07 — як у docs/conformance.md на SHA -->
+- AC, до яких ви доклалися: <!-- напр. AC-LEAVE-03 (реалізовано), AC-LEAVE-07 (міграція; реалізовано в #N) — як у docs/conformance.md на SHA -->
 - Рев'ю PR-ів колег (щонайменше 2): <!-- https://github.com/<pm>/<team-slug>/pull/N#pullrequestreview-M, … -->
 - PR зміни impl-<зріз>: <!-- техлід: …/pull/N · інші: «—» або PR, у якому ви брали участь -->
 

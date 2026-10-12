@@ -78,7 +78,7 @@ reviews:
         …/pull/N; щонайменше 3 посилання на issues або коментарі в issues, щонайменше одне — без
         #issuecomment; щонайменше 2 посилання …/pull/N у «PR-и задач»; щонайменше 2 посилання
         …/pull/N#pullrequestreview-M у «Рев'ю PR-ів колег», і вони не на PR зі списку «PR-и задач»
-        (власний PR схвалити не можна); «AC «реалізовано»» — список AC ID; «PR зміни impl-<зріз>» —
+        (власний PR схвалити не можна); «AC, до яких ви доклалися» — список AC ID; «PR зміни impl-<зріз>» —
         для techlead посилання …/pull/N, для dev «—» або посилання.
         Бонус E — «—» або опис із посиланням. Плейсхолдери <…>, «…» чи незаповнені коментарі-підказки
         замість значень — ⚠️. Повне ім'я людини у файлі — ⚠️ (ім'я лише в описі PR; логіни — нормально).
@@ -184,7 +184,7 @@ reviews:
           three links to issues or issue comments, at least one of them a plain issue link without
           #issuecomment; at least two /pull/N links under "PR-и задач"; at least two
           /pull/N#pullrequestreview-M links under "Рев'ю PR-ів колег", none of them on a pull request
-          listed under "PR-и задач" (authors cannot approve their own PR); "AC «реалізовано»" lists AC
+          listed under "PR-и задач" (authors cannot approve their own PR); "AC, до яких ви доклалися" lists AC
           IDs; "PR зміни impl-<зріз>" is a /pull/N link for techlead and "—" or a link for dev.
           Бонус E is "—" or a description with a link. Placeholders such as <…>, "…" or untouched
           template comments instead of values are a FAIL. List every missing or malformed field.
