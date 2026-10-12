@@ -1,52 +1,66 @@
 # Покрокова інструкція: трек розробника
 
-Ви форкаєте upstream свого PM і реалізуєте його специфікацію **по-своєму**: свій форк, свій проєкт Supabase,
-свій проєкт Vercel. Специфікацію (`product/`, `openspec/specs/`) у форку не змінюєте. Питання до неї ставите
-issue в upstream, нову версію забираєте гілкою `sync/spec-vX.Y`.
+Ви — collaborator у **репозиторії команди**, який PM створив зі шаблону у своєму акаунті. Уся команда працює в
+ньому: одна спільна реалізація, одна база Supabase, один проєкт Vercel. Ви ставите питання до спеки, берете задачі,
+робите кожну в окремій гілці й PR, а PR-и колег рецензуєте. Специфікацію (`product/`, `openspec/specs/`) не
+змінюєте: її веде PM, а схвалює техлід.
+
+Техлід — один із розробників, якого обрала команда. Він проходить той самий трек, а ще схвалює PR-и PM зі спекою,
+веде з командою зміну `impl-<зріз>` (план і задачі), рецензує міграції й запускає `npm run users:demo`.
 
 - Рубрика й Definition of Done — у [README](../README.md#трек-розробника--100--5-балів).
 - Зразок формату артефактів — [`examples/leave-portal/`](../examples/leave-portal/) (не відповідь).
 - Як PM пише спеку (і як її читати) — [`docs/spec-guide.md`](spec-guide.md).
+- У репозиторії команди: `docs/onboarding.md` (перший запуск), `docs/team.md` (хто є хто), `AGENTS.md` (правила для
+  агента).
 
-Позначення: `<я>` — ваш GitHub-логін, `<pm>` — логін PM, `<team-slug>` — назва upstream (слаг команди),
-`<ref>` — Project ref проєкту Supabase, `<зріз>` — короткий слаг першого зрізу з `proposal.md` PM.
+Позначення: `<я>` — ваш GitHub-логін, `<pm>` — логін PM, `<team-slug>` — назва репозиторію команди (слаг команди),
+`<зріз>` — короткий слаг першого зрізу з `proposal.md` PM, `<N>` — номер issue чи PR.
 Команди — для Git Bash на Windows і терміналу macOS. Де PowerShell відрізняється, це сказано окремо. У Windows
 PowerShell 5.1 немає `&&`: виконуйте команди по черзі. Якщо PowerShell відповідає «running scripts is disabled on
 this system», пишіть `npx.cmd`, `npm.cmd`, `openspec.cmd` замість `npx`, `npm`, `openspec`.
 
-**Бутстрап не чекає на спеку.** Кроки 1–9 від PM не залежать — починайте в день 0.
-
-**Бюджет треку: 9,5–10,5 годин за тиждень** (сума кроків нижче, без бонусу). Бутстрап (кроки 0–9) — ~3 год, реалізація — 4–5 год.
+**Бюджет треку: 8–10 годин за тиждень** (сума кроків нижче, без бонусу). Найбільше — задачі (4–5 год) і рев'ю колег.
 
 Дні календарні (з вихідними); «кінець дня N» — 23:59 за Києвом N-го дня після заняття (день 0 — день заняття).
 
 | Крок | Коли | Бюджет | Трек |
 |---|---|---|---|
-| 0. Підготовка машини й акаунтів | до заняття | 30 хв | — |
-| 1. Форк, Actions, клон, `set-default` | день 0 | 15 хв | A |
-| 2. Ruleset на `main` | день 0 | 10 хв | A |
-| 3. Залежності й локальні перевірки | день 0 | 15 хв | A |
-| 4. Supabase: проєкт, Auth, link, міграції, користувачі | дні 0–1 | 40 хв | A |
-| 5. Vercel: імпорт, змінні, захист preview, редеплой | дні 0–1 | 30 хв | A |
-| 6. Supabase Auth: Site URL і Redirect URLs | дні 0–1 | 5 хв | A |
-| 7. Секрети CI для job `db` | дні 0–1 | 10 хв | A |
-| 8. CodeRabbit | дні 0–1 | 5 хв | A |
-| 9. Перший PR: `docs/bootstrap.md`, зелений CI, preview | день 1 | 30 хв | A |
-| 10. Синхронізація `spec-v0.1` | день 2, щойно є тег | 20 хв | B |
-| 11. Читання спеки: `spec-clarify`, issues, журнал | дні 2–3 | 1 год | B |
-| 12. Реалізація зрізу: `impl-<зріз>`, PR-и, матриця | дні 3–7 | 4–5 год | C |
-| 13. Синхронізація `spec-v0.2` | дні 5–7 | 45 хв | D |
-| 14. Здача | день 7 | 15 хв | — |
+| 0. Підготовка машини й акаунтів | до заняття | 20 хв | — |
+| 1. Інвайти GitHub і Supabase | день 0 | 5 хв | A |
+| 2. Онбординг: клон, залежності, `.env.local`, вхід | дні 0–1 | 40 хв | A |
+| 3. Перший PR: рядок у `docs/team.md` | дні 0–1 | 20–30 хв | A |
+| 4. Читання спеки й питання | дні 1–3 | 1 год | B |
+| 5. План `impl-<зріз>` і задачі разом із техлідом | дні 2–3 | 30–45 хв | C |
+| 6. Задачі: гілка → PR → рев'ю → merge | дні 3–7 | 4–5 год | C |
+| 7. Рев'ю PR-ів колег | дні 1–7 | 1–1,5 год | D |
+| 8. Здача | день 7 | 15 хв | — |
 
-## 0. Підготовка (30 хв)
+## Як працює `main` команди
 
-1. **Акаунти:** GitHub (особистий), [Supabase](https://supabase.com/dashboard) (власна організація),
-   [Vercel](https://vercel.com) (Hobby, вхід через GitHub). Нічого клієнтського.
-2. **Вільний слот Supabase.** На Free активних може бути лише **2** проєкти на всі організації, де ви Owner або
-   Admin. Проєкти з WS5 поставте на паузу або видаліть.
-3. **Node 24:** `node -v` → `v24.…`. Git (на Windows — з Git Bash), GitHub CLI: `gh --version` → `gh auth login`.
+PM налаштовує ruleset і `.github/CODEOWNERS` у день 0. Звідси правила, з якими ви житимете весь тиждень:
+
+- **У `main` — лише через PR.** Прямий push відхиляється, force push і видалення `main` заборонено.
+- **Потрібен approve колеги.** Свій PR схвалити не можна. PR, що чіпає `/product/`, `/openspec/` чи `/.github/`,
+  схвалює PM або техлід; міграції (`/supabase/migrations/`) — техлід або PM. Решту — будь-хто з колег.
+- **Approve — після останнього push.** Будь-який новий коміт у гілку, зокрема кнопка **Update branch** чи
+  `git merge origin/main`, вимагає нового approve. Тому **оновлюйте гілку лише тоді, коли GitHub показує конфлікт**:
+  обов'язкові перевірки не вимагають, щоб гілка була свіжою.
+- **Перевірки** `spec`, `app`, `conformance`, `db-check` мають бути зеленими, а всі розмови рев'ю — розв'язані
+  (Resolve conversation).
+- **Злиття:** задачі — **Squash and merge**. Merge commit — запасний шлях, якщо Vercel не деплоїть ваші коміти
+  ([нижче](#vercel-preview-і-прод)).
+
+Це не бюрократія курсу, а звичайний `main` клієнтського проєкту агенції: завтра на роботі буде так само.
+
+## 0. Підготовка (20 хв)
+
+1. **Акаунти (особисті, не клієнтські):** GitHub і [Supabase](https://supabase.com/dashboard). Власний проєкт
+   Supabase і вільний слот не потрібні: ви — учасник організації PM з роллю Developer. Vercel і CodeRabbit
+   налаштовує PM.
+2. **Node 24:** `node -v` → `v24.…`. Git (на Windows — з Git Bash), GitHub CLI: `gh --version` → `gh auth login`.
    На Windows без прав адміністратора: `winget install --id GitHub.cli --scope user --silent`, потім перезапустіть термінал.
-4. **OpenSpec глобально** тієї ж версії, що в шаблоні. Його викликають `/opsx:*` і скіли агента:
+3. **OpenSpec глобально** тієї ж версії, що в шаблоні. Його викликають `/opsx:*` і скіли агента:
 
    ```bash
    npm i -g @fission-ai/openspec@1.14.1
@@ -54,71 +68,25 @@ this system», пишіть `npx.cmd`, `npm.cmd`, `openspec.cmd` замість 
    openspec config set telemetry.enabled false
    ```
 
-5. Claude Code або Cursor. Docker **не потрібен**: працюємо з хмарним проєктом Supabase через міграції.
+4. Claude Code або Cursor. Docker **не потрібен**: ви працюєте проти спільної хмарної бази, а міграції перевіряє CI
+   (`db-check` піднімає одноразову базу в Docker на раннері GitHub).
 
-## 1. Форк, Actions, клон, `set-default` (15 хв) — трек A
+## 1. Інвайти GitHub і Supabase (5 хв) — трек A
+
+- **GitHub:** <https://github.com/<pm>/<team-slug>/invitations> (або лист від GitHub) → **Accept invitation**. Без
+  цього ви не запушите гілку, не схвалите PR і не потрапите в CODEOWNERS. Техліду — найпершим: поки він не прийняв
+  інвайт, PR-и PM зі спекою нікому схвалити.
+- **Supabase:** лист-запрошення на email вашого акаунта Supabase → прийняти. Роль — **Developer**: ви бачите URL і
+  ключі проєкту, керуєте тестовими користувачами, але налаштувань проєкту не змінюєте. Лист не прийшов? Напишіть PM,
+  з яким email ви зареєстровані в Supabase.
+
+## 2. Онбординг (40 хв) — трек A
+
+Покроково — `docs/onboarding.md` у репозиторії команди. Коротко:
 
 ```bash
-gh repo fork <pm>/<team-slug> --clone
+gh repo clone <pm>/<team-slug>
 cd <team-slug>
-gh repo set-default <я>/<team-slug>
-gh repo set-default --view          # має показати <я>/<team-slug>
-git remote -v                       # origin → ваш форк, upstream → репозиторій PM
-```
-
-- `gh repo fork --clone` сам додає remote `upstream`, але **ставить upstream репозиторієм за замовчуванням**. Без
-  `set-default` команди `gh pr create` і `gh workflow run` полізуть у репозиторій PM. `gh secret set` завжди
-  пишемо з `--repo <я>/<team-slug>` (крок 7): на секрети `set-default` не діє. Через браузер (Fork на
-  сторінці upstream) — те саме, тоді клонуйте свій форк і додайте `git remote add upstream https://github.com/<pm>/<team-slug>.git`.
-- **Actions у форку вимкнено за замовчуванням.** Вкладка Actions вашого форку → **I understand my workflows, go
-  ahead and enable them**. Потім перший прогін: Actions → CI → **Run workflow** або `gh workflow run ci.yml`.
-  Очікувано зелені `spec`, `app`, `conformance`. `db` пропущено, бо це не push у `main`. Форкнули вже після
-  тегу `spec-v0.1`? Тоді `conformance` червоний: `spec:source` (`.spec-source` ще закоментований) і `NO-ROW` — це
-  очікувано, див. примітку нижче й у кінці кроку 9.
-
-> Форкнули вже після тегу `spec-v0.1` (зокрема, приєдналися на WS7 чи пізніше)? `main` PM може містити правки
-> `product/` після останнього тегу, тож ДО ruleset (крок 2) вирівняйте `main` форку з останнім тегом:
->
-> ```bash
-> git fetch upstream --tags
-> git ls-remote --tags --refs --sort=-v:refname upstream "spec-v*" | head -1   # останній тег
-> git reset --hard <останній тег>
-> git push --force-with-lease origin main
-> ```
->
-> Далі крок 10 одразу з цим тегом (гілка `sync/<останній тег>`, у `.spec-source` — він же); проміжні теги окремо
-> не синхронізуйте. Форк після `spec-v0.2`: один PR `sync/spec-v0.2` (`.spec-source` → `spec-v0.2`, рядки всіх AC,
-> `docs/bootstrap.md`) зараховується і як `sync/spec-v0.1`, і як D; у таблиці «Синхронізація на spec-v0.2» — рядок
-> «форк після spec-v0.2, коду на spec-v0.1 не було». У файлі здачі в полі «PR sync/spec-v0.1» — те саме посилання.
-
-**Доказ:** посилання на перший run і вивід `gh repo set-default --view` — у `docs/bootstrap.md` (крок 9).
-
-## 2. Ruleset на `main` (10 хв) — трек A
-
-Через браузер: Settings → Rules → Rulesets → New ruleset → New branch ruleset → назва `main: PR + CI`,
-Enforcement status **Active**, Target branches → **Include default branch**, позначте **Restrict deletions**,
-**Block force pushes**, **Require a pull request before merging** (Required approvals — `0`: власний PR
-схвалити не можна; Allowed merge methods — лише **Merge**, точну назву поля звіряємо на репетиції),
-**Require status checks to pass** → `spec`, `app`, `conformance` → Create. Якщо перевірок немає в пошуку, дочекайтеся першого прогону CI з кроку 1.
-
-Або через `gh api` (JSON — [`materials/rulesets/fork-main.json`](../materials/rulesets/fork-main.json); ми перевіримо
-його на ваших акаунтах на репетиції):
-
-```bash
-curl -sLo ruleset.json https://raw.githubusercontent.com/koldovsky/2026-quitcode-06-specs-in-practice-hw/main/materials/rulesets/fork-main.json
-gh api repos/<я>/<team-slug>/rulesets --method POST --input ruleset.json
-rm ruleset.json
-```
-
-PowerShell: `curl.exe` замість `curl`, `Remove-Item ruleset.json` замість `rm`.
-
-Ruleset дозволяє лише merge commit: так тег upstream гарантовано потрапляє в історію `main`, і наступна
-синхронізація не дає конфліктів. Якщо налаштовуєте через браузер і поле злиття не знайшли — **гілки
-`sync/spec-vX.Y` зливайте лише кнопкою Create a merge commit**.
-
-## 3. Залежності й локальні перевірки (15 хв) — трек A
-
-```bash
 npm ci
 npm run lint
 npm run typecheck
@@ -128,247 +96,143 @@ npm test
 Попередження `npm warn deprecated …` / `allow-scripts` під час `npm ci` очікувані. `npm audit fix` і оновлення
 пакетів до latest не запускайте: шаблон перевірено з TypeScript ^5 і ESLint ^9.
 
-**Denylist команди.** PM надішле особистим повідомленням список справжніх назв. Збережіть його в
-`product/denylist.local.txt` свого клону (уже в `.gitignore`; `spec:source` невідстежуваний файл не бачить). Тоді
-`npm run spec:check` ловить назви в `docs/`, `src/`, `supabase/` і `tests/` ще до push.
+1. **`.env.local`** (у `.gitignore`): `cp .env.example .env.local` і заповніть із Supabase → Project Settings → API
+   Keys: `NEXT_PUBLIC_SUPABASE_URL` і `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (`sb_publishable_…`).
+   `SUPABASE_SECRET_KEY` вам не потрібен: він обходить RLS, і його тримають лише PM і техлід для `npm run users:demo`.
+   Значень не вставляйте в чат з агентом: `.claude/settings.json` шаблону забороняє агенту Claude Code читати
+   `.env*`; у Cursor такої заборони немає — лише ваша дисципліна.
+2. **Denylist команди.** PM надішле особистим повідомленням список справжніх назв. Збережіть його в
+   `product/denylist.local.txt` свого клону (уже в `.gitignore`). Тоді `npm run spec:check` ловить назви в `docs/`,
+   `src/`, `supabase/` і `tests/` ще до push.
+3. **Перший вхід:** `npm run dev` → <http://localhost:3000> → вхід синтетичним користувачем (`admin@example.test`
+   тощо; пароль PM або техлід надішле особистим повідомленням). База спільна: ви бачите ті самі дані, що й колеги.
+4. **Свої тестові користувачі** — лише синтетичні: Supabase → Authentication → Users → **Add user** → email на
+   кшталт `<я>-employee@example.test`, позначте автопідтвердження (точні назви полів звіряємо на репетиції).
+   Реєстрацію в застосунку PM вимкнув, тож інших шляхів немає.
+5. Для Supabase MCP з `.mcp.json` (лише читання; цей файл читає Claude Code, Cursor — ні) задайте змінну перед
+   запуском агента: `export SUPABASE_PROJECT_REF=<ref>` (PowerShell: `$env:SUPABASE_PROJECT_REF = "<ref>"`), де
+   `<ref>` — з адреси Dashboard (`/project/<ref>`).
 
-## 4. Supabase (40 хв) — трек A
+**Правила спільної бази (з `AGENTS.md` шаблону):** схему змінюємо лише міграціями через PR (крок 6);
+`supabase db push` з ноутбука, DDL у SQL Editor чи Table Editor, `supabase db reset --linked`, `migration repair`,
+`db push --include-all` — ніколи. Роль Developer технічно дозволяє змінити схему в Dashboard, тож це правило
+тримається на вас: одна така зміна ламає наступний `db-deploy` усій команді.
 
-1. **Проєкт:** Dashboard → New project → **ваша власна організація** (не через Vercel Marketplace: та інтеграція
-   створює окрему організацію, керовану Vercel, і займає слот). Назва — `<team-slug>`, пароль бази збережіть у
-   менеджері паролів, регіон — найближчий.
-2. **Auth:** у налаштуваннях Authentication, провайдер Email (орієнтовно Authentication → Sign In / Providers →
-   Email; точний шлях у Dashboard звіряємо на репетиції), вимкніть **Confirm email**. Вбудований SMTP надсилає
-   2 листи на годину і лише членам команди проєкту, тож користувачів створює скрипт. У налаштуваннях
-   Authentication вимкніть і **Allow new users to sign up** (точний шлях у Dashboard звіряємо на репетиції).
-   Публічний ключ лежить у JS-бандлі, тож з увімкненою реєстрацією будь-хто зареєструється сам. Користувачі
-   з'являються лише через `npm run users:demo` (Admin API; що він працює з вимкненою реєстрацією, звіряємо на
-   репетиції). У `supabase/config.toml` шаблону вже стоїть `[auth] enable_signup = false` з коментарем, але це
-   конфігурація CLI: `db push` застосовує в хмарі міграції (і сид з `--include-seed`), а налаштувань Auth з
-   `config.toml` не переносить. Тому перемикач у Dashboard — обов'язковий.
-3. **Прив'язка й міграції** (без Docker):
+## 3. Перший PR: рядок у `docs/team.md` (20–30 хв) — трек A
 
-   ```bash
-   # Windows: якщо Git Bash відповідає «non-TTY environments», виконайте login і link у PowerShell або
-   # Windows Terminal (звіряємо на репетиції); пароль бази вводьте на запит, не прапорцем -p
-   npx supabase login                       # відкриє браузер
-   npx supabase link --project-ref <ref>     # спитає пароль бази
-   npx supabase db push --dry-run            # покаже 20261012000000_profiles_and_roles.sql
-   npm run db:push
-   npm run db:types
-   ```
-
-   `<ref>` — з адреси Dashboard (`/project/<ref>`) або Project Settings → General. Якщо `db:types` впав,
-   виконайте `git restore src/lib/supabase/database.types.ts`.
-4. **`.env.local`** (у `.gitignore`):
-
-   ```bash
-   cp .env.example .env.local
-   ```
-
-   Заповніть за Project Settings → API Keys: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-   (`sb_publishable_…`), `SUPABASE_SECRET_KEY` (`sb_secret_…`), `DEMO_USER_PASSWORD` (свій, ≥ 8 символів).
-   `SUPABASE_SECRET_KEY` живе **лише тут**: його читає `scripts/create-demo-users.mjs` (`npm run users:demo`), а
-   код застосунку — ні (у Vercel його не додаємо, крок 5). Значення не вставляйте в чат з агентом:
-   `.claude/settings.json` шаблону забороняє читати `.env*` агенту Claude Code; у Cursor такої заборони немає — лише
-   ваша дисципліна.
-5. **Користувачі й перший вхід:**
-
-   ```bash
-   npm run users:demo     # admin@example.test, member1@example.test, member2@example.test
-   npm run dev            # http://localhost:3000 → вхід як admin@example.test
-   ```
-
-6. Для Supabase MCP з `.mcp.json` (лише читання; цей файл читає Claude Code, Cursor — ні) задайте змінну перед
-   запуском агента:
-   `export SUPABASE_PROJECT_REF=<ref>` (PowerShell: `$env:SUPABASE_PROJECT_REF = "<ref>"`).
-
-**Правила бази (з `AGENTS.md` шаблону):** схему змінюємо лише міграціями, у Dashboard схему не редагуємо;
-`supabase db reset --linked`, `migration repair`, `db push --include-all` — ніколи. CLI у сесії агента сам
-підтверджує дії, тому `.claude/settings.json` питає вас перед кожним `db push` (у Claude Code; у Cursor
-підтверджуйте самі).
-
-## 5. Vercel (30 хв) — трек A
-
-1. Vercel → **Add New → Project** → Import Git Repository → ваш форк `<я>/<team-slug>` (дайте застосунку Vercel
-   доступ лише до цього репозиторію). Framework — Next.js, Node 24.x береться з `engines` у `package.json`.
-2. **Environment Variables** для **Production і Preview**: лише `NEXT_PUBLIC_SUPABASE_URL` і
-   `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. `SUPABASE_SECRET_KEY` у Vercel **не** додавайте: у шаблоні його
-   читає лише скрипт `users:demo`, який ви запускаєте локально, а код застосунку першого зрізу — ні. Секретний
-   ключ обходить RLS, тож він має бути лише там, де без нього не обійтись (найменші привілеї). Змінну типу
-   **Secret** додавайте лише тоді, коли її потребує ваш власний серверний код, і після цього — редеплой. Ніколи в Client Components і ніколи з префіксом
-   `NEXT_PUBLIC_`. **Не** підключайте Supabase через Marketplace-інтеграцію Vercel.
-3. **Deploy.** Перевірте прод-URL `https://<проєкт>.vercel.app/login`.
-4. Settings → **Deployment Protection** → **Vercel Authentication**: вимкніть перемикач **Require Log In** → **Save**
-   (на новому Hobby-проєкті він увімкнений; список «Standard Protection» поруч не чіпайте). Інакше PM
-   і викладач не відкриють ваші preview без входу у ваш акаунт Vercel (на Hobby немає учасників команди). Перевірка — у кроці 9:
-   preview відкривається у вікні інкогніто без входу.
-
-   > **Ризики вимкненого захисту.** Відтепер кожна адреса деплою — preview гілки й URL кожного коміту — відкрита
-   > будь-кому, хто має посилання, а Vercel публікує ці посилання в коментарях до PR у вашому публічному репозиторії.
-   > - **Preview працюють з тією самою базою, що й прод** (на Supabase Free окремої бази для preview немає):
-   >   незавершений код будь-якої гілки читає й пише ті самі дані.
-   > - **Старі деплої лишаються доступними** за своїми адресами: виправлення в базі (міграція) захищає всі деплої
-   >   одразу, а виправлення лише в коді застосунку старих адрес не торкається — небезпечний старий деплой видаліть
-   >   у Vercel (Deployments → ⋯ → Delete).
-   > - **Сторінку входу кожного деплою може пробувати будь-хто** — паролі синтетичних користувачів робіть довгими й
-   >   випадковими (`DEMO_USER_PASSWORD`).
-   >
-   > Тому відкриті preview безпечні лише за трьох правил: **секретного ключа немає у Vercel** (preview не обійде
-   > RLS), **RLS і явні GRANT на кожній таблиці** (саме вони захищають дані, а не вхід у Vercel), **дані лише
-   > синтетичні** (`*@example.test`, жодних справжніх клієнтів). У клієнтських проєктах агенції захист не вимикають:
-   > там потрібен платний план із паролем або SSO.
-5. **Редеплой після будь-якої зміни змінних:** Deployments → останній деплой → ⋯ → **Redeploy**. Змінні діють лише
-   для нових деплоїв.
-
-Обмеження Hobby: лише некомерційне особисте використання. Тому застосунок навчальний: вигадані дані, без
-брендингу клієнта, клієнтам не передається. Cron — щонайбільше раз на добу.
-
-## 6. Supabase Auth: Site URL і Redirect URLs (5 хв) — трек A
-
-Supabase → Authentication → **URL Configuration**:
-
-- **Site URL** — прод-URL Vercel (`https://<проєкт>.vercel.app`);
-- **Redirect URLs** — `http://localhost:3000/**` і `https://*-<slug-акаунта-vercel>.vercel.app/**`. Slug — остання
-  частина адреси будь-якого preview: `<проєкт>-<хеш>-<slug>.vercel.app`.
-
-## 7. Секрети CI для job `db` (10 хв) — трек A
-
-Job `db` у `.github/workflows/ci.yml` виконує `supabase db push` після кожного push у `main` вашого форку, але
-лише якщо задано всі три секрети.
-
-```bash
-gh secret set SUPABASE_ACCESS_TOKEN --repo <я>/<team-slug>
-gh secret set SUPABASE_DB_PASSWORD --repo <я>/<team-slug>
-gh secret set SUPABASE_PROJECT_ID --repo <я>/<team-slug>     # значення — <ref>
-gh secret set SPEC_DENYLIST --repo <я>/<team-slug>   # необов'язково: той самий список через кому — для CI форку
-```
-
-`gh secret set` питає значення й ніде його не друкує. `SUPABASE_ACCESS_TOKEN` — окремий токен для CI:
-Supabase → Account → Access Tokens → Generate. Якщо доступні токени з обмеженими правами, дайте лише потрібні
-(перелік прав перевіримо на репетиції). Не використовуйте токен зі свого `supabase login`.
-
-## 8. CodeRabbit (5 хв) — трек A
-
-<https://github.com/apps/coderabbitai> → Install → ваш акаунт → Only select repositories → `<team-slug>`.
-`.coderabbit.yaml` уже є в шаблоні. Репозиторії з < 10 зірок CodeRabbit не рецензує автоматично: після
-створення PR напишіть **окремим коментарем** `@coderabbitai review`.
-
-## 9. Перший PR (30 хв) — трек A
-
-```bash
-git switch -c bootstrap/evidence
-```
-
-Заповніть `docs/bootstrap.md` за пунктами з кроків 1–8: посилання на run, назви змінних і де вони задані,
-регіон, прод-URL. **Жодних значень секретів.** Знімки екрана можна класти в `docs/img/`, але `spec:check` картинок не
-читає: перед комітом перевірте, що на них немає назв клієнта, імен людей і значень ключів. Пункти «Тег спеки злито»
-і «Після merge у `main` job `db`…» заповните пізніше. Обов'язкові перевірки ruleset — `spec`, `app`,
-`conformance` (крок 2); змінні Vercel — лише дві `NEXT_PUBLIC_…` (крок 5).
-
-**Перший PR — `docs/bootstrap.md`, а не тест.** У демо заняття `spec-v0.1` уже вийшов, тому там перший PR
-одразу з тестом з AC ID. У вас у день 0–1 спеки у форку ще немає, а тест з AC ID до `sync/spec-v0.1` валить
-`conformance` з `ORPHAN` (AC немає в спеці). Тому зелений CI і preview доводимо на `docs/bootstrap.md` (день 0–1),
-а тести з AC ID у назві — лише в PR після того, як злито `sync/spec-v0.1` (крок 10).
-
-```bash
-git add docs
-git commit -m "Record bootstrap evidence"
-git push -u origin bootstrap/evidence
-gh pr create --web       # base: main вашого форку
-```
-
-Очікувано: зелені `spec`, `app`, `conformance`, коментар Vercel із preview-URL, який відкривається без входу.
-Окремим коментарем — `@coderabbitai review`. Злийте PR. Після merge перевірте Actions: job `db` зелений і
-виконав крок `supabase db push` (точний текст виводу CLI перевіримо на репетиції; база вже актуальна, бо міграцію
-ви застосували в кроці 4). Якщо в лозі «db push пропущено», якогось секрету з кроку 7 бракує.
-Job `db` червоний на `supabase link` чи `db push`, хоча секрети на місці? Перевірте, чи проєкт Supabase не на
-паузі (Dashboard → Resume project; як саме CLI падає на паузі, звіряємо на репетиції), і перезапустіть job.
-
-> Форкнули вже після тегу `spec-v0.1`? Спершу вирівняйте `main` з останнім тегом (крок 1), потім крок 10 з цим
-> тегом, а `docs/bootstrap.md` закомітьте в ту саму гілку `sync/<останній тег>`: окремий PR бутстрапу впаде на
-> `conformance` з `NO-ROW`.
-
-## 10. Синхронізація `spec-v0.1` (20 хв) — трек B
-
-Щойно PM поставив тег (до кінця дня 2):
+Перший PR кожного — маленький, щоб пройти весь шлях до `main`: гілка → PR → CI → рев'ю колеги → merge → деплой.
 
 ```bash
 git switch main
 git pull
-git fetch upstream --tags
-git switch -c sync/spec-v0.1
-git merge --no-edit spec-v0.1
+git switch -c team/<я>
 ```
 
-1. У `.spec-source` розкоментуйте два рядки: `upstream: <pm>/<team-slug>`, `version: spec-v0.1`.
-2. `npm run spec:source` → **OK** (не SKIP: SKIP означає, що рядки не розкоментовано або в `upstream:` стоїть ваш
-   логін, а не `<pm>`).
-3. У `docs/conformance.md` додайте рядок на кожен AC зі спеки. Поки код не написано — статус
-   `відкладено (не реалізовано, задача з tasks.md)` або інша конкретна причина. Це вміє `/conformance` у Claude Code
-   чи Cursor.
-4. `npm run ac:coverage` → OK.
-5. Комітимо й відкриваємо PR:
+Додайте в таблицю `docs/team.md` свій рядок: логін, роль (розробник / техлід), зона, яку берете на себе цього тижня
+(наприклад, «форма заявки», «черга менеджера», «міграції й RLS»). Логіни, не імена.
 
-   ```bash
-   git add .spec-source docs
-   git commit -m "Sync spec-v0.1"
-   git push -u origin sync/spec-v0.1
-   gh pr create --web       # base: main вашого форку
-   ```
+```bash
+git add docs/team.md
+git commit -m "Add <я> to the team table"
+git push -u origin team/<я>
+gh pr create --web
+```
 
-   → зелений CI → злийте кнопкою **Create a merge commit** (не Squash і не Rebase).
+1. Заповніть шаблон опису PR (що не стосується — AC, міграції — «—»). Окремим коментарем — `@coderabbitai review`.
+2. Попросіть колегу про рев'ю (Reviewers → логін). Ви ж рецензуєте чийсь PR `docs/team.md` — це перше рев'ю
+   для кроку 7.
+3. Зелений CI + approve → **Squash and merge** → `git switch main` і `git pull`.
 
-## 11. Читання спеки (1 год) — трек B
+**Конфлікт.** П'ятеро людей одночасно дописують одну таблицю, тож PR, злитий другим, отримає конфлікт. Це і є
+тренування: `git pull origin main` у своїй гілці, лишіть обидва рядки, `git add docs/team.md`, `git commit`,
+`git push` — і попросіть колегу схвалити ще раз (новий push знімає силу попереднього approve).
+
+**Доказ:** злитий PR з approve колеги (посилання — у файл здачі). На цьому PR також перевірте Vercel — розділ нижче.
+
+### Vercel: preview і прод
+
+Vercel належить PM, але деплоїть кожну гілку команди:
+
+- **Preview.** На кожен PR бот Vercel пише коментар з preview-URL. Відкрийте його у вікні інкогніто: сторінка
+  `/login` відкривається без входу у Vercel (PM вимкнув Require Log In).
+- **Прод.** Після merge у `main` Vercel деплоїть прод-URL команди, а job `db-deploy` застосовує нові міграції.
+  Якщо прод одразу після merge показує помилку бази, дочекайтеся завершення `db-deploy`.
+
+Публічний особистий репозиторій, за документацією Vercel, деплоїть коміти collaborators, але на Hobby трапляються
+відмови. Тому перший PR кожного — заодно перевірка. **Якщо замість preview Vercel пише «blocked» і згадує автора
+коміту** (commit author), напишіть PM у чат команди:
+
+- **рев'ю без preview** — колега запускає вашу гілку локально: `gh pr checkout <N>` → `npm run dev`;
+- **прод після merge** — ваші PR зливає PM кнопкою **Create a merge commit** (автор merge-коміту — він), або PM
+  створює деплой у Vercel вручну (Dashboard → Create Deployment).
+
+Vercel не є обов'язковою перевіркою ruleset, тож PR це не блокує.
+
+### Ризики відкритих preview
+
+PM вимкнув захист preview, щоб колеги могли їх відкривати. Відтепер кожна адреса деплою — preview гілки й URL кожного
+коміту — відкрита будь-кому, хто має посилання, а Vercel публікує ці посилання в коментарях до PR у публічному
+репозиторії.
+
+- **Preview працюють з тією самою базою, що й прод** (на Supabase Free окремої бази для preview немає): незавершений
+  код будь-якої гілки читає й пише ті самі дані.
+- **Старі деплої лишаються доступними** за своїми адресами: виправлення в базі (міграція) захищає всі деплої одразу,
+  а виправлення лише в коді застосунку старих адрес не торкається — небезпечний старий деплой PM видаляє у Vercel
+  (Deployments → ⋯ → Delete).
+- **Сторінку входу кожного деплою може пробувати будь-хто** — паролі синтетичних користувачів робіть довгими й
+  випадковими.
+
+Тому відкриті preview безпечні лише за трьох правил: **секретного ключа немає у Vercel** (preview не обійде RLS),
+**RLS і явні GRANT на кожній таблиці** (саме вони захищають дані, а не вхід у Vercel), **дані лише синтетичні**
+(`*@example.test`, жодних справжніх клієнтів). У клієнтських проєктах агенції захист не вимикають: там потрібен
+платний план із паролем або SSO.
+
+## 4. Читання спеки й питання (1 год) — трек B
+
+**Поки PM пише спеку (дні 1–2),** читайте його відкритий PR `spec/add-<зріз>` (вкладка Files changed) і коментуйте
+рядки: це найдешевший момент для відповіді.
+
+**Після тегу `spec-v0.1`** (до кінця дня 2): `git switch main` → `git pull`. Спека — у `openspec/specs/`.
 
 У Claude Code або Cursor: «Уточни спеку spec-v0.1 скілом spec-clarify». Скіл:
 
 1. проходить 11 категорій таксономії і записує таблицю Ясно / Частково / Немає в розділ `## Скан за таксономією`
-   файлу `docs/spec-reading.md` (розділ уже є в шаблоні);
+   вашого журналу `docs/spec-reading/<я>.md` (у кожного свій файл, тож конфліктів немає);
 2. ставить вам **по одному** питанню з варіантами й рекомендацією — ви вирішуєте, чи йде воно до PM;
-3. видає готові тексти issues і додає рядки в `docs/spec-reading.md`.
+3. видає готові тексти issues і додає рядки в журнал.
 
 **Власне око обов'язкове.** Перечитайте спеку самі до запуску скіла й запишіть свої питання: у журналі має
 бути видно, що знайшли ви, а що скіл (розділ «Що пропустив би без скіла / що скіл знайшов зайве»).
 
-**Спершу перегляньте наявні:** `gh issue list --repo <pm>/<team-slug> --label spec-question --state all` (або
-сторінка Issues upstream). Ваше питання вже є — допишіть коментар із новим випадком чи варіантом поведінки, а не
-дубль (посилання на коментар — `…/issues/N#issuecomment-M`). Зараховуємо щонайменше 3 питання в upstream: власні
-issues `spec-question` або коментар із новим варіантом чи впливом у наявному issue колеги (дублікатів не
-створюємо), з них щонайменше 1 — власне issue.
+**Спершу перегляньте наявні:** `gh issue list --label spec-question --state all` (або сторінка Issues). Ваше питання
+вже є — допишіть коментар із новим випадком чи варіантом поведінки, а не дубль (посилання на коментар —
+`…/issues/N#issuecomment-M`). Зараховуємо щонайменше 3 питання: власні issues `spec-question` або коментар із новим
+варіантом чи впливом у наявному issue колеги (дублікатів не створюємо), з них щонайменше 1 — власне issue.
 
-**Створюйте issues через вебформу**: `https://github.com/<pm>/<team-slug>/issues/new/choose` → «Питання до
-специфікації», вставте поля з тексту скіла. Не через `gh issue create --label spec-question`: мітку через API може
-ставити лише користувач із правом push у репозиторій, інакше GitHub мовчки її відкидає. Форма ставить мітку сама.
+**Створюйте issues через вебформу:** `https://github.com/<pm>/<team-slug>/issues/new/choose` → «Питання до
+специфікації», вставте поля з тексту скіла. Форма ставить мітку `spec-question` сама і тримає однаковий формат для
+всіх: варіанти поведінки (не реалізації), рекомендований, вплив.
 
-Потім у `docs/spec-reading.md`:
+Потім у `docs/spec-reading/<я>.md`:
 
-- **таблиця скану** (11 категорій, статус Ясно / Частково / Немає, де саме) — у розділі
-  `## Скан за таксономією`. Скіл заповнює її сам; перевірте, що всі 11 рядків на місці й колонка «Де» вказує на
-  конкретні вимоги чи AC, і виправте, з чим не згодні (рубрика B її перевіряє). Зразок —
+- **таблиця скану** (11 категорій, статус Ясно / Частково / Немає, де саме) — перевірте, що всі 11 рядків на місці й
+  колонка «Де» вказує на конкретні вимоги чи AC, і виправте, з чим не згодні (рубрика B її перевіряє). Зразок —
   [`spec-reading.md` демо](../examples/leave-portal/2-clarify/spec-reading.md);
 - колонка «Issue» — посилання `<pm>/<team-slug>#N`;
 - «Рішення (що зробили)» — ваше **робоче припущення**, поки PM не відповів;
 - коли PM відповість — «Відповідь PM» і що змінили;
 - «Власні припущення» — те, що ви вирішили самі без питання.
 
-Зразок — [`examples/leave-portal/2-clarify/spec-reading.md`](../examples/leave-portal/2-clarify/spec-reading.md) і
-[`issue-Q2.md`](../examples/leave-portal/2-clarify/issue-Q2.md). Журнал комітьте PR-ом у форк.
+Зразок issue — [`issue-Q2.md`](../examples/leave-portal/2-clarify/issue-Q2.md). Журнал — окремим PR (гілка
+`docs/spec-reading-<я>`), рев'ю колеги, Squash and merge.
 
-**PM ще не випустив `spec-v0.1`?** Читайте відкриту зміну з його PR: `git fetch upstream`, потім
-`git show upstream/spec/add-<зріз>:openspec/changes/add-<зріз>/proposal.md` (і так само `specs/…/spec.md`). Якщо
-`git show` пише «does not exist», PM уже заархівував зміну в гілці: нові шляхи покаже
-`git ls-tree -r --name-only upstream/spec/add-<зріз> openspec` (спека — у `openspec/specs/<capability>/spec.md`,
-proposal — у `openspec/changes/archive/<дата>-add-<зріз>/`). У полі «Версія специфікації» issue вкажіть id зміни
-(`add-<зріз>`). Так само ставте питання й коментарі в PR PM — це найдешевший момент для відповіді.
+**Доказ:** щонайменше 3 питання (власні issues або коментарі з новим варіантом, з них щонайменше 1 — власне issue);
+`docs/spec-reading/<я>.md` у `main`.
 
-**Доказ:** щонайменше 3 питання в upstream: власні issues `spec-question` або коментар із новим варіантом чи впливом
-у наявному issue колеги (дублікатів не створюємо), з них щонайменше 1 — власне issue; `docs/spec-reading.md` у
-`main` форку.
+## 5. План `impl-<зріз>` і задачі разом із техлідом (30–45 хв) — трек C
 
-## 12. Реалізація зрізу (4–5 год) — трек C
-
-### 12.1 План: зміна `impl-<зріз>` (45 хв)
+Одна реалізація на команду — один план. Техлід відкриває PR зі зміною `impl-<зріз>`, команда обговорює його в рев'ю
+й дописує в ту саму гілку (за домовленістю з техлідом):
 
 ```bash
 git switch main
@@ -377,68 +241,89 @@ git switch -c impl/<зріз>-plan
 npx openspec new change impl-<зріз>
 ```
 
-1. У `openspec/changes/impl-<зріз>/.openspec.yaml` допишіть рядок `skip_specs: true` (саме `skip_specs`:
-   помилку в ключі OpenSpec мовчки ігнорує). Зміна розробника не змінює спеку PM.
+1. У `openspec/changes/impl-<зріз>/.openspec.yaml` допишіть рядок `skip_specs: true` (саме `skip_specs`: помилку в
+   ключі OpenSpec мовчки ігнорує). Зміна розробників не змінює спеку PM.
 2. `proposal.md` — коротко: який зріз і яка версія спеки; `design.md` — таблиці, міграції (GRANT + RLS +
    політики), server actions, сторінки, і кожне рішення з посиланням на AC ID; `tasks.md` — **вертикальні** задачі
    (таблиця/RLS + доменна функція + server action/сторінка + тест), кожна закінчується рядком `Done when: AC-…`.
-   Правила для агента — у `openspec/config.yaml` (`rules: design`, `rules: tasks`), шаблони —
+   Задач — щонайменше дві на розробника: дрібніть до одного AC на задачу. Правила для агента — у
+   `openspec/config.yaml` (`rules: design`, `rules: tasks`), шаблони —
    `npx openspec instructions design --change impl-<зріз>` і `npx openspec instructions tasks --change impl-<зріз>`.
 3. Рішення, яких спека свідомо не дає (модель даних, бібліотеки), записуйте як ADR у `docs/decisions/`.
-4. Перевірте: `npx openspec validate impl-<зріз> --strict` → PR у форк → злийте.
+4. `npx openspec validate impl-<зріз> --strict` → PR. Схвалює PM (власник коду `/openspec/`), бо техлід — автор.
 
-Зразок — [`examples/leave-portal/3-impl/tasks.md`](../examples/leave-portal/3-impl/tasks.md) і
+Після merge техлід (або PM) заводить **задачі-issues** за формою «Задача» (мітка `task`): AC ID, що зробити, Done
+when, область (UI / дія / міграція / тест). Кожен призначає собі свої (Assignees → себе) і пише в коментарі, що
+взяв. Зразок — [`examples/leave-portal/3-impl/tasks.md`](../examples/leave-portal/3-impl/tasks.md) і
 [`design.md`](../examples/leave-portal/3-impl/design.md).
 
-### 12.2 Задача за задачею (3–4 год)
+**PM ще не випустив `spec-v0.1`?** План можна почати з відкритого PR PM. Тести з AC ID у назві — лише після того,
+як спеку злито в `main`: до того `conformance` падає з `ORPHAN` (AC немає в спеці), і PR не злити.
 
-Одна задача (або кілька маленьких) — одна гілка й один PR. Агенту давайте одну задачу з `tasks.md` за раз
-(у Claude Code може допомогти `/opsx:apply impl-<зріз>`), а не всю спеку.
+## 6. Задачі: гілка → PR → рев'ю → merge (4–5 год) — трек C
 
-1. **Міграція** (якщо задача її потребує):
+Одна задача — одна гілка й один PR. Агенту давайте одну задачу за раз (у Claude Code може допомогти
+`/opsx:apply impl-<зріз>`), а не всю спеку.
 
-   ```bash
-   npx supabase migration new <назва>
-   # SQL: enable row level security; revoke all … from anon, authenticated; явні grant;
-   #      політика на кожну операцію to authenticated з (select auth.uid())
-   npx supabase db push --dry-run
-   npm run db:push
-   npm run db:types
-   ```
+```bash
+git switch main
+git pull
+git switch -c task/<N>-<коротко>
+```
 
-   **Кілька записів або перевірка + запис разом** (заявка з позиціями, запуск із копією задач, утримання слоту без
-   перетину): у supabase-js немає транзакцій, кожен запит — окрема транзакція. Робіть це однією функцією Postgres
-   через `supabase.rpc(…)`, як `submit_leave_request` у демо (`supabase/migrations/20261013000000_leave_requests.sql`):
-   `security invoker`, або `security definer` лише в схемі `private` з `set search_path = ''`.
+### 6.1 Міграції — лише через PR
 
-   Застосовані міграції не редагуємо, лише новий файл. Довідкові дані першої задачі — в ідемпотентний
-   `supabase/seed.sql` (`insert … on conflict do nothing`), у хмару його застосовує лише
-   `npx supabase db push --include-seed` (звичайний `db:push` і job `db` у CI сид **не** виконують). **У хмарі сид
-   виконується лише один раз:** відредагований `seed.sql` повторно не виконується, CLI лише оновлює його хеш
-   (`Updating seed hash…`). Довідкові дані, додані пізніше (або якщо `--include-seed` уже запускали), — новою
-   міграцією з `insert … on conflict do nothing`.
-   **Нові ролі** (замість `member`/`admin` шаблону) — окрема нова міграція в такому порядку:
+```bash
+npx supabase migration new <назва>
+# SQL: enable row level security; revoke all … from anon, authenticated; явні grant;
+#      політика на кожну операцію to authenticated з (select auth.uid())
+```
 
-   ```sql
-   alter table public.profiles drop constraint profiles_role_check;               -- 1) зняти старе правило
-   update public.profiles set role = 'employee' where role = 'member';            -- 2) перевести наявні дані
-   alter table public.profiles alter column role set default 'employee';          -- 3) новий default
-   alter table public.profiles
-     add constraint profiles_role_check check (role in ('employee', 'manager', 'admin'));  -- 4) нове правило
-   ```
+Шлях міграції: файл у PR → `db-check` у CI застосовує **всі** міграції й сид до одноразової бази й перевіряє порядок
+→ рев'ю техліда чи PM (CODEOWNERS) → merge → `db-deploy` застосовує її до спільної бази. Локально без Docker
+міграцію не запустити — її перевіряє `db-check`.
 
-   Дані й default оновлюємо **до** нового `profiles_role_check`, інакше він упаде на рядках `member`, які вже
-   створив `npm run users:demo` у кроці 4. А старе правило знімаємо першим, бо воно не пускає нові значення в
-   `update`. Ролі тут — з демо, у вас — з `product/roles.md`. Потім оновіть `supabase/demo-users.json` і
-   `npm run users:demo`.
-2. **Код і тести.** Назва кожного тесту поведінки починається з AC ID: `it("AC-…-02: …")`. Тести — лише у файлах
+- **«Мітка часу міграції ≤ найновішої на main».** Колега злив міграцію раніше за вас, і ваша опинилась у минулому.
+  Хмарна база такої не прийме, тому `db-check` червоний з інструкцією. Виправлення: `git pull origin main` у своїй
+  гілці, `npx supabase migration new <назва>` (новий файл зі свіжою міткою), перенесіть туди SQL, старий файл
+  видаліть, `git push` — і новий approve.
+- **Застосовані міграції не редагуємо**, лише новий файл. Деструктивне (`drop`, перейменування колонок, `truncate`)
+  — лише за згодою техліда: база одна, і чужі гілки ще читають стару схему.
+- **Кілька записів або перевірка + запис разом** (заявка з позиціями, запуск із копією задач, утримання слоту без
+  перетину): у supabase-js немає транзакцій, кожен запит — окрема транзакція. Робіть це однією функцією Postgres
+  через `supabase.rpc(…)`, як `submit_leave_request` у демо (`supabase/migrations/20261013000000_leave_requests.sql`):
+  `security invoker`, або `security definer` лише в схемі `private` з `set search_path = ''`.
+- **Довідкові дані.** Сид шаблону PM застосував у день 0, і в хмарі сид виконується лише раз. Нові довідкові дані —
+  новою міграцією з `insert … on conflict do nothing`.
+- **Типи бази** (`src/lib/supabase/database.types.ts`) оновлюйте, як описано в README шаблону; з ноутбука в базу
+  нічого не пушимо.
+
+**Нові ролі** (замість `member`/`admin` шаблону) — окрема нова міграція в такому порядку:
+
+```sql
+alter table public.profiles drop constraint profiles_role_check;               -- 1) зняти старе правило
+update public.profiles set role = 'employee' where role = 'member';            -- 2) перевести наявні дані
+alter table public.profiles alter column role set default 'employee';          -- 3) новий default
+alter table public.profiles
+  add constraint profiles_role_check check (role in ('employee', 'manager', 'admin'));  -- 4) нове правило
+```
+
+Дані й default оновлюємо **до** нового `profiles_role_check`, інакше він упаде на рядках `member`, які вже
+створив `npm run users:demo` у день 0. А старе правило знімаємо першим, бо воно не пускає нові значення в `update`.
+Ролі тут — з демо, у вас — з `product/roles.md`. Після `db-deploy` техлід оновлює `supabase/demo-users.json` (PR) і
+запускає `npm run users:demo`.
+
+### 6.2 Код, тести, матриця
+
+1. **Тести.** Назва кожного тесту поведінки починається з AC ID: `it("AC-…-02: …")`. Тести — лише у файлах
    `*.test.ts` / `*.test.tsx` (у `src/` або `tests/`): `*.spec.ts` Vitest не запускає, і `ac:coverage` такий тест не
    рахує. Пропущені тести (`.skip`, `.todo`) AC не покривають, а тест без жодного `expect` Vitest вважає проваленим.
-   Шляхи в колонках «Код» і «Тест» пишіть від кореня репозиторію в бектиках (`src/…`, `tests/…`, `supabase/…`;
-   номер рядка `:12` можна): `ac:coverage` перевіряє, що ці файли є і що тест із цим AC лежить у вказаному файлі.
-3. **Матриця.** `/conformance` перебудовує `docs/conformance.md`. Статус — дослівно `реалізовано` або
-   `відкладено (причина)`.
-4. **Перевірки перед PR:**
+2. **Матриця.** У `docs/conformance.md` знайдіть рядок свого AC (PM додав його зі статусом
+   `відкладено (новий AC — чекає задачі)`) і змініть: колонки «Код» і «Тест» — шляхи від кореня репозиторію в
+   бектиках (`src/…`, `tests/…`, `supabase/…`; номер рядка `:12` можна), статус — дослівно `реалізовано` або
+   `відкладено (причина)`. `ac:coverage` перевіряє, що ці файли є і що тест із цим AC лежить у вказаному файлі.
+   Матриця одна на команду: конфлікт у ній — лишіть обидві зміни (кожна в своєму рядку).
+3. **Перевірки перед PR:**
 
    ```bash
    npm run lint
@@ -446,102 +331,82 @@ npx openspec new change impl-<зріз>
    npm test
    npm run build          # у виводі має бути ƒ Proxy (Middleware)
    npm run ac:coverage
+   npm run spec:check
    ```
 
-5. **PR у форк** → зелений CI → preview відкривається → коментар `@coderabbitai review` → виправлення → merge.
-   Після merge Vercel деплоїть прод, а job `db` застосовує міграції. Якщо прод одразу після merge показує помилку
-   бази, дочекайтеся завершення job `db`.
-6. **Останній PR зрізу, до merge:** `npx openspec archive impl-<зріз> -y` у тій самій гілці (прямі коміти в
-   `main` ruleset не пустить).
+### 6.3 PR задачі
 
-**PM ще не випустив `spec-v0.1`?** `design.md` і `tasks.md` можна почати з відкритої зміни в PR PM (як у
-кроці 11), код — писати й зливати. Тести поведінки (з AC ID у назві) — лише після злиття `sync/spec-v0.1`:
-до того `conformance` падає з `ORPHAN`, а ruleset без нього PR не пустить. Затримка PM балів не знімає
-([README](../README.md#що-знімає-бали-розробник)).
+```bash
+git add -A
+git commit -m "AC-…-02: <що зроблено>"
+git push -u origin task/<N>-<коротко>
+gh pr create --web
+```
 
-**Відповіді PM ще немає?** Або реалізуйте своє робоче припущення з `docs/spec-reading.md` і назвіть його в PR,
+1. Опис PR: тип «Реалізація», `Closes #<N>` (issue задачі), AC, які покриває PR. Окремим коментарем —
+   `@coderabbitai review` (кількість рев'ю на годину обмежена: просіть після групи виправлень).
+2. Reviewers — колега (міграцію автоматично отримають техлід і PM через CODEOWNERS).
+3. Виправлення за рев'ю — новими комітами в ту саму гілку; відповідайте на кожен коментар і розв'язуйте розмову.
+4. Зелений CI + approve після останнього push → **Squash and merge** (або PM зливає merge-комітом, якщо Vercel блокує
+   ваші коміти). Issue закриється сам.
+5. **Останній PR зрізу, до merge:** `npx openspec archive impl-<зріз> -y` у тій самій гілці. PR чіпає `/openspec/`,
+   тож схвалює PM або техлід.
+
+**Відповіді PM ще немає?** Або реалізуйте своє робоче припущення з `docs/spec-reading/<я>.md` і назвіть його в PR,
 або залиште AC зі статусом `відкладено (чекаємо відповідь PM на Q3, <pm>/<team-slug>#N)`.
 
-**Скільки встигнути.** Очікуємо `реалізовано` щонайменше для половини AC зрізу (вертикальні задачі з `tasks.md` по
-черзі); решта — `відкладено (конкретна причина)`, і це не знімає балів у C, якщо `design.md` і `tasks.md`
-покривають усі AC ([README](../README.md#рубрика-розробника-що-дивимось)).
+**PM випустив `spec-v0.2`.** У його PR уже є рядки нових AC зі статусом `відкладено (новий AC — чекає задачі)`, а
+техлід заводить на них задачі. Якщо ви реалізували AC, який став MODIFIED, звірте свій код:
+`git diff spec-v0.1 spec-v0.2 -- openspec/specs`. Не відповідає — новий PR з виправленням коду й тесту або
+`відкладено (причина)` у рядку.
 
-**Доказ:** PR-и у форку зі зеленим CI, `docs/conformance.md` на `main` з рядком для кожного AC, прод-URL, на
-якому зріз працює під синтетичними користувачами. В останньому PR реалізації — запис екрана 1–2 хв (вхід кожною
-роллю й головний сценарій зрізу на прод-URL), без паролів у кадрі.
+**Знайшли помилку в спеці?** Не правте `openspec/specs/` чи `product/`: питання — issue `spec-question` або коментар
+у PR PM. Готову пропозицію можна оформити PR-ом, що додає лише `openspec/changes/<id>/` (тип «Зміна
+специфікації»); рішення й merge — за PM.
 
-## 13. Синхронізація `spec-v0.2` (45 хв) — трек D
+**Доказ:** щонайменше 2 ваші злиті PR задач зі зеленим CI, тестами з AC ID і рядками матриці; міграції — лише в
+PR. В останньому своєму PR задачі — коментар із записом екрана 1–2 хв: ваша задача на прод-URL команди під
+синтетичним користувачем, без паролів у кадрі.
 
-Про новий тег PM напише в чат команди. Крім того, поки `.spec-source` вказує старий тег, `npm run spec:source` (і
-CI форку) друкує попередження «УВАГА: в <pm>/<team-slug> уже є spec-v0.2…». CI при цьому лишається зеленим, тож
-не відкладайте синхронізацію.
+## 7. Рев'ю PR-ів колег (1–1,5 год) — трек D
 
-```bash
-git switch main
-git pull
-git fetch upstream --tags
-git switch -c sync/spec-v0.2
-git merge --no-edit spec-v0.2
-```
+Рев'ю — половина роботи в команді, а не формальність перед merge. Зараховуємо щонайменше 2 змістовні рев'ю PR-ів
+колег (рев'ю техліда на PR-и PM зі спекою — теж).
 
-1. `.spec-source` → `version: spec-v0.2`; `npm run spec:source` → **OK** (не SKIP: SKIP означає, що рядки не
-   розкоментовано або в `upstream:` стоїть ваш логін, а не `<pm>`).
-2. `npm run ac:coverage` **упаде** з `NO-ROW` на нових AC — це і є дрейф, який ловить CI (зразок —
-   [`drift-ci.txt`](../examples/leave-portal/4-spec-v0.2/drift-ci.txt)). Додайте рядки.
-3. **Змінені сценарії (MODIFIED) перевірка не бачить** — звірте їх самі:
+**Як рецензувати добре:**
 
-   ```bash
-   git diff spec-v0.1 spec-v0.2 -- openspec/specs
-   ```
+1. **Спершу контекст:** issue задачі, AC у спеці (`openspec/specs/…`), рядок `tasks.md`. Рецензуєте відповідність
+   спеці, а не своєму смаку.
+2. **Запустіть, якщо є що дивитись:** preview з коментаря Vercel або локально — `gh pr checkout <N>` → `npm run dev`.
+3. **Пройдіть чекліст:**
+   - AC реалізовано так, як написано в спеці (а не як прочитав автор) — інакше посилання на рядок спеки;
+   - назва тесту починається з AC ID, тест перевіряє саме правило (а не мок), є негативний шлях;
+   - рядок `docs/conformance.md` оновлено, шляхи правильні;
+   - міграція: RLS, `revoke` + явні `grant`, політика на кожну операцію, ролі не з `user_metadata`, не редагує
+     застосовану міграцію;
+   - жодних секретів, справжніх даних, `SUPABASE_SECRET_KEY` у клієнтському коді;
+   - нічого зайвого поза задачею.
+4. **Коментуйте рядки:** Files changed → «+» біля рядка → коментар; дрібне виправлення — блоком ` ```suggestion `.
+   Кожне зауваження — що не так, чому (AC, правило), що запропонувати.
+5. **Завершіть рев'ю** (Review changes): **Request changes**, якщо є блокер; **Approve** — з одним-двома реченнями,
+   що ви перевірили («AC-…-04: перевірив заблокований день 05.11, тест покриває обидва випадки; запустив локально»);
+   **Comment** — питання без вердикту. «LGTM» без змісту рев'ю не зараховуємо.
+6. **Відповідайте протягом доби:** чужий PR, що чекає рев'ю, гальмує всю команду.
 
-   Для кожного зміненого AC: код уже відповідає (бо ви взяли ту саму відповідь як робоче припущення), треба
-   змінити код і тест, або `відкладено (причина)`. Таблицю «Синхронізація на spec-v0.2» (колонки: AC, що
-   змінив PM, ваш код на spec-v0.1, що зробили) додайте в `docs/spec-reading.md`. Зразок —
-   [`spec-reading.md` демо](https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo/blob/main/docs/spec-reading.md#синхронізація-на-spec-v02).
-4. Реалізація дельти — у тій самій гілці або окремими PR після злиття sync-PR. Великій дельті дайте окрему зміну
-   `impl-<зріз>-v0-2` з `skip_specs: true`.
-5. Комітимо й відкриваємо PR:
+CodeRabbit — помічник, а не рецензент: його коментарі не замінюють approve колеги. Не погоджуєтесь із ним —
+відповідайте в треді, чому.
 
-   ```bash
-   git add .spec-source docs
-   git commit -m "Sync spec-v0.2"
-   git push -u origin sync/spec-v0.2
-   gh pr create --web       # base: main вашого форку
-   ```
+**Доказ:** посилання на свої рев'ю (`…/pull/N#pullrequestreview-M`: відкрийте рев'ю у вкладці Conversation і скопіюйте
+посилання з його часу).
 
-   → зелений CI → злийте кнопкою **Create a merge commit** (не Squash і не Rebase).
+## 8. Здача (15 хв)
 
-Якщо попередній sync-PR злили squash-ем і `git merge` дав конфлікти в `product/` чи `openspec/specs/`, візьміть
-версію тегу й завершіть merge:
+Інструкція — [`submissions/README.md`](../submissions/README.md). SHA — коміт `main` репозиторію команди на момент
+здачі:
 
 ```bash
-git checkout --theirs -- product openspec/specs
-git add product openspec/specs
-git commit --no-edit
-```
-
-**PM не випустив `spec-v0.2`?** Тоді D не оцінюємо, а трек рахуємо зі 100 = (A+B+C)×100/90; у файлі здачі в полі
-«PR sync/spec-v0.2» — «`spec-v0.2` не випущено». Затримка PM не знімає з вас балів.
-
-**Термінове виправлення шаблону, а нового тегу ще немає:** той самий `git cherry-pick <sha>` у форку PR-ом
-«Оновлення шаблону» (лише якщо коміт не чіпає `product/` і `openspec/`); пізніший merge тегу з тим самим комітом
-конфліктів не дає. Форк ще не синхронізований (`.spec-source` закоментований, а спека в upstream уже є) — cherry-pick
-робіть у гілку `sync/spec-vX.Y`, а не окремим PR: інакше `conformance` червоний. Звичайно ж виправлення шаблону
-приходить із наступним тегом спеки: PM переносить його в upstream.
-
-**Знайшли помилку в спеці?** Не правте `openspec/` у форку — запропонуйте зміну PM. Команди — у README шаблону,
-«Шлях розробника», крок 9: гілка від `upstream/main`, зміна лише в `openspec/changes/<id>/`, PR в upstream з типом
-«Зміна специфікації». Рішення — за PM; у ваш форк зміна прийде з наступним тегом.
-
-## 14. Здача (15 хв)
-
-Інструкція — [`submissions/README.md`](../submissions/README.md). SHA для розробника — коміт `main` вашого форку,
-який задеплоєно на прод:
-
-```bash
-git switch main
-git pull
-git rev-parse HEAD
+git fetch origin
+git rev-parse origin/main
 ```
 
 ## Бонус E (+5, 1–2 год) — одне з двох
@@ -551,8 +416,8 @@ git rev-parse HEAD
   шаблон](https://github.com/koldovsky/2026-quitcode-06-project-template#як-цей-шаблон-зібрано-з-нуля):
   де лежить `proxy.ts`, Cache Components, `setAll` із заголовками, `*_ANON_KEY` замість publishable, GRANT у
   міграції, `.env.example` у `.gitignore`, `next typegen` перед `tsc`. Таблиця «пастка → що зробив агент → як помітили».
-- **`/opsx:verify` + власний розбір.** До archive запустіть `/opsx:verify impl-<зріз>`. Для кожної знахідки
-  (CRITICAL / WARNING / SUGGESTION) вирішіть: справжня проблема, хибна тривога чи смак — і чому. Підсумуйте, що
-  verify знайшов такого, чого не ловлять `npm test` і `ac:coverage`, і де він помилився.
+- **`/opsx:verify` + власний розбір.** Перед archive `impl-<зріз>` запустіть `/opsx:verify impl-<зріз>`. Для
+  кожної знахідки (CRITICAL / WARNING / SUGGESTION) вирішіть: справжня проблема, хибна тривога чи смак — і чому.
+  Підсумуйте, що verify знайшов такого, чого не ловлять `npm test` і `ac:coverage`, і де він помилився.
 
 Звіт — у розділі «Бонус E» файлу здачі: посилання і до пів сторінки висновків.
