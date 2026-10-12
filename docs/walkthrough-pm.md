@@ -185,7 +185,9 @@ gh label create task --force --repo <pm>/<team-slug> --description "Задача
 підключення з паролем бази, і цей секрет має бачити тільки `main`, а не гілки розробників.
 
 1. **Environment.** Settings → Environments → `production`. Перший прогін CI з кроку 1 міг уже створити його
-   автоматично (job `db-deploy` на нього посилається) — тоді відкрийте його; інакше **New environment** →
+   автоматично (job `db-deploy` на нього посилається) — тоді відкрийте його. `Production` з великої літери, яке
+   створює Vercel для своїх деплоїв, — те саме середовище (регістр у назвах GitHub не розрізняє): налаштуйте
+   його, нового не створюйте. Якщо середовища ще немає — **New environment** →
    `production` → Configure environment. Deployment branches and tags → **Selected branches and tags** → Add deployment branch or tag rule → `main`.
 2. **Рядок підключення.** Supabase → кнопка **Connect** угорі проєкту → **Session pooler** (порт `5432`) → URI
    вигляду `postgresql://postgres.<ref>:[YOUR-PASSWORD]@<хост пулера>:5432/postgres`. Замініть `[YOUR-PASSWORD]`
