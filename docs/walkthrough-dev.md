@@ -106,9 +106,11 @@ npm test
    `src/`, `supabase/` і `tests/` ще до push.
 3. **Перший вхід:** `npm run dev` → <http://localhost:3000> → вхід синтетичним користувачем (`admin@example.test`
    тощо; пароль PM або техлід надішле особистим повідомленням). База спільна: ви бачите ті самі дані, що й колеги.
-4. **Свої тестові користувачі** — лише синтетичні: Supabase → Authentication → Users → **Add user** → email на
-   кшталт `<я>-employee@example.test`, позначте автопідтвердження (точні назви полів звіряємо на репетиції).
-   Реєстрацію в застосунку PM вимкнув, тож інших шляхів немає.
+4. **Свої тестові користувачі** — лише синтетичні, два шляхи (реєстрацію в застосунку PM вимкнув):
+   - одразу: Supabase → Authentication → Users → **Add user** → email на кшталт `<я>-employee@example.test`,
+     позначте автопідтвердження (точні назви полів звіряємо на репетиції); роль у профілі — за замовчуванням;
+   - з потрібною роллю: запис `*@example.test` у `supabase/demo-users.json` у PR «Онбординг», після merge PM або
+     техлід запускає `npm run users:demo` (як у `docs/onboarding.md`).
 5. Для Supabase MCP з `.mcp.json` (лише читання; цей файл читає Claude Code, Cursor — ні) задайте змінну перед
    запуском агента: `export SUPABASE_PROJECT_REF=<ref>` (PowerShell: `$env:SUPABASE_PROJECT_REF = "<ref>"`), де
    `<ref>` — з адреси Dashboard (`/project/<ref>`).
@@ -125,7 +127,7 @@ npm test
 ```bash
 git switch main
 git pull
-git switch -c team/<я>
+git switch -c onboarding/<я>
 ```
 
 Додайте в таблицю `docs/team.md` свій рядок: логін, роль (розробник / техлід), зона, яку берете на себе цього тижня
@@ -133,12 +135,12 @@ git switch -c team/<я>
 
 ```bash
 git add docs/team.md
-git commit -m "Add <я> to the team table"
-git push -u origin team/<я>
+git commit -m "Onboarding: add <я> to docs/team.md"
+git push -u origin onboarding/<я>
 gh pr create --web
 ```
 
-1. Заповніть шаблон опису PR (що не стосується — AC, міграції — «—») і додайте знімок екрана локального
+1. Заповніть шаблон опису PR: тип «Онбординг», що не стосується (AC, міграції) — «—». Додайте знімок екрана локального
    `npm run dev` після входу синтетичним користувачем (адреса `localhost:3000`, без паролів у кадрі) — доказ
    онбордингу. Окремим коментарем — `@coderabbitai review`.
 2. Попросіть колегу про рев'ю (Reviewers → логін). Ви ж рецензуєте чийсь PR `docs/team.md` — це перше рев'ю
@@ -225,8 +227,8 @@ PM вимкнув захист preview, щоб колеги могли їх ві
 - коли PM відповість — «Відповідь PM» і що змінили;
 - «Власні припущення» — те, що ви вирішили самі без питання.
 
-Зразок issue — [`issue-Q2.md`](../examples/leave-portal/2-clarify/issue-Q2.md). Журнал — окремим PR (гілка
-`docs/spec-reading-<я>`), рев'ю колеги, Squash and merge.
+Зразок issue — [`issue-Q2.md`](../examples/leave-portal/2-clarify/issue-Q2.md). Журнал — окремим PR типу «Онбординг»
+(гілка `onboarding/<я>-spec-reading`), рев'ю колеги, Squash and merge.
 
 **Доказ:** щонайменше 3 питання (власні issues або коментарі з новим варіантом, з них щонайменше 1 — власне issue);
 `docs/spec-reading/<я>.md` у `main`.
@@ -253,7 +255,7 @@ npx openspec new change impl-<зріз>
    `openspec/config.yaml` (`rules: design`, `rules: tasks`), шаблони —
    `npx openspec instructions design --change impl-<зріз>` і `npx openspec instructions tasks --change impl-<зріз>`.
 3. Рішення, яких спека свідомо не дає (модель даних, бібліотеки), записуйте як ADR у `docs/decisions/`.
-4. `npx openspec validate impl-<зріз> --strict` → PR. Схвалює PM (власник коду `/openspec/`), бо техлід — автор.
+4. `npx openspec validate impl-<зріз> --strict` → PR (тип «Зміна специфікації»). Схвалює PM (власник коду `/openspec/`), бо техлід — автор.
 
 Після merge техлід (або PM) заводить **задачі-issues** за формою «Задача» (мітка `task`): AC ID, що зробити, Done
 when, область (UI / дія / міграція / тест). Кожен призначає собі свої (Assignees → себе) і пише в коментарі, що
@@ -286,10 +288,10 @@ npx supabase migration new <назва>
 → рев'ю техліда чи PM (CODEOWNERS) → merge → `db-deploy` застосовує її до спільної бази. Локально без Docker
 міграцію не запустити — її перевіряє `db-check`.
 
-- **«Мітка часу міграції ≤ найновішої на main».** Колега злив міграцію раніше за вас, і ваша опинилась у минулому.
-  Хмарна база такої не прийме, тому `db-check` червоний з інструкцією. Виправлення: `git pull origin main` у своїй
-  гілці, `npx supabase migration new <назва>` (новий файл зі свіжою міткою), перенесіть туди SQL, старий файл
-  видаліть, `git push` — і новий approve.
+- **`OLDER`: мітка часу міграції ≤ найновішої на `main`.** Колега злив міграцію раніше за вас, і ваша опинилась у
+  минулому. Хмарна база такої не прийме, тому `db-check` червоний і друкує готову команду `git mv` зі свіжою міткою.
+  Виправлення: `git pull origin main` у своїй гілці, виконайте цю команду (SQL не змінюється), `git commit`,
+  `git push` — і новий approve.
 - **Застосовані міграції не редагуємо**, лише новий файл. Деструктивне (`drop`, перейменування колонок, `truncate`)
   — лише за згодою техліда: база одна, і чужі гілки ще читають стару схему.
 - **Кілька записів або перевірка + запис разом** (заявка з позиціями, запуск із копією задач, утримання слоту без
@@ -298,8 +300,8 @@ npx supabase migration new <назва>
   `security invoker`, або `security definer` лише в схемі `private` з `set search_path = ''`.
 - **Довідкові дані.** Сид шаблону PM застосував у день 0, і в хмарі сид виконується лише раз. Нові довідкові дані —
   новою міграцією з `insert … on conflict do nothing`.
-- **Типи бази** (`src/lib/supabase/database.types.ts`) оновлюйте, як описано в README шаблону; з ноутбука в базу
-  нічого не пушимо.
+- **Типи бази** (`src/lib/supabase/database.types.ts`): готовий файл для схеми вашого PR — у Summary прогону
+  `db-check` (README шаблону, «Шлях розробника»); скопіюйте його в PR. З ноутбука в базу нічого не пушимо.
 
 **Нові ролі** (замість `member`/`admin` шаблону) — окрема нова міграція в такому порядку:
 
@@ -348,7 +350,7 @@ git push -u origin task/<N>-<коротко>
 gh pr create --web
 ```
 
-1. Опис PR: тип «Реалізація», `Closes #<N>` (issue задачі), AC, які покриває PR. Окремим коментарем —
+1. Опис PR: тип «Реалізація задачі», `Closes #<N>` (issue задачі), AC, які покриває PR. Окремим коментарем —
    `@coderabbitai review` (кількість рев'ю на годину обмежена: просіть після групи виправлень).
 2. Reviewers — колега (міграцію автоматично отримають техлід і PM через CODEOWNERS).
 3. Виправлення за рев'ю — новими комітами в ту саму гілку; відповідайте на кожен коментар і розв'язуйте розмову.
