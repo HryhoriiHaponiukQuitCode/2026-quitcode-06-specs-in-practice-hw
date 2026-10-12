@@ -2,8 +2,8 @@
 #
 # CodeRabbit config — review of QuitCode Workshop 6 submission PRs.
 # Workshop: "Специфікації на практиці: старт командного проєкту".
-# The work itself lives in the teams' repositories (PM upstream, developer forks) and is graded
-# by the instructor's pipeline at the SHA from the submission file. Here CodeRabbit checks ONLY
+# The work itself lives in one shared repository per team (in the PM's personal account) and is
+# graded by the instructor's pipeline at the team-main SHA from the submission file. Here CodeRabbit checks ONLY
 # the submission PR: one new file submissions/<team-slug>/<github-login>.md, its fields, and that
 # nothing else changed. Every check is STATIC over the diff and the PR description: no network,
 # no npm, no cloning of linked repositories.
@@ -64,24 +64,26 @@ reviews:
         Шлях: submissions/<team-slug>/<github-login>.md; team-slug — рівно один із
         property-workflows, therapy-scheduling, school-purchasing, leave-portal; ім'я файла
         (без .md) збігається з полем «GitHub-логін» і, якщо видно, з логіном автора PR (без
-        урахування регістру). Розділ «Дані»: «Роль» — pm або dev; «Команда» — та сама, що тека;
-        «Upstream» — https://github.com/<owner>/<repo> без зайвого шляху; «Форк» — для dev
-        https://github.com/<github-login>/<repo> з тим самим <repo>, що в Upstream, для pm рівно «—»;
-        «SHA» — рівно 40 символів [0-9a-f] (коротший SHA, гілка чи тег — ❌); «Версія спеки» —
-        spec-vX.Y; «Прод-URL» — для dev https://….vercel.app (або інший https-домен із поясненням),
-        для pm рівно «—». Розділ своєї ролі заповнено повними посиланнями https://github.com/…
-        (PR — …/pull/N, issues — …/issues/N, коментарі в issues — …/issues/N#issuecomment-M), розділ
-        іншої ролі — рівно «—». pm: «Нотатка PM» має щонайменше 3 пункти, у кожному — AC ID, щонайменше
-        два прочитання з посиланнями (пункт із поміткою «прогноз» — два прочитання без посилань), «Чому» і
-        «Що зробив PM». dev: щонайменше 3 посилання на issues або коментарі в issues (…/issues/N або
-        …/issues/N#issuecomment-M) в Upstream (той самий owner/repo), щонайменше одне — без #issuecomment.
-        Без посилання в розділі dev можуть бути лише число AC «реалізовано» / усього (N / M) і
-        «spec-v0.2 не випущено» в полі «PR sync/spec-v0.2»; у розділі pm — «spec-v0.2 не випущено» в
-        полях «PR зміни spec-v0.2» і «Тег spec-v0.2».
+        урахування регістру). Розділ «Дані»: «Роль» — pm, techlead або dev; «Команда» — та сама, що
+        тека; «Репо команди» — https://github.com/<owner>/<repo> без зайвого шляху; «SHA» — рівно 40
+        символів [0-9a-f] (коротший SHA, гілка чи тег — ❌); «Версія спеки» — spec-vX.Y або
+        spec-vX.Y.Z; «Прод-URL» — https://….vercel.app (або інший https-домен із поясненням).
+        Усі посилання на роботу ведуть у той самий owner/repo, що «Репо команди» (PR — …/pull/N,
+        issues — …/issues/N, коментарі — …/issues/N#issuecomment-M, рев'ю — …/pull/N#pullrequestreview-M,
+        файли — …/blob/…). Роль pm заповнює розділ «PM», а розділ «Розробник» — рівно «—»; ролі
+        techlead і dev — навпаки. pm: «Нотатка PM» має щонайменше 3 пункти, у кожному — AC ID,
+        щонайменше два прочитання з посиланнями (пункт із поміткою «прогноз» — два прочитання без
+        посилань), «Чому» і «Що зробив PM»; без посилання можуть бути лише «spec-v0.2 не випущено» в
+        полях «PR зміни spec-v0.2» і «Тег spec-v0.2». techlead/dev: перший PR (docs/team.md) —
+        …/pull/N; щонайменше 3 посилання на issues або коментарі в issues, щонайменше одне — без
+        #issuecomment; щонайменше 2 посилання …/pull/N у «PR-и задач»; щонайменше 2 посилання
+        …/pull/N#pullrequestreview-M у «Рев'ю PR-ів колег», і вони не на PR зі списку «PR-и задач»
+        (власний PR схвалити не можна); «AC «реалізовано»» — список AC ID; «PR зміни impl-<зріз>» —
+        для techlead посилання …/pull/N, для dev «—» або посилання.
         Бонус E — «—» або опис із посиланням. Плейсхолдери <…>, «…» чи незаповнені коментарі-підказки
         замість значень — ⚠️. Повне ім'я людини у файлі — ⚠️ (ім'я лише в описі PR; логіни — нормально).
         Значення секретів (sb_secret_, sb_publishable_ зі значенням, sbp_, eyJ…, паролі, рядки
-        підключення з паролем), email не з домену example.test — ❌.
+        підключення з паролем, postgresql://…), email не з домену example.test — ❌.
 
     - path: "submissions/_template.md"
       instructions: |
@@ -146,7 +148,7 @@ reviews:
           The description MUST contain a filled-in "Ім'я та Прізвище" field under the "Учасник"
           heading with the participant's real full name (two words). An empty field, a leftover
           placeholder or template comment, or only a GitHub login is NOT acceptable: say so and ask
-          the author to add it. Also check that "Роль" and "Команда" are filled and that the
+          the author to add it. Also check that "Роль" (PM, техлід or розробник) and "Команда" are filled and that the
           Definition of Done checklist for the participant's role is filled in rather than left as
           unchecked template boxes. PASS if all hold; FAIL otherwise. Answer in Ukrainian.
 
@@ -167,22 +169,26 @@ reviews:
         name: "Поля файлу здачі заповнено"
         instructions: >
           Static review of the submission file only; do NOT open links or run anything. Check the
-          "Дані" section: Роль is pm or dev; Команда equals the folder name; Upstream is
-          https://github.com/<owner>/<repo>; Форк is https://github.com/<login>/<same repo> for dev and
-          exactly "—" for pm; SHA is exactly 40 lowercase hex characters (a short SHA, branch or tag
-          name is a FAIL); Версія спеки matches spec-vX.Y; Прод-URL is an https URL (normally
-          *.vercel.app) for dev and exactly "—" for pm. The section of the participant's role uses
-          full https://github.com/ links (pull requests as /pull/N, issues as /issues/N, issue comments
-          as /issues/N#issuecomment-M) and the other role's section is exactly "—". For pm, "Нотатка PM"
-          has at least three items, each with an AC ID, at least two readings with links (an item marked
-          «прогноз» may give two readings without links), "Чому" and "Що зробив PM". For dev, at least
-          three links to issues or issue comments (/issues/N or /issues/N#issuecomment-M) point to the
-          Upstream repository, at least one of them a plain issue link without #issuecomment. Non-link values the template allows in the dev
-          section: the count "AC «реалізовано» / усього" (N / M) and "spec-v0.2 не випущено" for
-          "PR sync/spec-v0.2"; in the pm section, "spec-v0.2 не випущено" for "PR зміни spec-v0.2" and
-          "Тег spec-v0.2". Бонус E is "—" or a description with a link.
-          Placeholders such as <…>, "…" or untouched template comments instead of values are a FAIL.
-          List every missing or malformed field. Answer in Ukrainian.
+          "Дані" section: Роль is pm, techlead or dev; Команда equals the folder name; Репо команди is
+          https://github.com/<owner>/<repo>; SHA is exactly 40 lowercase hex characters (a short SHA,
+          branch or tag name is a FAIL); Версія спеки matches spec-vX.Y or spec-vX.Y.Z; Прод-URL is an
+          https URL (normally *.vercel.app). Every work link points to the same owner/repo as Репо
+          команди and uses full https://github.com/ links (pull requests as /pull/N, issues as
+          /issues/N, issue comments as /issues/N#issuecomment-M, reviews as
+          /pull/N#pullrequestreview-M, files as /blob/...). Role pm fills the "PM" section and the
+          "Розробник" section is exactly "—"; roles techlead and dev do the opposite. For pm, "Нотатка
+          PM" has at least three items, each with an AC ID, at least two readings with links (an item
+          marked «прогноз» may give two readings without links), "Чому" and "Що зробив PM"; the only
+          non-link values allowed are "spec-v0.2 не випущено" for "PR зміни spec-v0.2" and "Тег
+          spec-v0.2". For techlead and dev: the first PR (docs/team.md) is a /pull/N link; at least
+          three links to issues or issue comments, at least one of them a plain issue link without
+          #issuecomment; at least two /pull/N links under "PR-и задач"; at least two
+          /pull/N#pullrequestreview-M links under "Рев'ю PR-ів колег", none of them on a pull request
+          listed under "PR-и задач" (authors cannot approve their own PR); "AC «реалізовано»" lists AC
+          IDs; "PR зміни impl-<зріз>" is a /pull/N link for techlead and "—" or a link for dev.
+          Бонус E is "—" or a description with a link. Placeholders such as <…>, "…" or untouched
+          template comments instead of values are a FAIL. List every missing or malformed field.
+          Answer in Ukrainian.
 
       - mode: "warning"
         name: "Анонімізація й секрети у здачі"

@@ -10,19 +10,32 @@ submissions/<team-slug>/<github-login>.md
 - `<github-login>` — ваш логін GitHub, точно як у профілі (той самий, з якого відкрито PR);
 - вміст — за [шаблоном](_template.md), усі поля заповнені, зайва для вашої ролі частина — «—».
 
-Інших файлів PR не змінює: ні README, ні `docs/`, ні `materials/`, ні `examples/`, ні чужих файлів у `submissions/`.
+Здає кожен окремо: PM, техлід і кожен розробник — свій файл. Інших файлів PR не змінює: ні README, ні `docs/`, ні
+`materials/`, ні `examples/`, ні чужих файлів у `submissions/`.
 
 ## SHA — що саме вказати
 
-Конвеєр перевіряє ваш репозиторій **на цьому коміті**, тому коміт має бути запушений, а SHA — повний (40 символів).
+Конвеєр перевіряє репозиторій команди **на цьому коміті**, тому коміт має бути запушений, а SHA — повний
+(40 символів). Для всіх ролей це коміт `main` репозиторію команди на момент здачі:
 
-| Роль | Який коміт | Команда |
-|---|---|---|
-| PM | коміт, на який вказує тег `spec-v0.2` в upstream | `git fetch origin --tags` → `git rev-list -n 1 spec-v0.2` |
-| Розробник | коміт `main` форку, задеплоєний на прод | `git switch main` → `git pull` → `git rev-parse HEAD` |
+```bash
+git fetch origin
+git rev-parse origin/main
+```
 
-Якщо PM не випустив `spec-v0.2`, PM вказує останній тег, а розробник — свій `main` і пише в «Версія спеки»
-останній тег, з яким синхронізувався.
+Якщо команда здає в різний час, SHA у файлах можуть відрізнятися — це нормально: кожен вказує `main`, на якому
+його робота вже злита.
+
+## Посилання — у якому вигляді
+
+| Що | Вигляд |
+|---|---|
+| Репозиторій команди | `https://github.com/<pm>/<team-slug>` |
+| PR | `https://github.com/<pm>/<team-slug>/pull/N` |
+| Issue | `https://github.com/<pm>/<team-slug>/issues/N` |
+| Коментар в issue | `https://github.com/<pm>/<team-slug>/issues/N#issuecomment-M` |
+| Рев'ю PR | `https://github.com/<pm>/<team-slug>/pull/N#pullrequestreview-M` (у вкладці Conversation — посилання з часу рев'ю) |
+| Тег | `https://github.com/<pm>/<team-slug>/releases/tag/spec-v0.1` або `…/tree/spec-v0.1` |
 
 ## Покроково
 
@@ -37,6 +50,9 @@ git commit -m "WS6 submission: <team-slug>/<github-login>"
 git push -u origin ws06/<github-login>
 gh pr create --repo koldovsky/2026-quitcode-06-specs-in-practice-hw --web
 ```
+
+Цей репозиторій курсу — єдине місце, де ви робите fork: у нього в учасників немає права запису, тож PR здачі йде
+з вашої копії. До роботи команди це не стосується.
 
 PowerShell: `Copy-Item` замість `cp` (або `cp` — у PowerShell це той самий alias).
 

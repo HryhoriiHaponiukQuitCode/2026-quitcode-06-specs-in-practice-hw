@@ -5,37 +5,39 @@
 Ім'я та прізвище сюди НЕ пишіть — лише в опис PR (репозиторій публічний).
 Поле або розділ, що не стосується вашої ролі, — рівно «—». Коментарі-підказки після заповнення можна видалити.
 Посилання — повні: https://github.com/… або https://….vercel.app.
+Особистий внесок рахуємо за PR, рев'ю й issues, автор яких — ви (ваш логін).
 -->
 
 ## Дані
 
-- Роль: <!-- pm або dev -->
+- Роль: <!-- pm, techlead або dev (техлід здає трек розробника) -->
 - Команда: <!-- property-workflows | therapy-scheduling | school-purchasing | leave-portal -->
 - GitHub-логін: <!-- як у назві файлу -->
-- Upstream: <!-- https://github.com/<pm>/<team-slug> -->
-- Форк: <!-- dev: https://github.com/<я>/<team-slug> · pm: — -->
-- SHA: <!-- 40 hex. pm: git rev-list -n 1 spec-v0.2 · dev: git rev-parse HEAD на main форку, який задеплоєно -->
-- Версія спеки: <!-- spec-v0.2 (або останній тег PM, якщо spec-v0.2 не вийшов) -->
-- Прод-URL: <!-- dev: https://<проєкт>.vercel.app · pm: — -->
+- Репо команди: <!-- https://github.com/<pm>/<team-slug> -->
+- SHA: <!-- 40 hex: git fetch origin → git rev-parse origin/main (main репо команди на момент здачі) -->
+- Версія спеки: <!-- останній тег на main команди: spec-v0.2 (або spec-v0.1, spec-v0.1.1, якщо spec-v0.2 не вийшов) -->
+- Прод-URL: <!-- https://<проєкт>.vercel.app — прод команди -->
 
 ## PM
 
-<!-- Розробник: заголовок «## PM» залиште, а все під ним (і «Нотатку PM») замініть одним рядком «—». -->
+<!-- Розробник і техлід: заголовок «## PM» залиште, а все під ним (і «Нотатку PM») замініть одним рядком «—». -->
 
-- PR продуктового контексту: <!-- https://github.com/<pm>/<team-slug>/pull/N -->
+- PR налаштування (CODEOWNERS, `docs/bootstrap.md`): <!-- https://github.com/<pm>/<team-slug>/pull/N -->
+- PR продуктового контексту: <!-- …/pull/N -->
 - PR першого зрізу (з розділом `## spec-review`): <!-- …/pull/N -->
 - Тег spec-v0.1: <!-- https://github.com/<pm>/<team-slug>/releases/tag/spec-v0.1 або …/tree/spec-v0.1 -->
 - PR зміни spec-v0.2: <!-- …/pull/N або «spec-v0.2 не випущено» -->
 - Тег spec-v0.2: <!-- …/tree/spec-v0.2 або «spec-v0.2 не випущено» -->
 - Issues `spec-question`, на які ви відповіли: <!-- …/issues/N, …/issues/M -->
+- Задачі-issues `task`: <!-- …/issues/N, …/issues/M (заведені вами чи техлідом) -->
 
 ### Нотатка PM (трек D)
 
-<!-- Щонайменше три розбіжності. Логіни, не імена. Формат кожної:
+<!-- Щонайменше три розбіжності всередині команди. Логіни, не імена. Формат кожної:
      (якщо команда дала менше трьох — бракуючий пункт: ваш AC із двома можливими прочитаннями й поміткою «прогноз», без посилань) -->
 
 1. **AC / вимога:** <!-- AC-…-02 — «цитата з spec-v0.1» -->
-   **Як прочитали:** <!-- прочитання 1 (посилання на issue / PR / рядок у форку), прочитання 2 (…) -->
+   **Як прочитали:** <!-- прочитання 1 (посилання на issue / коментар рев'ю / PR / рядок коду), прочитання 2 (…) -->
    **Чому:** <!-- яке слово чи пропуск у спеці це дозволив; категорія таксономії -->
    **Що зробив PM:** <!-- відповідь, MODIFIED / ADDED у spec-v0.2 або «залишив, бо …» -->
 2. …
@@ -45,12 +47,13 @@
 
 <!-- PM: заголовок «## Розробник» залиште, а все під ним замініть одним рядком «—». -->
 
-- Перший PR (бутстрап, `docs/bootstrap.md`): <!-- https://github.com/<я>/<team-slug>/pull/N -->
-- PR sync/spec-v0.1: <!-- …/pull/N або те саме посилання, що й sync/spec-v0.2, якщо форк після spec-v0.2 -->
-- Issues або коментарі в upstream (щонайменше 3, з них щонайменше 1 — власне issue): <!-- https://github.com/<pm>/<team-slug>/issues/N або …/issues/N#issuecomment-M, … -->
-- PR-и реалізації: <!-- …/pull/N, …/pull/M -->
-- PR sync/spec-v0.2: <!-- …/pull/N або «spec-v0.2 не випущено» -->
-- AC «реалізовано» / усього: <!-- напр. 8 / 10 — як у docs/conformance.md на SHA -->
+- Перший PR (`docs/team.md`): <!-- https://github.com/<pm>/<team-slug>/pull/N -->
+- Журнал `docs/spec-reading/<login>.md`: <!-- https://github.com/<pm>/<team-slug>/blob/<SHA>/docs/spec-reading/<login>.md -->
+- Issues або коментарі (щонайменше 3, з них щонайменше 1 — власне issue): <!-- https://github.com/<pm>/<team-slug>/issues/N або …/issues/N#issuecomment-M, … -->
+- PR-и задач, автор — ви (щонайменше 2): <!-- …/pull/N, …/pull/M -->
+- AC «реалізовано» у ваших PR: <!-- напр. AC-LEAVE-03, AC-LEAVE-07 — як у docs/conformance.md на SHA -->
+- Рев'ю PR-ів колег (щонайменше 2): <!-- https://github.com/<pm>/<team-slug>/pull/N#pullrequestreview-M, … -->
+- PR зміни impl-<зріз>: <!-- техлід: …/pull/N · інші: «—» або PR, у якому ви брали участь -->
 
 ## Бонус E
 

@@ -2,13 +2,16 @@
 
 Репозиторій курсу, а не проєкт: тут інструкції (`docs/`), брифи команд (`materials/briefs/`), JSON ruleset-ів
 (`materials/rulesets/`), зразки з демо (`examples/leave-portal/`) і здача (`submissions/`). Коду, `package.json` і
-збірки немає. Робота учасників живе в репозиторіях команд, створених із шаблону
-`koldovsky/2026-quitcode-06-project-template`, — там свої `AGENTS.md` і `CLAUDE.md`.
+збірки немає. Робота учасників живе в репозиторіях команд — по одному спільному репозиторію на команду в
+особистому акаунті PM, створеному з шаблону `koldovsky/2026-quitcode-06-project-template`; там свої `AGENTS.md` і
+`CLAUDE.md`.
 
 ## Що агент робить тут
 
 - Допомагає учаснику **заповнити файл здачі** `submissions/<team-slug>/<github-login>.md` за
-  `submissions/_template.md`: SHA — повні 40 символів, посилання — повні `https://github.com/…`, поле іншої ролі — «—».
+  `submissions/_template.md`: роль — `pm`, `techlead` або `dev`; SHA — повні 40 символів `main` репозиторію команди;
+  посилання — повні `https://github.com/…` на той самий репозиторій команди (рев'ю — `…/pull/N#pullrequestreview-M`);
+  розділ іншої ролі — «—».
 - Пояснює кроки з `docs/walkthrough-pm.md`, `docs/walkthrough-dev.md` і `docs/spec-guide.md`.
 
 ## Межі
