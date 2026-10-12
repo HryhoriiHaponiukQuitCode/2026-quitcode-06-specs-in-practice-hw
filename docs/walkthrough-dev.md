@@ -199,9 +199,9 @@ npm test
    **Secret** додавайте лише тоді, коли її потребує ваш власний серверний код, і після цього — редеплой. Ніколи в Client Components і ніколи з префіксом
    `NEXT_PUBLIC_`. **Не** підключайте Supabase через Marketplace-інтеграцію Vercel.
 3. **Deploy.** Перевірте прод-URL `https://<проєкт>.vercel.app/login`.
-4. Settings → **Deployment Protection** → **Vercel Authentication**: якщо увімкнено — вимкніть → Save. Інакше PM
-   і викладач не відкриють ваші preview без входу у ваш акаунт Vercel (на Hobby немає учасників команди). Чи
-   вмикає його Vercel для нових проєктів Hobby за замовчуванням, перевіряємо на репетиції. Перевірка — у кроці 9:
+4. Settings → **Deployment Protection** → **Vercel Authentication**: вимкніть перемикач **Require Log In** → **Save**
+   (на новому Hobby-проєкті він увімкнений; список «Standard Protection» поруч не чіпайте). Інакше PM
+   і викладач не відкриють ваші preview без входу у ваш акаунт Vercel (на Hobby немає учасників команди). Перевірка — у кроці 9:
    preview відкривається у вікні інкогніто без входу.
 5. **Редеплой після будь-якої зміни змінних:** Deployments → останній деплой → ⋯ → **Redeploy**. Змінні діють лише
    для нових деплоїв.
