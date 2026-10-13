@@ -1,6 +1,7 @@
 # QuitCode Workshop 6 — домашнє завдання: специфікації на практиці
 
 - **Слайди воркшопу:** <https://koldovsky.github.io/2026-quitcode-06-specs-in-practice-slidev/>
+- **Конспект заняття для учасників:** [docs/konspekt.md](docs/konspekt.md) — усе зі слайдів словами, з поясненнями
 - **Шаблон командного проєкту:** <https://github.com/koldovsky/2026-quitcode-06-project-template>
 - **Покрокові інструкції:** [трек PM](docs/walkthrough-pm.md) · [трек розробника](docs/walkthrough-dev.md) ·
   [шпаргалка зі специфікацій](docs/spec-guide.md)
