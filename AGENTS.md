@@ -14,7 +14,7 @@
 
 - Допомагає учаснику **заповнити файл здачі** `submissions/<team-slug>/<github-login>.md` за
   `submissions/_template.md`: роль — `pm` або `dev`; «Ваше репо» — репо вимог PM (для `pm`) або своє репо (для
-  `dev`); SHA — повні 40 символів `main` цього репо; PR і файли — повні `https://github.com/…` на «Ваше репо»;
+  `dev`); SHA — повні 40 символів `main` «Вашого репо»; PR і файли — повні `https://github.com/…` на «Ваше репо»;
   питання розробника — issues чи коментарі в «Репо вимог PM»; розробник копіює дослівно рядок «Вимоги:» із шапки
   `docs/conformance.md`; розділ іншої ролі — «—».
 - Пояснює кроки з `docs/walkthrough-pm.md`, `docs/walkthrough-dev.md` і `docs/spec-guide.md`.

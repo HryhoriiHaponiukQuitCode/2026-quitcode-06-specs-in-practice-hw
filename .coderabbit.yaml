@@ -91,8 +91,8 @@ reviews:
         …/pull/N#discussion_rM), щонайменше одне — …/issues/N без #issuecomment. У «PR-и задач
         «Реалізація»» щонайменше 2 посилання …/pull/N (або 1, якщо у файлі пояснено, що перші вимоги
         з'явились у main PM пізніше за кінець дня 3 — README, «Не знімає балів»); «PR «Оновлення вимог»
-        після уточнень PM» — посилання (з поясненням, якщо PM не злив уточнень до кінця дня 6); «AC, які
-        ви реалізували» — список AC ID.
+        після уточнень PM» — …/pull/N або, якщо PM не злив уточнень до кінця дня 4, рядок
+        «/spec-sync <YYYY-MM-DD>: Вимоги актуальні» (це не ❌); «AC, які ви реалізували» — список AC ID.
         Бонус E — «—» або опис із посиланням. Плейсхолдери <…>, «…» чи незаповнені коментарі-підказки
         замість значень — ⚠️. Повне ім'я людини у файлі — ⚠️ (ім'я лише в описі PR; логіни — нормально).
         Значення секретів (sb_secret_, sb_publishable_ зі значенням, sbp_, eyJ…, паролі, рядки
@@ -203,7 +203,9 @@ reviews:
           «Оновлення вимог»", "PR-и задач «Реалізація»" and "PR «Оновлення вимог» після уточнень PM" are
           /pull/N links in "Ваше репо", with at least two under "PR-и задач «Реалізація»" (or one, if
           the file explains that the PM merged the first requirements after the end of day 3 — README,
-          «Не знімає балів»); the journal docs/spec-reading.md and "Зміна impl-<зріз>" are /blob/ or
+          «Не знімає балів»); instead of a link, "PR «Оновлення вимог» після уточнень PM" may be the line
+          "/spec-sync <YYYY-MM-DD>: Вимоги актуальні" when the PM merged no clarifications by the end of
+          day 4; the journal docs/spec-reading.md and "Зміна impl-<зріз>" are /blob/ or
           /tree/ links in "Ваше репо"; "Питання в репо PM" has at least three links into "Репо вимог
           PM" (issues, issue comments, or comments on the PM's first-requirements pull request), at
           least one of them a plain /issues/N link without #issuecomment; "AC, які ви реалізували"

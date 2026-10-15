@@ -43,6 +43,7 @@ git rev-parse origin/main
 | Файл або тека на SHA | ваше репо | `https://github.com/<ваш-логін>/<repo>/blob/<SHA>/docs/spec-reading.md`, `…/tree/<SHA>/openspec/changes/…` |
 | Питання (issue) | репо вимог PM | `https://github.com/<pm>/<team-slug>-spec/issues/N` |
 | Коментар в issue | репо вимог PM | `https://github.com/<pm>/<team-slug>-spec/issues/N#issuecomment-M` |
+| Коментар до PR перших вимог | репо вимог PM | `https://github.com/<pm>/<team-slug>-spec/pull/N#discussion_rM` (до рядка) або `…/pull/N#issuecomment-M` |
 | Рядок коду в нотатці PM | репо розробника | `https://github.com/<dev>/<team-slug>/blob/<SHA>/src/…#L10` (посилання на коміт, а не на `main`, — щоб рядок не з'їхав) |
 
 PM посилається на PR та issues свого репо вимог, а в «Нотатці PM» — ще й на репо розробників. Розробник
