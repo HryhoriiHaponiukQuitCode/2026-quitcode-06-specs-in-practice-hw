@@ -3,13 +3,15 @@
 # CodeRabbit config — review of QuitCode Workshop 6 submission PRs.
 # Workshop: "Специфікації на практиці: старт командного проєкту".
 # The work itself lives in each participant's own repository: the PM's requirements repo
-# <pm>/<team-slug>-spec (from the spec template) and every developer's own implementation repo
-# <dev>/<team-slug> (from the project template; requirements arrive only via /spec-sync). The
-# instructor's pipeline grades that repo at the main SHA from the submission file, and the
-# developer's questions by issues in the PM's repo. Here CodeRabbit checks ONLY
-# the submission PR: one new file submissions/<team-slug>/<github-login>.md, its fields, and that
-# nothing else changed. Every check is STATIC over the diff and the PR description: no network,
-# no npm, no cloning of linked repositories.
+# <pm>/<team-slug>-spec (from the spec template; requirements in plain language as issues
+# «Продукт»/«Вимога» or as docs/ files, questions as issues «Питання до вимог») and every
+# developer's own implementation repo <dev>/<team-slug> (from the project template; requirements
+# arrive in requirements/ only via /requirements-sync, the developer translates them into OpenSpec).
+# The instructor's pipeline grades that repo at the main SHA from the submission file, and
+# questions and answers by issues in the PM's repo. Here CodeRabbit checks ONLY the submission PR:
+# one new file submissions/<team-slug>/<github-login>.md, its fields, and that nothing else
+# changed. Every check is STATIC over the diff and the PR description: no network, no npm, no
+# cloning of linked repositories.
 # Limits: custom check names < 50 chars, tone_instructions ≤ 250 chars — otherwise CodeRabbit
 # silently ignores the WHOLE file (tells: review in English, docstring check reappears).
 
@@ -75,26 +77,36 @@ reviews:
         саме, що «Ваше репо»; «Прод-URL» — для dev https://….vercel.app (або інший https-домен із
         поясненням), для pm — «—». Роль pm заповнює розділ «PM», а розділ «Розробник» — рівно «—»;
         роль dev — навпаки.
-        pm: PR і issues — у «Ваше репо» (…/pull/N, …/issues/N); «PR продуктового контексту» і «PR перших
-        вимог» — …/pull/N; «PR уточнень» — …/pull/N або рівно «уточнень не випущено»; «Нотатка PM» має
-        щонайменше 3 пункти, у кожному — AC ID, щонайменше дві реалізації чи прочитання з посиланнями
-        (посилання можуть вести в репо розробників іншого owner — https://github.com/<dev>/<repo>/blob/…,
-        …/pull/N — або на issues і коментарі в «Ваше репо»; пункт із поміткою «прогноз» — два прочитання
-        без посилань), «Чому» і «Що зробив PM».
+        pm: усі посилання розділу «PM», крім «Нотатки PM», — у «Ваше репо». «Сховище вимог» — issues, docs
+        або docs/. issues: «Продукт» — одне …/issues/N; «Вимоги першого зрізу» — …/issues/N;
+        «Самоперевірка за чеклістом» — …/issues/N#issuecomment-M; «Зміни вимог із журналом змін» —
+        …/issues/N#issuecomment-M. docs: «Продукт» — …/blob/<SHA>/docs/product.md; «Вимоги першого
+        зрізу» — …/blob/<SHA>/docs/requirements/<NN>-<slug>.md; «Самоперевірка за чеклістом» —
+        …/commit/<sha>#commitcomment-M; «Зміни вимог із журналом змін» — …/commit/<sha> або
+        …/blob/<SHA>/docs/requirements/…#L<N>. Будь-яка з цих форм прийнятна для обох варіантів (не ❌);
+        «Зміни вимог із журналом змін» може бути рівно «змін не було». «Питання, на які ви відповіли» —
+        …/issues/N. «Нотатка PM» має щонайменше 3 пункти, у кожному — AC ID, щонайменше дві реалізації чи
+        прочитання з посиланнями (посилання можуть вести в репо розробників іншого owner —
+        https://github.com/<dev>/<repo>/blob/…, …/pull/N — або на issues і коментарі в «Ваше репо»; пункт
+        із поміткою «прогноз» — два прочитання без посилань), «Чому» і «Що зробив PM».
         dev: поле «Рядок «Вимоги:» з docs/conformance.md на SHA» — дослівно
-        «Вимоги: <URL> · коміт <40 hex> · <YYYY-MM-DD>», де URL
-        збігається з «Репо вимог PM»; заглушка «Вимоги: — (заповнює /spec-sync)» чи коротший коміт —
-        ❌. «Перший PR «Оновлення вимог»», «PR-и задач «Реалізація»» і «PR «Оновлення вимог» після
-        уточнень PM» — …/pull/N у «Ваше репо»; журнал docs/spec-reading.md і «Зміна impl-<зріз>» — …/blob/…
-        або …/tree/… у «Ваше репо». «Питання в репо PM» — щонайменше 3 посилання на «Репо вимог PM»
-        (…/issues/N, …/issues/N#issuecomment-M або коментар до PR перших вимог …/pull/N#issuecomment-M чи
-        …/pull/N#discussion_rM), щонайменше одне — …/issues/N без #issuecomment. У «PR-и задач
-        «Реалізація»» щонайменше 2 посилання …/pull/N (або 1, якщо у файлі пояснено, що перші вимоги
-        з'явились у main PM пізніше за кінець дня 3 — README, «Не знімає балів»); «PR «Оновлення вимог»
-        після уточнень PM» — …/pull/N або, якщо PM не злив уточнень до кінця дня 4, рядок
-        «/spec-sync <YYYY-MM-DD>: Вимоги актуальні» (це не ❌); «AC, які ви реалізували» — список AC ID.
-        Бонус E — «—» або опис із посиланням. Плейсхолдери <…>, «…» чи незаповнені коментарі-підказки
-        замість значень — ⚠️. Повне ім'я людини у файлі — ⚠️ (ім'я лише в описі PR; логіни — нормально).
+        «Вимоги: <URL> · джерело: issues · знімок <YYYY-MM-DD>» (або «джерело: docs»), де URL —
+        https://github.com/<owner>/<repo> і збігається з «Репо вимог PM»; заглушка «Вимоги: — (заповнює
+        /requirements-sync)», локальний шлях замість URL чи інше джерело — ❌; дата знімка раніша за
+        2026-10-19 — ⚠️ (для D потрібен знімок від 19.10), якщо в полі «PR «Оновлення вимог» після
+        уточнень PM» немає рядка «/requirements-sync <YYYY-MM-DD>: Вимоги актуальні» з датою від
+        2026-10-19 (тоді рання дата знімка — нормально). «Перший PR «Оновлення вимог»», «PR
+        «Специфікація» з перекладом першого зрізу», «PR-и задач «Реалізація»» і «PR «Оновлення вимог»
+        після уточнень PM» — …/pull/N у «Ваше репо» (в останньому полі може бути ще й рядок
+        «/requirements-sync <YYYY-MM-DD>: Вимоги актуальні» — це не ❌); «PR «Специфікація» зі змінами
+        після уточнень» — …/pull/N у «Ваше репо» або рівно «змін у вимогах PM не було»; журнал docs/spec-reading.md і «Зміна
+        impl-<зріз>» — …/blob/… або …/tree/… у «Ваше репо». «Питання в репо PM» — щонайменше 3 посилання
+        на «Репо вимог PM» (…/issues/N або …/issues/N#issuecomment-M), щонайменше одне — …/issues/N без
+        #issuecomment. У «PR-и задач «Реалізація»» щонайменше 2 посилання …/pull/N (або 1, якщо у файлі
+        пояснено, що PM опублікував перші вимоги пізніше за кінець 16.10 — README, «Не знімає балів»);
+        «AC, які ви реалізували» — список AC ID. Бонус E — «—» або опис із посиланням.
+        Плейсхолдери <…>, «…» чи незаповнені коментарі-підказки замість значень — ⚠️. Повне ім'я людини
+        у файлі — ⚠️ (ім'я лише в описі PR; логіни — нормально).
         Значення секретів (sb_secret_, sb_publishable_ зі значенням, sbp_, eyJ…, паролі, рядки
         підключення з паролем, postgresql://…), email не з домену example.test — ❌.
 
@@ -190,26 +202,37 @@ reviews:
           "Ваше репо"; Прод-URL is an https URL (normally *.vercel.app) for dev and "—" for pm. Role pm
           fills the "PM" section and the "Розробник" section is exactly "—"; role dev does the opposite.
           All links are full https://github.com/ links (pull requests as /pull/N, issues as /issues/N,
-          comments as /issues/N#issuecomment-M, files and folders as /blob/... or /tree/...).
-          For pm: own pull requests and issues point to "Ваше репо"; "PR продуктового контексту" and
-          "PR перших вимог" are /pull/N links; "PR уточнень" is a /pull/N link or exactly "уточнень не
-          випущено"; "Нотатка PM" has at least three items, each with an AC ID, at least two
-          implementations or readings with links (links may point to developers' repositories of other
-          owners, or to issues and comments in "Ваше репо"; an item marked «прогноз» may give two
-          readings without links), "Чому" and "Що зробив PM".
+          comments as /issues/N#issuecomment-M, commits as /commit/<sha>, commit comments as
+          /commit/<sha>#commitcomment-M, files and folders as /blob/... or /tree/...).
+          For pm: every link of the "PM" section except "Нотатка PM" points to "Ваше репо"; "Сховище
+          вимог" is issues, docs or docs/; "Продукт" is an /issues/N link or a /blob/<SHA>/docs/product.md
+          link; "Вимоги першого зрізу" are /issues/N links or /blob/<SHA>/docs/requirements/... links;
+          "Самоперевірка за чеклістом" is an /issues/N#issuecomment-M link or a
+          /commit/<sha>#commitcomment-M link; "Зміни вимог із журналом змін" is an
+          /issues/N#issuecomment-M, /commit/<sha> or /blob/... link, or exactly "змін не було";
+          "Питання, на які ви відповіли" are /issues/N links; "Нотатка PM" has at least three items,
+          each with an AC ID, at least two implementations or readings with links (links may point to
+          developers' repositories of other owners, or to issues and comments in "Ваше репо"; an item
+          marked «прогноз» may give two readings without links), "Чому" and "Що зробив PM".
           For dev: the field "Рядок «Вимоги:» з docs/conformance.md на SHA" reads exactly
-          "Вимоги: <URL> · коміт <40 hex> · <YYYY-MM-DD>" with URL equal to "Репо вимог PM" (the
-          placeholder "Вимоги: — (заповнює /spec-sync)" or a short commit is a FAIL); "Перший PR
-          «Оновлення вимог»", "PR-и задач «Реалізація»" and "PR «Оновлення вимог» після уточнень PM" are
-          /pull/N links in "Ваше репо", with at least two under "PR-и задач «Реалізація»" (or one, if
-          the file explains that the PM merged the first requirements after the end of day 3 — README,
-          «Не знімає балів»); instead of a link, "PR «Оновлення вимог» після уточнень PM" may be the line
-          "/spec-sync <YYYY-MM-DD>: Вимоги актуальні" when the PM merged no clarifications by the end of
-          day 4; the journal docs/spec-reading.md and "Зміна impl-<зріз>" are /blob/ or
+          "Вимоги: <URL> · джерело: issues · знімок <YYYY-MM-DD>" (or "джерело: docs") with URL a
+          https://github.com/<owner>/<repo> link equal to "Репо вимог PM" (the placeholder
+          "Вимоги: — (заповнює /requirements-sync)", a local path instead of the URL or another source
+          word is a FAIL; a snapshot date before 2026-10-19 is a warning to mention, not a FAIL, and no
+          warning at all when "PR «Оновлення вимог» після уточнень PM" also has the line
+          "/requirements-sync <YYYY-MM-DD>: Вимоги актуальні" dated 2026-10-19 or later);
+          "Перший PR «Оновлення вимог»", "PR «Специфікація» з перекладом першого зрізу", "PR-и задач
+          «Реалізація»" and "PR «Оновлення вимог» після уточнень PM" are /pull/N links in "Ваше репо",
+          with at least two under "PR-и задач «Реалізація»" (or one, if the file explains that the PM
+          published the first requirements after the end of 16.10 — README, «Не знімає балів»);
+          "PR «Оновлення вимог» після уточнень PM" may add the line "/requirements-sync <YYYY-MM-DD>:
+          Вимоги актуальні" next to the link (not a FAIL); "PR
+          «Специфікація» зі змінами після уточнень" is a /pull/N link in "Ваше репо" or exactly "змін у
+          вимогах PM не було"; the journal docs/spec-reading.md and "Зміна impl-<зріз>" are /blob/ or
           /tree/ links in "Ваше репо"; "Питання в репо PM" has at least three links into "Репо вимог
-          PM" (issues, issue comments, or comments on the PM's first-requirements pull request), at
-          least one of them a plain /issues/N link without #issuecomment; "AC, які ви реалізували"
-          lists AC IDs. Бонус E is "—" or a description with a link. Placeholders such as <…>, "…" or
+          PM" (issues or issue comments), at least one of them a plain /issues/N link without
+          #issuecomment; "AC, які ви реалізували" lists AC IDs. Бонус E is "—" or a description with a
+          link. Placeholders such as <…>, "…" or
           untouched template comments instead of values are a FAIL. List every missing or malformed
           field. Answer in Ukrainian.
 

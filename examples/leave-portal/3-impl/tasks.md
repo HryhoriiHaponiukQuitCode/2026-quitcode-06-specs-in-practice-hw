@@ -1,5 +1,5 @@
-> **Зразок формату, не відповідь.** Копія з демо-репозиторію (портал відсутностей), без змін нижче цього блоку.
-> Оригінал: <https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo/blob/demo-03-impl/openspec/changes/archive/2026-10-09-impl-leave-request/tasks.md>. Команда leave-portal пише власну специфікацію своїми словами — див. [README](../README.md).
+> **Зразок формату, не відповідь.** Копія з демо-репозиторію (портал відсутностей), без змін нижче цього блоку. У курсі це план розробника `impl-<зріз>` у його власному репо.
+> Оригінал: <https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo/blob/demo-03-impl/openspec/changes/archive/2026-10-09-impl-leave-request/tasks.md>. PM команди leave-portal пише власні вимоги, а розробник — власну специфікацію, своїми словами — див. [README](../README.md).
 
 # Tasks
 

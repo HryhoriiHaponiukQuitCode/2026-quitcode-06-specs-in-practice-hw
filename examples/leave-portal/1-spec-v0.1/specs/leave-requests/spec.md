@@ -1,5 +1,5 @@
-> **Зразок формату, не відповідь.** Копія з демо-репозиторію (портал відсутностей), без змін нижче цього блоку.
-> Оригінал: <https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo/blob/5a02e255e71989d1a04d1987402be9db5f735674/openspec/changes/add-leave-request/specs/leave-requests/spec.md>. Команда leave-portal пише власну специфікацію своїми словами — див. [README](../../../README.md).
+> **Зразок формату, не відповідь.** Копія з демо-репозиторію (портал відсутностей), без змін нижче цього блоку. У курсі таку дельту пише **розробник**: це переклад AC з вимоги PM [`0-requirements.md`](../../../0-requirements.md) з тими самими ID.
+> Оригінал: <https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo/blob/5a02e255e71989d1a04d1987402be9db5f735674/openspec/changes/add-leave-request/specs/leave-requests/spec.md>. PM команди leave-portal пише власні вимоги, а розробник — власну специфікацію, своїми словами — див. [README](../../../README.md).
 
 # Дельта: leave-requests
 

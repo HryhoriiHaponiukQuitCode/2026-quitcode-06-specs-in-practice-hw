@@ -1,5 +1,5 @@
-> **Зразок формату, не відповідь.** Копія з демо-репозиторію (портал відсутностей), без змін нижче цього блоку.
-> Оригінал: <https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo/blob/5a02e255e71989d1a04d1987402be9db5f735674/openspec/changes/add-leave-request/proposal.md>. Команда leave-portal пише власну специфікацію своїми словами — див. [README](../README.md).
+> **Зразок формату, не відповідь.** Копія з демо-репозиторію (портал відсутностей), без змін нижче цього блоку. У курсі таку зміну пише **розробник**: це переклад вимоги PM [`0-requirements.md`](../0-requirements.md) у його специфікацію.
+> Оригінал: <https://github.com/koldovsky/2026-quitcode-06-leave-portal-demo/blob/5a02e255e71989d1a04d1987402be9db5f735674/openspec/changes/add-leave-request/proposal.md>. PM команди leave-portal пише власні вимоги, а розробник — власну специфікацію, своїми словами — див. [README](../README.md).
 
 # Пропозиція: подання заявки на відсутність і рішення менеджера
 
