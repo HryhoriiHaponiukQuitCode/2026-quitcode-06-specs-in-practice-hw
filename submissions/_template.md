@@ -53,7 +53,7 @@ PM здає репо вимог <pm>/<team-slug>-spec, розробник — с
 - Журнал `docs/spec-reading.md`: <!-- https://github.com/<ваш-логін>/<team-slug>/blob/<SHA>/docs/spec-reading.md -->
 - Питання в репо PM (щонайменше 3, з них щонайменше 1 — власне issue): <!-- https://github.com/<pm>/<team-slug>-spec/issues/N, …/issues/N#issuecomment-M або коментар до PR перших вимог …/pull/N#discussion_rM, … -->
 - Зміна `impl-<зріз>`: <!-- https://github.com/<ваш-логін>/<team-slug>/tree/<SHA>/openspec/changes/… (або archive/…) -->
-- PR-и задач «Реалізація» (щонайменше 2): <!-- …/pull/N, …/pull/M (один — якщо PM злив перші вимоги пізніше за кінець дня 3; тоді так і напишіть) -->
+- PR-и задач «Реалізація» (щонайменше 2): <!-- …/pull/N, …/pull/M — PR, що реалізують пункт tasks.md (код і тест з AC ID), а не план чи докази налаштування; один — якщо PM злив перші вимоги пізніше за кінець дня 3, тоді так і напишіть -->
 - PR «Оновлення вимог» після уточнень PM: <!-- …/pull/N. Якщо PM не злив уточнень до кінця дня 4 — PR /spec-sync, зроблений на день 6, або, якщо агент відповів «Вимоги актуальні», рядок: /spec-sync <YYYY-MM-DD>: Вимоги актуальні -->
 - AC, які ви реалізували: <!-- напр. AC-LEAVE-03 (реалізовано), AC-LEAVE-10 (відкладено: рішення PM — …/issues/N) — як у docs/conformance.md на SHA -->
 
