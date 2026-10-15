@@ -129,7 +129,8 @@
 - **Типи PR у репо розробника:**
   - «Оновлення вимог» — лише `product/`, `openspec/specs/`, `docs/conformance.md` (те, що зробив `/spec-sync`);
   - «Реалізація» — `src/`, `supabase/migrations/`, тести, `docs/conformance.md`, `docs/decisions/`,
-    `docs/spec-reading.md`, своя `openspec/changes/impl-<зріз>/`;
+    `docs/spec-reading.md`, своя `openspec/changes/impl-<зріз>/`, а також `docs/bootstrap.md` зі знімками в
+    `docs/img/` (докази налаштування) і `supabase/demo-users.json`;
   - «Оновлення шаблону» — `git cherry-pick` виправлення шаблону.
 - **Виправлення шаблонів** після дня 0 — коміт у шаблоні й оголошення в чаті курсу з SHA. Кожен переносить його у
   своє репо `git cherry-pick` (PR «Оновлення шаблону»).
