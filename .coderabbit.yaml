@@ -2,8 +2,11 @@
 #
 # CodeRabbit config — review of QuitCode Workshop 6 submission PRs.
 # Workshop: "Специфікації на практиці: старт командного проєкту".
-# The work itself lives in one shared repository per team (in the PM's personal account) and is
-# graded by the instructor's pipeline at the team-main SHA from the submission file. Here CodeRabbit checks ONLY
+# The work itself lives in each participant's own repository: the PM's requirements repo
+# <pm>/<team-slug>-spec (from the spec template) and every developer's own implementation repo
+# <dev>/<team-slug> (from the project template; requirements arrive only via /spec-sync). The
+# instructor's pipeline grades that repo at the main SHA from the submission file, and the
+# developer's questions by issues in the PM's repo. Here CodeRabbit checks ONLY
 # the submission PR: one new file submissions/<team-slug>/<github-login>.md, its fields, and that
 # nothing else changed. Every check is STATIC over the diff and the PR description: no network,
 # no npm, no cloning of linked repositories.
@@ -64,23 +67,32 @@ reviews:
         Шлях: submissions/<team-slug>/<github-login>.md; team-slug — рівно один із
         property-workflows, therapy-scheduling, school-purchasing, leave-portal; ім'я файла
         (без .md) збігається з полем «GitHub-логін» і, якщо видно, з логіном автора PR (без
-        урахування регістру). Розділ «Дані»: «Роль» — pm, techlead або dev; «Команда» — та сама, що
-        тека; «Репо команди» — https://github.com/<owner>/<repo> без зайвого шляху; «SHA» — рівно 40
-        символів [0-9a-f] (коротший SHA, гілка чи тег — ❌); «Версія спеки» — spec-vX.Y або
-        spec-vX.Y.Z; «Прод-URL» — https://….vercel.app (або інший https-домен із поясненням).
-        Усі посилання на роботу ведуть у той самий owner/repo, що «Репо команди» (PR — …/pull/N,
-        issues — …/issues/N, коментарі — …/issues/N#issuecomment-M, рев'ю — …/pull/N#pullrequestreview-M,
-        файли — …/blob/…, теги — …/releases/tag/spec-vX.Y або …/tree/spec-vX.Y). Роль pm заповнює розділ «PM», а розділ «Розробник» — рівно «—»; ролі
-        techlead і dev — навпаки. pm: «Нотатка PM» має щонайменше 3 пункти, у кожному — AC ID,
-        щонайменше два прочитання з посиланнями (пункт із поміткою «прогноз» — два прочитання без
-        посилань), «Чому» і «Що зробив PM»; без посилання можуть бути лише «spec-v0.2 не випущено» в
-        полях «PR зміни spec-v0.2» і «Тег spec-v0.2». techlead/dev: перший PR (docs/team.md) —
-        …/pull/N; щонайменше 3 посилання на issues або коментарі в issues, щонайменше одне — без
-        #issuecomment; щонайменше 2 посилання …/pull/N у «PR-и задач» (або 1, якщо у файлі
-        пояснено затримку spec-v0.1 чи нестачу задач task — README, «Не знімає балів»); щонайменше 2 посилання
-        …/pull/N#pullrequestreview-M у «Рев'ю PR-ів колег», і вони не на PR зі списку «PR-и задач»
-        (власний PR схвалити не можна); «AC, до яких ви доклалися» — список AC ID; «PR зміни impl-<зріз>» —
-        для techlead посилання …/pull/N, для dev «—» або посилання.
+        урахування регістру). Розділ «Дані»: «Роль» — pm або dev; «Команда» — та сама, що тека;
+        «Ваше репо» — https://github.com/<owner>/<repo> без зайвого шляху, owner — це «GitHub-логін»
+        (інакше ⚠️); назва репо для pm зазвичай <team-slug>-spec, для dev — <team-slug> (інша назва —
+        ⚠️, не ❌); «SHA» — рівно 40 символів [0-9a-f] (коротший SHA, гілка чи тег — ❌);
+        «Репо вимог PM» — https://github.com/<owner>/<repo> (зазвичай …/<team-slug>-spec), для pm — те
+        саме, що «Ваше репо»; «Прод-URL» — для dev https://….vercel.app (або інший https-домен із
+        поясненням), для pm — «—». Роль pm заповнює розділ «PM», а розділ «Розробник» — рівно «—»;
+        роль dev — навпаки.
+        pm: PR і issues — у «Ваше репо» (…/pull/N, …/issues/N); «PR продуктового контексту» і «PR перших
+        вимог» — …/pull/N; «PR уточнень» — …/pull/N або рівно «уточнень не випущено»; «Нотатка PM» має
+        щонайменше 3 пункти, у кожному — AC ID, щонайменше дві реалізації чи прочитання з посиланнями
+        (посилання можуть вести в репо розробників іншого owner — https://github.com/<dev>/<repo>/blob/…,
+        …/pull/N — або на issues і коментарі в «Ваше репо»; пункт із поміткою «прогноз» — два прочитання
+        без посилань), «Чому» і «Що зробив PM».
+        dev: поле «Рядок «Вимоги:» з docs/conformance.md на SHA» — дослівно
+        «Вимоги: <URL> · коміт <40 hex> · <YYYY-MM-DD>», де URL
+        збігається з «Репо вимог PM»; заглушка «Вимоги: — (заповнює /spec-sync)» чи коротший коміт —
+        ❌. «Перший PR «Оновлення вимог»», «PR-и задач «Реалізація»» і «PR «Оновлення вимог» після
+        уточнень PM» — …/pull/N у «Ваше репо»; журнал docs/spec-reading.md і «Зміна impl-<зріз>» — …/blob/…
+        або …/tree/… у «Ваше репо». «Питання в репо PM» — щонайменше 3 посилання на «Репо вимог PM»
+        (…/issues/N, …/issues/N#issuecomment-M або коментар до PR перших вимог …/pull/N#issuecomment-M чи
+        …/pull/N#discussion_rM), щонайменше одне — …/issues/N без #issuecomment. У «PR-и задач
+        «Реалізація»» щонайменше 2 посилання …/pull/N (або 1, якщо у файлі пояснено, що перші вимоги
+        з'явились у main PM пізніше за кінець дня 3 — README, «Не знімає балів»); «PR «Оновлення вимог»
+        після уточнень PM» — посилання (з поясненням, якщо PM не злив уточнень до кінця дня 6); «AC, які
+        ви реалізували» — список AC ID.
         Бонус E — «—» або опис із посиланням. Плейсхолдери <…>, «…» чи незаповнені коментарі-підказки
         замість значень — ⚠️. Повне ім'я людини у файлі — ⚠️ (ім'я лише в описі PR; логіни — нормально).
         Значення секретів (sb_secret_, sb_publishable_ зі значенням, sbp_, eyJ…, паролі, рядки
@@ -101,12 +113,12 @@ reviews:
 
     - path: "docs/**"
       instructions: |
-        Інструкції курсу (walkthrough-pm, walkthrough-dev, spec-guide). У PR здачі не змінюються —
+        Інструкції курсу (walkthrough-pm, walkthrough-dev, spec-guide, konspekt). У PR здачі не змінюються —
         будь-яка зміна ❌. Помилку в матеріалах повідомляють окремим issue, а не в PR здачі.
 
     - path: "materials/**"
       instructions: |
-        Брифи команд і JSON ruleset-ів — матеріали курсу. Будь-яка зміна в PR здачі — ❌.
+        Брифи команд і JSON ruleset-у репо розробника — матеріали курсу. Будь-яка зміна в PR здачі — ❌.
 
     - path: "examples/**"
       instructions: |
@@ -149,7 +161,7 @@ reviews:
           The description MUST contain a filled-in "Ім'я та Прізвище" field under the "Учасник"
           heading with the participant's real full name (two words). An empty field, a leftover
           placeholder or template comment, or only a GitHub login is NOT acceptable: say so and ask
-          the author to add it. Also check that "Роль" (PM, техлід or розробник) and "Команда" are filled and that the
+          the author to add it. Also check that "Роль" (PM or розробник) and "Команда" are filled and that the
           Definition of Done checklist for the participant's role is filled in rather than left as
           unchecked template boxes. PASS if all hold; FAIL otherwise. Answer in Ukrainian.
 
@@ -170,28 +182,34 @@ reviews:
         name: "Поля файлу здачі заповнено"
         instructions: >
           Static review of the submission file only; do NOT open links or run anything. Check the
-          "Дані" section: Роль is pm, techlead or dev; Команда equals the folder name; Репо команди is
-          https://github.com/<owner>/<repo>; SHA is exactly 40 lowercase hex characters (a short SHA,
-          branch or tag name is a FAIL); Версія спеки matches spec-vX.Y or spec-vX.Y.Z; Прод-URL is an
-          https URL (normally *.vercel.app). Every work link points to the same owner/repo as Репо
-          команди and uses full https://github.com/ links (pull requests as /pull/N, issues as
-          /issues/N, issue comments as /issues/N#issuecomment-M, reviews as
-          /pull/N#pullrequestreview-M, files as /blob/..., tags as /releases/tag/spec-vX.Y or
-          /tree/spec-vX.Y). Role pm fills the "PM" section and the
-          "Розробник" section is exactly "—"; roles techlead and dev do the opposite. For pm, "Нотатка
-          PM" has at least three items, each with an AC ID, at least two readings with links (an item
-          marked «прогноз» may give two readings without links), "Чому" and "Що зробив PM"; the only
-          non-link values allowed are "spec-v0.2 не випущено" for "PR зміни spec-v0.2" and "Тег
-          spec-v0.2". For techlead and dev: the first PR (docs/team.md) is a /pull/N link; at least
-          three links to issues or issue comments, at least one of them a plain issue link without
-          #issuecomment; at least two /pull/N links under "PR-и задач" (or one, if the file explains a late spec-v0.1 or too few
-          task issues — README, «Не знімає балів»); at least two
-          /pull/N#pullrequestreview-M links under "Рев'ю PR-ів колег", none of them on a pull request
-          listed under "PR-и задач" (authors cannot approve their own PR); "AC, до яких ви доклалися" lists AC
-          IDs; "PR зміни impl-<зріз>" is a /pull/N link for techlead and "—" or a link for dev.
-          Бонус E is "—" or a description with a link. Placeholders such as <…>, "…" or untouched
-          template comments instead of values are a FAIL. List every missing or malformed field.
-          Answer in Ukrainian.
+          "Дані" section: Роль is pm or dev; Команда equals the folder name; "Ваше репо" is
+          https://github.com/<owner>/<repo> (owner should equal GitHub-логін; repo is normally
+          <team-slug>-spec for pm and <team-slug> for dev — a different owner or name is a warning to
+          mention, not a FAIL); SHA is exactly 40 lowercase hex characters (a short SHA, branch or tag
+          name is a FAIL); "Репо вимог PM" is https://github.com/<owner>/<repo> and, for pm, equals
+          "Ваше репо"; Прод-URL is an https URL (normally *.vercel.app) for dev and "—" for pm. Role pm
+          fills the "PM" section and the "Розробник" section is exactly "—"; role dev does the opposite.
+          All links are full https://github.com/ links (pull requests as /pull/N, issues as /issues/N,
+          comments as /issues/N#issuecomment-M, files and folders as /blob/... or /tree/...).
+          For pm: own pull requests and issues point to "Ваше репо"; "PR продуктового контексту" and
+          "PR перших вимог" are /pull/N links; "PR уточнень" is a /pull/N link or exactly "уточнень не
+          випущено"; "Нотатка PM" has at least three items, each with an AC ID, at least two
+          implementations or readings with links (links may point to developers' repositories of other
+          owners, or to issues and comments in "Ваше репо"; an item marked «прогноз» may give two
+          readings without links), "Чому" and "Що зробив PM".
+          For dev: the field "Рядок «Вимоги:» з docs/conformance.md на SHA" reads exactly
+          "Вимоги: <URL> · коміт <40 hex> · <YYYY-MM-DD>" with URL equal to "Репо вимог PM" (the
+          placeholder "Вимоги: — (заповнює /spec-sync)" or a short commit is a FAIL); "Перший PR
+          «Оновлення вимог»", "PR-и задач «Реалізація»" and "PR «Оновлення вимог» після уточнень PM" are
+          /pull/N links in "Ваше репо", with at least two under "PR-и задач «Реалізація»" (or one, if
+          the file explains that the PM merged the first requirements after the end of day 3 — README,
+          «Не знімає балів»); the journal docs/spec-reading.md and "Зміна impl-<зріз>" are /blob/ or
+          /tree/ links in "Ваше репо"; "Питання в репо PM" has at least three links into "Репо вимог
+          PM" (issues, issue comments, or comments on the PM's first-requirements pull request), at
+          least one of them a plain /issues/N link without #issuecomment; "AC, які ви реалізували"
+          lists AC IDs. Бонус E is "—" or a description with a link. Placeholders such as <…>, "…" or
+          untouched template comments instead of values are a FAIL. List every missing or malformed
+          field. Answer in Ukrainian.
 
       - mode: "warning"
         name: "Анонімізація й секрети у здачі"
