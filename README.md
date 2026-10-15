@@ -104,9 +104,9 @@
   `npm run spec:check`), скіл `spec-review`, команди `/opsx:*`, форма issue «Питання до специфікації», CI з одним
   job `spec`, `.coderabbit.yaml` з перевірками якості спеки. Застосунку, Supabase, Vercel і ruleset-у в ньому немає.
 - **Шаблон проєкту** уже несе шари WS3–WS5: `AGENTS.md` і `CLAUDE.md`, команди `/opsx:*`, `/conformance` і
-  `/spec-sync`, скіли `spec-clarify` і `spec-review`, Supabase MCP лише на читання й заборони деструктивних команд
-  (обидва діють лише в Claude Code), CI (`spec`, `app`, `conformance`, `db-check`, `db-deploy`), шаблон PR,
-  `.coderabbit.yaml` і чекліст розробника `docs/bootstrap.md`.
+  `/spec-sync`, скіл `spec-clarify`, Supabase MCP лише на читання й заборони деструктивних команд (обидва діють лише
+  в Claude Code), CI (`spec`, `app`, `conformance`, `db-check`, `db-deploy`), шаблон PR, `.coderabbit.yaml` і
+  чекліст розробника `docs/bootstrap.md`.
 - **Поточні вимоги — `main` репо PM.** PM змінює їх лише PR-ом з OpenSpec-зміною: archive у гілці, запис із датою в
   `product/CHANGELOG.md`, merge, повідомлення «вимоги оновлено» в чаті команди. Тегів немає: строки PM рахуємо за
   часом merge PR у `main`.
