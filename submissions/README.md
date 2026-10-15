@@ -49,7 +49,7 @@ README, ні `docs/`, ні `materials/`, ні `examples/`, ні чужих фа�
 | Файл або тека на SHA | ваше репо | `https://github.com/<ваш-логін>/<repo>/blob/<SHA>/docs/spec-reading.md`, `…/tree/<SHA>/openspec/changes/…` |
 | Issue «Продукт», «Вимога» чи «Питання до вимог» | репо вимог PM | `https://github.com/<pm>/<team-slug>-spec/issues/N` |
 | Коментар в issue («Перевірено за чеклістом: …», «Зміна: …», ваше питання) | репо вимог PM | `https://github.com/<pm>/<team-slug>-spec/issues/N#issuecomment-M` |
-| Варіант `docs/`: файл вимоги, коміт, коментар до коміту | репо вимог PM | `…/blob/<SHA>/docs/requirements/01-….md`, `…/commit/<sha>`, `…/commit/<sha>#commitcomment-M` |
+| Варіант `docs/`: файл вимоги, рядок файлу (наприклад, «Перевірено за чеклістом: …» у журналі змін), коміт, коментар до коміту | репо вимог PM | `…/blob/<SHA>/docs/requirements/01-….md`, `…/blob/<SHA>/docs/requirements/01-….md#L40`, `…/commit/<sha>`, `…/commit/<sha>#commitcomment-M` |
 | Сценарій чи рядок коду в нотатці PM | репо розробника | `https://github.com/<dev>/<team-slug>/blob/<SHA>/src/…#L10` (посилання на коміт, а не на `main`, — щоб рядок не з'їхав) |
 
 PM посилається на issues, файли й коміти свого репо вимог, а в «Нотатці PM» — ще й на репо розробників. Розробник

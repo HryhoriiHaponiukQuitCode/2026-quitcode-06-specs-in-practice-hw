@@ -82,7 +82,8 @@ reviews:
         «Самоперевірка за чеклістом» — …/issues/N#issuecomment-M; «Зміни вимог із журналом змін» —
         …/issues/N#issuecomment-M. docs: «Продукт» — …/blob/<SHA>/docs/product.md; «Вимоги першого
         зрізу» — …/blob/<SHA>/docs/requirements/<NN>-<slug>.md; «Самоперевірка за чеклістом» —
-        …/commit/<sha>#commitcomment-M; «Зміни вимог із журналом змін» — …/commit/<sha> або
+        …/blob/<SHA>/docs/requirements/…#L<N> (рядок журналу змін) або …/commit/<sha>#commitcomment-M;
+        «Зміни вимог із журналом змін» — …/commit/<sha> або
         …/blob/<SHA>/docs/requirements/…#L<N>. Будь-яка з цих форм прийнятна для обох варіантів (не ❌);
         «Зміни вимог із журналом змін» може бути рівно «змін не було». «Питання, на які ви відповіли» —
         …/issues/N. «Нотатка PM» має щонайменше 3 пункти, у кожному — AC ID, щонайменше дві реалізації чи
@@ -207,7 +208,8 @@ reviews:
           For pm: every link of the "PM" section except "Нотатка PM" points to "Ваше репо"; "Сховище
           вимог" is issues, docs or docs/; "Продукт" is an /issues/N link or a /blob/<SHA>/docs/product.md
           link; "Вимоги першого зрізу" are /issues/N links or /blob/<SHA>/docs/requirements/... links;
-          "Самоперевірка за чеклістом" is an /issues/N#issuecomment-M link or a
+          "Самоперевірка за чеклістом" is an /issues/N#issuecomment-M link, a
+          /blob/<SHA>/docs/requirements/...#L<N> link (a change-log line) or a
           /commit/<sha>#commitcomment-M link; "Зміни вимог із журналом змін" is an
           /issues/N#issuecomment-M, /commit/<sha> or /blob/... link, or exactly "змін не було";
           "Питання, на які ви відповіли" are /issues/N links; "Нотатка PM" has at least three items,
