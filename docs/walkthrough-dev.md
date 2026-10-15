@@ -334,10 +334,11 @@ Secrets — Read), `SUPABASE_DB_PASSWORD` і `SUPABASE_PROJECT_ID` (`<ref>`). С
    візьміть з адреси Dashboard (`/project/<ref>`).
 
 **Правила бази (з `AGENTS.md` шаблону).** Схему змінюємо лише міграціями через PR (крок 11.1). Жодних
-`supabase db push` з ноутбука, DDL у SQL Editor чи Table Editor, `supabase db reset --linked`, `migration repair`,
-`db push --include-all`. База ваша, і як Owner ви технічно можете змінити в Dashboard що завгодно, тож це правило
-тримається лише на вас. Зміна поза `main` ламає наступний `db-deploy` («Remote migration versions not found…»), а
-рубрика C зараховує лише міграції, що пройшли PR і `db-deploy`.
+`supabase db push` з ноутбука, DDL у SQL Editor чи Table Editor, `supabase db reset --linked`, `migration repair`
+агентом або поза відновленням за README шаблону («Збої й відновлення»), `db push --include-all`. База ваша, і як
+Owner ви технічно можете змінити в Dashboard що завгодно, тож це правило тримається лише на вас. Зміна поза `main`
+ламає наступний `db-deploy` («Remote migration versions not found…»), а рубрика C зараховує лише міграції, що
+пройшли PR і `db-deploy`.
 
 ## 6. Ruleset `solo-main` і CodeRabbit (25 хв) — трек A
 
@@ -440,12 +441,12 @@ Cursor — `/spec-sync` і ту саму адресу в тому самому �
 **Що робить агент.** Змінює лише `product/`, `openspec/specs/` і `docs/conformance.md`; єдиний виняток — п. 7, і
 лише після вашого «так».
 
-1. Знаходить репо PM у шапці `docs/conformance.md` — рядку на кшталт
+1. Перевіряє, що робоче дерево чисте, і переходить на свіжий `main`.
+2. Уже на свіжому `main` знаходить репо PM у шапці `docs/conformance.md` — рядку на кшталт
    `Вимоги: https://github.com/<pm>/<team-slug>-spec · коміт <40 символів SHA> · 2026-10-15`. До першої синхронізації
-   там стоїть `Вимоги: — (заповнює /spec-sync)`, і тоді агент бере адресу з вашого повідомлення.
-2. Перевіряє, що робоче дерево чисте, і переходить на свіжий `main`. Потім перевіряє, що репо PM існує й публічне
-   (`gh repo view`): якщо ні, зупиниться й попросить звірити адресу з чатом команди. Далі бере останній коміт `main`
-   репо PM звичайним git, без тимчасових тек:
+   там стоїть `Вимоги: — (заповнює /spec-sync)`, і тоді агент бере адресу з вашого повідомлення. Потім перевіряє, що
+   репо PM існує й публічне (`gh repo view`): якщо ні, зупиниться й попросить звірити адресу з чатом команди. Далі
+   бере останній коміт `main` репо PM звичайним git, без тимчасових тек:
 
    ```bash
    git fetch --depth 1 https://github.com/<pm>/<team-slug>-spec main
@@ -547,7 +548,7 @@ GitHub не поставить, і питання загубиться сере�
 - «Власні припущення» — те, що ви вирішили самі без питання.
 
 Зразок issue — [`issue-Q2.md`](../examples/leave-portal/2-clarify/issue-Q2.md). Журнал потрапляє в `main` PR-ом
-«Реалізація»: окремим (гілка `docs/spec-reading`) або разом із першим PR задачі. Дописуйте його впродовж тижня.
+«Реалізація»: окремим (гілка `task/spec-reading`) або разом із першим PR задачі. Дописуйте його впродовж тижня.
 
 **Доказ:** щонайменше 3 питання в репо PM (власні issues або коментарі з новим варіантом в issues чи в PR перших
 вимог, з них щонайменше 1 — власне issue); `docs/spec-reading.md` у `main` вашого репо.
@@ -559,7 +560,7 @@ GitHub не поставить, і питання загубиться сере�
 ```bash
 git switch main
 git pull
-git switch -c plan/impl-<зріз>
+git switch -c task/plan-impl-<зріз>
 npx openspec new change impl-<зріз>
 ```
 
